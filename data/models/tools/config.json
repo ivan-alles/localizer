@@ -1,0 +1,52 @@
+{
+  "dataset": "data/datasets/tools/dataset.json",
+  "validation_fraction": 0.2,
+  "validated_training_examples_count": 100000,
+  "final_training_examples_count": 50000,
+  "process_count": 4,
+  "training_examples_per_batch": 16,
+  "training_examples_per_epoch": 5000,
+  "training_examples_count_for_mean_computation": 100,
+  "data_augmentation_rotation": [
+    -0.05,
+    0.05
+  ],
+  "data_augmentation_shear_rotation": [
+    -0.05,
+    0.05
+  ],
+  "data_augmentation_shear_scale": [
+    0.95,
+    1.05
+  ],
+  "data_augmentation_scale": [
+    0.95,
+    1.05
+  ],
+  "data_augmentation_color": [
+    0.9,
+    1.1
+  ],
+  "rng_seed": 1,
+  "sigma": 1.5,
+  "objectness_ksize": 7,
+  "angle_ksize": 3,
+  "pos_ksize": 3,
+  "confidence_thr": 0.5,
+  "position_diff_thr": 15,
+  "angle_diff_thr": 15,
+  "input_scale": 0.7,
+  "model_scale": 0.125,
+  "input_shape": [
+    360,
+    360,
+    3
+  ],
+  "random_background_probability": 0.1,
+  "w_loss": [
+    1,
+    1,
+    1,
+    1
+  ]
+}

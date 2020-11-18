@@ -1,0 +1,28 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+
+[packages]
+atomicwrites = "*"
+Django = "*"
+django-cors-headers = "*"
+djangorestframework = "*"
+drf-nested-routers  = "*"
+fasteners = "*"
+numpy = "*"
+opencv-contrib-python = "*"
+piexif = "*"
+pillow = "*"
+pydot_ng = "*"
+pypiwin32 = "*"
+pathvalidate = "*"
+requests = "*"
+tensorflow = "*"
+robogym = {git = "https://github.com/ivan-alles/robogym.git",ref = "v1.0.2"}
+
+[requires]
+python_version = "3.6"

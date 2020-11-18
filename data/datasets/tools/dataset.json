@@ -1,0 +1,2097 @@
+{
+    "definitions": {
+        "files_loader": {},
+        "files_root_dir": "",
+        "marker_types": {
+            "Bounding box": {
+                "categories": [
+                    {
+                        "color": "#00ff00",
+                        "id": 0,
+                        "name": "pliers"
+                    },
+                    {
+                        "color": "#0000ff",
+                        "id": 1,
+                        "name": "screwdriver"
+                    }
+                ],
+                "description": " ",
+                "rendering_script": [
+                    "p.SetBaseTransform(true, true)",
+                    "p.SetDefaultPen()",
+                    "p.DrawRect(-1, -1, 2, 2)"
+                ],
+                "value_type": "oriented_rect"
+            },
+            "Object": {
+                "categories": [
+                    {
+                        "color": "#00ff00",
+                        "id": 0,
+                        "name": "pliers"
+                    },
+                    {
+                        "color": "#0000ff",
+                        "id": 1,
+                        "name": "screwdriver"
+                    }
+                ],
+                "description": " ",
+                "line_width": -5,
+                "rendering_script": [
+                    "p.SetBaseTransform(true, true)",
+                    "p.SetDefaultPen()",
+                    "p.DrawEllipse(-10, -10, 20, 20)",
+                    "p.SetPen(255, 0, 0, -2)",
+                    "p.DrawLine(0, 0, 50, 0)",
+                    "p.DrawLine(45, 5, 50, 0)",
+                    "p.DrawLine(45, -5, 50, 0)",
+                    "p.SetPen(0, 255, 0, -2)",
+                    "p.DrawLine(0, 0, 0, 50)",
+                    "p.DrawLine(5, 45, 0, 50)",
+                    "p.DrawLine(-5, 45, 0, 50)",
+                    ""
+                ],
+                "value_type": "oriented_point"
+            }
+        },
+        "user_data": {
+        }
+    },
+    "files": [
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "249.938 85.9627 1.309"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "566.956 141.615 2.77507"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "145.59 273.292 0.994838"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "506.335 337.888 0.680678"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "257.888 205.714 239.619 103.396 -1.8675"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "460.757 138.694 119.772 217.376 -1.92026"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "147.081 275.776 231.718 61.4829 -2.19911"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "497.391 331.925 199.185 49.9446 -2.47837"
+                }
+            ],
+            "name": "20180514-130933-252-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "100.373 221.615 0.645772"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "403.975 82.4845 0.523599"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "327.95 320.497 1.39626"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "484.472 355.776 1.09956"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "484.212 149.984 80.5725 217.549 -0.995306"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "178.385 314.534 117.079 249.508 -0.858216"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "327.95 322.981 221.993 57.3075 -1.74533"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "477.019 345.342 195.276 37.0384 -2.04204"
+                }
+            ],
+            "name": "20180514-130943-426-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "126.211 401.988 -1.3439"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "390.062 291.18 0"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "280.745 220.124 -1.8675"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "397.043 118.335 -2.84489"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "187.826 295.155 247.364 133.784 -1.38758"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "490.932 311.553 86.2486 221.59 -1.48768"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "279.255 217.143 224.686 46.8702 -1.8675"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "408.447 121.739 205.454 43.1844 -2.84489"
+                }
+            ],
+            "name": "20180514-130950-195-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "181.366 82.4845 0.645772"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "558.012 290.683 2.60054"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "231.056 339.379 -0.715585"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "403.478 118.758 -2.72271"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "247.95 169.441 123.586 216.676 -1.01229"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "447.205 329.441 79.1022 252.918 -2.07694"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "415.901 122.733 213.838 48.5011 -2.74017"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "230.559 338.882 41.6639 240.307 -2.28638"
+                }
+            ],
+            "name": "20180514-130957-292-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "310.062 227.081 -2.82743"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "559.006 288.696 2.60054"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "231.553 338.385 -0.715585"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "402.981 119.752 -2.72271"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "216.149 177.391 223.121 93.1863 -2.77507"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "448.199 326.957 79.0078 255.138 -2.07694"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "233.043 337.391 34.8582 226.502 -2.28638"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "414.41 121.242 203.357 38.9041 -2.70526"
+                }
+            ],
+            "name": "20180514-131001-006-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "348.852 59.8033 2.05949"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "507.279 366.689 -2.63545"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "472.176 160.054 2.63545"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "214.379 355.624 -2.68781"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "259.173 149.49 234.805 148.119 -1.22173"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "427.728 295.533 213.004 84.8079 0.610865"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "482.566 152.954 40.778 201.838 1.08402"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "210.685 354.989 44.6232 227.487 2.01761"
+                }
+            ],
+            "name": "20180514-131007-348-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "178.644 305.1 188.166 142.503 0.471239"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "263.344 173.639 46.1044 234.766 -0.571166"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "402.885 215.082 49.6677 248.939 0.261171"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "476.852 304.262 41.3528 186.561 0.810362"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "122.754 214.033 0.659701"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "262.295 172.066 1.01229"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "402.901 215.601 1.84106"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "461.189 314.691 2.35619"
+                }
+            ],
+            "name": "20180514-131019-789-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "247.082 357.246 180.686 144.019 0.0131019"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "158.951 303.738 0.192224"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "449.574 160 45.2554 237.656 0.618757"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "492.59 290.098 43.0491 181.473 -0.0918137"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "252.328 189.902 230.383 43.3207 1.02354"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "492.066 271.213 -1.67552"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "450.623 155.279 -0.942478"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "253.377 194.098 -2.11486"
+                }
+            ],
+            "name": "20180514-131027-654-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "395.016 326.82 81.901 189.118 0.301047"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "443.803 134.295 244.53 44.3206 -2.7247"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "235.541 156.328 37.1295 233.281 -0.993509"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "161.574 281.18 182.507 36.4909 -2.53862"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "438.033 243.41 1.85122"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "442.754 134.295 -2.72271"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "234.545 154.634 0.607456"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "145.695 271.317 -2.54818"
+                }
+            ],
+            "name": "20180514-131033-348-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "396.066 325.77 76.306 191.677 0.283963"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "437.508 243.41 1.8101"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "403.934 119.607 40.3063 246.868 1.67388"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "269.115 269.639 232.76 37.8992 1.18786"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "161.574 280.131 37.5117 183.369 2.14236"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "483.672 303.738 178.585 47.0753 1.72039"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "402.885 118.033 -3.02341"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "271.213 274.361 -1.95477"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "144.262 270.164 -2.56563"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "476.328 336.262 1.72733"
+                }
+            ],
+            "name": "20180514-131038-908-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "341.508 167.344 140.285 177.342 -0.61942"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "483.672 159.475 43.1053 240.562 2.44301"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "515.148 301.115 42.7174 187.12 2.15849"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "243.41 280.656 230.947 37.13 1.46435"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "146.361 325.246 183.865 34.776 1.98586"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "336.262 64.5246 1.15593"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "484.721 162.098 0.907571"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "488.393 281.18 -2.51327"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "242.885 282.229 -1.66716"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "155.803 307.41 -1.16937"
+                }
+            ],
+            "name": "20180514-131048-116-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "340.459 167.869 146.628 181.425 -0.584969"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "335.738 65.5738 1.16086"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "452.197 148.984 232.463 40.106 2.06761"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "515.672 300.066 182.141 53.5581 0.635702"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "288 318.426 229.171 45.6118 0.662118"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "165.246 168.393 185.603 44.8877 1.69871"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "454.295 147.41 2.02294"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "487.869 280.131 -2.51016"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "285.377 316.852 0.663225"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "162.623 187.279 1.68876"
+                }
+            ],
+            "name": "20180514-131055-061-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "341.508 166.82 139.769 182.519 -0.621568"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "335.738 66.0984 1.14683"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "452.721 147.934 235.307 44.9029 2.08942"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "515.148 300.59 185.347 43.0999 0.619341"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "400.787 337.311 238.866 46.3964 0.645594"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "193.049 365.115 245.28 42.0037 1.0057"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "166.295 168.918 186.883 36.0002 1.6949"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "454.295 147.41 2.04009"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "487.869 279.082 -2.56255"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "406.033 339.41 0.628229"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "195.672 367.213 1.01417"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "161.574 186.754 1.65192"
+                }
+            ],
+            "name": "20180514-131101-148-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "285.902 140.59 122.6 216.646 -0.213771"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "476.852 241.311 137.968 182.088 -0.740739"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "265.967 247.082 -1.65806"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "497.836 339.41 -2.11795"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "165.246 167.869 184.415 42.9356 -1.46025"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "191.475 363.016 242.013 43.4746 -2.12714"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "402.361 336.262 238.375 40.8707 -2.526"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "162.981 187.283 1.68518"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "195.727 367.899 1.0206"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "406.531 339.246 0.62307"
+                }
+            ],
+            "name": "20180514-131109-420-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "285.377 137.443 121.536 212.044 -0.21371"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "476.852 243.41 137.02 185.091 -0.774349"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "265.967 247.082 -1.65806"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "498.361 340.984 -2.09621"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "400.262 337.311 235.969 40.3841 -2.51944"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "193.049 363.541 240.949 44.078 -2.15212"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "406.557 339.41 0.649727"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "194.098 367.213 0.997822"
+                }
+            ],
+            "name": "20180514-131124-655-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "165.246 188.852 85.3808 191.778 -0.0872665"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "486.295 246.033 79.5668 215.965 0.393714"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "162.098 281.705 -1.72788"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "434.361 334.689 -1.23918"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "261.77 186.754 249.611 44.2977 -1.5113"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "371.934 172.066 241.194 42.8199 -1.3308"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "262.295 191.475 1.62455"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "374.557 168.918 -1.33551"
+                }
+            ],
+            "name": "20180514-131134-481-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "219.803 123.279 78.6541 196.21 -0.808116"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "478.426 317.902 218.756 79.4122 0.262462"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "278.033 198.82 -2.41833"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "383.475 279.082 0.168611"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "450.623 147.41 238.641 40.4928 0.0464132"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "252.328 327.344 244.262 40.7382 0.836809"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "455.344 148.459 0.0450762"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "250.754 325.246 -2.28785"
+                }
+            ],
+            "name": "20180514-131140-162-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "195.672 160 79.7145 191.553 0.592652"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "448 148.984 228.863 141.025 0.454518"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "426.492 309.508 79.1813 216.104 -0.942536"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "250.754 349.377 42.1588 180.442 -2.51684"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "133.77 228.721 -1.05783"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "376.131 50.3607 0.706899"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "500.459 386.098 -2.60054"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "232.918 376.656 2.15433"
+                }
+            ],
+            "name": "20180514-131149-893-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "190.426 141.115 198.106 81.0197 -0.692622"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "444.328 153.705 230.439 140.33 0.551464"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "425.967 312.131 83.0997 214.974 -0.946767"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "233.443 319.475 39.972 178.242 -2.76528"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "112.262 190.951 -0.789086"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "376.131 50.3607 0.6962"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "500.984 385.574 -2.57233"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "219.726 352.07 1.92982"
+                }
+            ],
+            "name": "20180514-131153-262-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "189.902 140.59 194.234 80.9177 -0.778018"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "408.131 331.541 79.0854 216.467 -0.143956"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "455.344 125.902 244.151 71.7512 -0.490818"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "233.443 321.049 178.749 38.4367 1.94398"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "495.738 246.033 34.8874 241.583 1.91986"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "412.328 433.311 -1.85021"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "564.984 85.5082 2.58309"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "112.262 192 -0.815641"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "494.562 246.594 -2.79253"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "219.14 353.361 1.92615"
+                }
+            ],
+            "name": "20180514-131200-800-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "359.344 344.656 240.789 76.0762 -0.0328113"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "455.344 98.6229 219.757 78.6416 -0.759265"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "495.544 247.296 42.5489 243.675 1.90241"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "274.419 140.788 39.1894 204.521 2.63545"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "172.237 275.41 185.917 40.7028 -2.9147"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "477.377 354.098 3.03729"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "540.328 36.7213 2.30244"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "492.3 245.674 -2.79253"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "138.176 267.3 -2.9147"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "280.366 151.061 1.08229"
+                }
+            ],
+            "name": "20180514-131210-954-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "184.131 298.492 116.177 213.548 0.587666"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "449.049 327.344 186.697 111.309 -0.761528"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "305.836 160.525 245.878 38.4464 0.486707"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "500.459 158.426 229.432 35.8105 0.633759"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "362.492 364.066 -0.703536"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "271.213 233.967 2.15627"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "502.557 159.475 0.638838"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "303.738 158.951 -2.65471"
+                }
+            ],
+            "name": "20180514-131225-481-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "168.393 289.574 209.575 120.667 -0.250072"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "463.213 353.574 183.47 104.884 0.334587"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "326.295 148.984 242.465 43.4224 -1.98885"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "449.049 150.033 229.153 36.9042 -1.3659"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "391.869 290.623 0.376062"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "277.508 303.738 2.89879"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "328.918 151.607 1.15192"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "450.623 146.885 1.76278"
+                }
+            ],
+            "name": "20180514-131231-158-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "243.934 308.459 213.834 117.813 0.426144"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "488.393 339.934 110.723 185.856 0.493624"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "395.016 187.803 36.1334 230.96 1.64061"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "288.525 100.197 42.293 245.99 1.27409"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "560.787 280.131 2.09455"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "170.492 229.246 0.463239"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "400.262 187.803 -3.06418"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "286.951 102.295 2.86941"
+                }
+            ],
+            "name": "20180514-131236-956-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "249.18 296.918 218.252 78.8008 0.509306"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "485.77 339.41 106.762 183.127 0.547622"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "405.683 230.645 203.021 37.7101 2.85905"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "328.743 111.738 245.007 41.6042 1.93732"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "558.688 280.656 2.07596"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "163.148 236.59 0.422251"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "327.577 112.321 1.93732"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "394.608 235.891 2.84233"
+                }
+            ],
+            "name": "20180514-131243-868-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "134.295 197.77 -0.506145"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "454.82 438.557 -2.29334"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "453.665 163.478 2.79253"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "218.137 338.385 2.32129"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "235.031 164.969 214.667 84.1151 2.70526"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "428.82 342.36 185.43 129.687 -2.32785"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "467.578 157.019 40.688 225.265 -1.91986"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "218.634 337.888 49.4365 255.561 -2.3911"
+                }
+            ],
+            "name": "20180514-131250-595-0.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "213.508 340.459 204.157 165.531 -0.617382"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "445.377 173.115 167.607 175.978 -0.14985"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "299.541 194.098 43.506 240.529 2.73372"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "468.984 337.311 198.528 35.4107 2.75544"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "326.82 332.066 2.7068"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "490.492 78.6885 1.61808"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "304.262 197.77 1.18107"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "483.148 331.016 2.73284"
+                }
+            ],
+            "name": "20180515-094146-862.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "504.656 286.951 167.942 198.167 -0.192398"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "190.426 260.197 150.898 183.569 -0.0536515"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "335.213 140.066 241.09 45.2735 2.04706"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "392.393 286.951 198.759 35.4992 1.32645"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "144.787 348.328 -1.50718"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "540.328 181.508 1.55599"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "333.639 144.262 2.02112"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "396.066 302.164 -1.81913"
+                }
+            ],
+            "name": "20180515-094213-306.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "323.148 122.229 166.805 199.442 -0.0374945"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "184.131 312.131 153.708 187.457 0.665153"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "357.246 331.016 197.984 32.759 -1.85005"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "489.967 242.361 43.7715 238.024 -2.41262"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "279.607 274.885 2.25702"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "269.317 220.621 -1.44033"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "495.738 236.59 -0.855211"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "353.574 317.902 1.27332"
+                }
+            ],
+            "name": "20180515-094236-235.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "175.213 251.279 141.465 210.048 -0.462536"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "476.328 273.311 148.727 197.662 -0.746646"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "352 134.295 44.3054 240.09 0.855211"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "330.492 321.049 32.7415 202.473 0.567172"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "182.557 362.492 -1.9317"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "494.689 368.787 -2.23371"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "350.426 138.492 2.42077"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "321.049 332.59 -1.00839"
+                }
+            ],
+            "name": "20180515-094335-091.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "473.18 269.115 149.463 184.438 -0.729667"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "173.639 250.754 137.5 204.509 -0.486663"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "330.492 318.951 198.475 33.2119 -1.011"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "352 135.344 243.095 45.1999 -0.718847"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "183.607 359.869 -1.9609"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "494.164 367.738 -2.26525"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "321.574 333.639 -1.03158"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "349.902 135.869 2.41165"
+                }
+            ],
+            "name": "20180515-094344-740.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "169.967 229.246 150.886 205.164 0.117016"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "464.787 289.574 187.468 150.081 -0.490546"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "399.213 137.967 237.836 45.8843 2.64296"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "312.131 325.77 31.705 195.91 -2.7199"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "110.689 320 -1.39395"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "563.41 292.197 2.69741"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "404.984 135.869 -0.488151"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "318.426 312.131 2.00552"
+                }
+            ],
+            "name": "20180515-094352-986.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "492.066 188.328 203.371 37.5928 2.04164"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "547.148 232.393 180.4 36.7851 2.1514"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "205.639 221.902 36.7535 232.714 2.13969"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "186.23 327.869 38.5373 245.42 2.12871"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "434.885 359.344 41.1476 186.37 2.04374"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "288 162.098 37.2282 233.336 2.71673"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "397.115 167.344 40.773 242.199 3.01364"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "183.607 325.77 -2.55251"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "403.41 344.131 -2.63545"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "203.541 219.803 0.593412"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "285.902 159.475 1.11928"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "396.59 163.672 -1.69766"
+                },
+                {
+                    "category": 1,
+                    "text": "5",
+                    "type": "Object",
+                    "value": "487.869 198.82 2.04129"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "536.131 248.131 2.15483"
+                }
+            ],
+            "name": "20180515-094418-586.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "433.836 359.869 37.6802 181.281 2.03883"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "186.754 326.82 43.7284 242.506 2.14768"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "204.59 221.902 37.8036 232.319 2.1539"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "288 161.049 37.2803 234.75 2.70379"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "396.59 167.869 50.7837 259.583 3.03687"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "492.59 188.852 38.6505 199.236 -2.6897"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "545.574 232.918 38.7281 182.598 -2.56461"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "182.557 325.77 -2.56795"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "203.016 219.279 0.593412"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "286.426 160 1.13665"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "396.066 164.721 -1.72788"
+                },
+                {
+                    "category": 1,
+                    "text": "5",
+                    "type": "Object",
+                    "value": "486.295 199.344 1.99902"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "535.082 246.033 2.15177"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "403.934 344.656 -2.70526"
+                }
+            ],
+            "name": "20180515-094427-184.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "493.115 189.377 38.3919 203.027 -2.70849"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "546.098 232.918 37.3634 182.077 -2.55135"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "396.066 168.393 47.7612 240.078 3.01211"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "289.049 161.574 37.7113 232.731 2.69078"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "206.164 221.902 36.3675 234.189 2.14889"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "186.754 326.82 44.2809 241.548 2.16582"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "434.361 360.393 41.3025 184.716 2.042"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "403.934 345.18 -2.66614"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "182.557 324.721 -2.57473"
+                },
+                {
+                    "category": 1,
+                    "text": "5",
+                    "type": "Object",
+                    "value": "488.393 197.77 2.00628"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "534.557 247.607 2.16313"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "395.541 165.77 -1.69755"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "287.475 161.049 1.14326"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "203.339 220.112 0.575959"
+                }
+            ],
+            "name": "20180515-094436-470.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "516.721 175.738 105.079 193.898 -0.0436163"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "433.311 322.098 224.814 132.708 0.123908"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "308.984 143.213 211.806 115.345 0.585787"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "171.016 261.246 212.6 124.426 0.57764"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "538.229 80.7869 1.44601"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "246.557 54.5574 0.652955"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "236.59 347.279 -2.54244"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "332.59 257.049 0.283304"
+                }
+            ],
+            "name": "20180515-094537-773.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "173.115 260.721 217.984 119.778 0.588437"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "310.033 157.902 215.727 115.679 0.563164"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "519.869 175.213 106.376 192.561 -0.0872665"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "434.885 321.049 227.836 132.481 0.112909"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "538.754 82.8852 1.4826"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "249.18 70.8197 0.689014"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "237.639 348.328 -2.52119"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "332.59 255.475 0.3488"
+                }
+            ],
+            "name": "20180515-094551-686.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "509.902 176.787 81.3353 194.397 -0.50912"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "327.869 168.393 193.556 77.4614 0.430354"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "208.787 269.639 75.6325 218.263 -0.682544"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "433.311 317.377 240.873 75.8917 0.188154"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "265.443 359.344 -2.31555"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "326.295 276.459 0.140855"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "250.754 118.557 0.366838"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "473.705 93.377 0.922769"
+                }
+            ],
+            "name": "20180515-094608-966.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "206.689 272.262 75.4035 219.266 -0.726013"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "325.77 169.443 193.466 83.498 0.423863"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "508.852 177.836 82.3162 195.771 -0.486468"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "435.41 315.803 241.95 74.8939 0.192276"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "475.279 92.8525 0.932942"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "250.754 117.508 0.389053"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "326.295 276.459 0.18238"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "265.443 359.344 -2.34262"
+                }
+            ],
+            "name": "20180515-094623-381.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "201.443 251.803 93.866 217.251 0.412322"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "384 195.148 78.2074 192.113 -0.838447"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "483.672 140.59 79.5408 242.543 -0.401937"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "397.639 331.016 73.4255 199.982 -0.575357"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "145.836 340.459 -1.23848"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "438.557 413.377 -2.29599"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "326.82 121.705 0.699558"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "449.574 29.377 1.09239"
+                }
+            ],
+            "name": "20180515-094638-348.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "228.075 199.752 1.3439"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "394.037 185.342 1.29154"
+                },
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "572.919 197.764 1.67552"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "216.646 301.118 184.67 137.137 1.20322"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "372.671 278.261 189.435 135.922 1.25651"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "533.665 296.149 210.12 122.736 1.59196"
+                }
+            ],
+            "name": "20180517-144448-381.png"
+        },
+        {
+            "markers": [
+                {
+                    "category": 0,
+                    "type": "Object",
+                    "value": "307.578 208.199 1.82273"
+                },
+                {
+                    "category": 0,
+                    "type": "Bounding box",
+                    "value": "247.453 279.752 190.075 107.878 1.95477"
+                },
+                {
+                    "category": 1,
+                    "type": "Bounding box",
+                    "value": "370.085 291.795 243.467 41.3116 1.65806"
+                },
+                {
+                    "category": 1,
+                    "type": "Object",
+                    "value": "369.689 291.677 -1.48176"
+                }
+            ],
+            "name": "20180518-115608-395.png"
+        }
+    ]
+}

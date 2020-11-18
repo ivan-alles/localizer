@@ -1,0 +1,5 @@
+.temp
+.venv
+mydata/data
+mydata/log
+__pycache__
