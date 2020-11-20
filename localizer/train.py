@@ -37,11 +37,12 @@ INFINITE_DIFF = np.full(2, np.inf)
 
 CATEGORY_ALL = 'ALL'
 
+
 class Batch:
     """
     A batch. Will be filled by tensors for training.
     """
-    
+
     def __init__(self, size, input_shape, output_shape):
         self.input = np.empty(shape=(size,) + input_shape, dtype=np.float32)
         self.target_window = np.zeros(shape=(size,) + output_shape, dtype=np.float32)
@@ -125,7 +126,7 @@ class BatchGenerator:
         self._rng = np.random.RandomState(self._rng_seed)
         self._filters = {f.id: f for f in filters}
         if len(self._filters) != len(filters):
-            raise ValueError(f'Filter id duplications found.')
+            raise ValueError('Filter id duplications found.')
 
     def init_after_pickle(self):
         """
@@ -193,7 +194,8 @@ class MultiProcessBatchGenerator:
         if self._process_count != 0:
             # Pass the initialized batch generator to the pool thread once and for all now
             # to avoid copying its data in every job.
-            self._pool = Pool(processes=self._process_count, initializer=_worker_process_init, initargs=[self._master_batch_gen])
+            self._pool = Pool(processes=self._process_count, initializer=_worker_process_init,
+                              initargs=[self._master_batch_gen])
             self._jobs = []
 
         super().__init__()
@@ -432,7 +434,7 @@ class Trainer:
             if flt.size == 0:
                 continue
             # Assign probabilities to ensure category balance
-            total_obj_count_by_cat = {k: 0 for k in range(self._category_count) }
+            total_obj_count_by_cat = {k: 0 for k in range(self._category_count)}
             for data_element_idx in flt.data_element_indices:
                 for obj in self._dataset.data_elements[data_element_idx].objects:
                     total_obj_count_by_cat[obj.category] += 1
@@ -605,7 +607,6 @@ class Trainer:
         print(f'Train on {self._filters[train_filter_name].size} data elements.')
         print(f'Validate on {self._filters[validate_filter_name].size} data elements.')
 
-
         training_examples_to_make = self._cfg[train_phase_params['name'] + '_training_examples_count']
         training_examples_done = 0
 
@@ -649,10 +650,10 @@ class Trainer:
             self._validate_model(train_phase_params,
                                  train_phase_params['name'] == 'final' and is_phase_finished())
 
-
     def _validate_model(self, train_phase_params, extended_validation):
         localizer = predict.Localizer(self._model_dir)
-        localizer.diag = False
+        localizer.diag = False  # Set to true to see diagnostic images
+        localizer_diag_dir = os.path.join(self._output_dir, 'localizer_diag')
 
         result_dir = os.path.join(self._output_dir, 'validate')
         utils.make_clean_directory(result_dir)
@@ -663,7 +664,6 @@ class Trainer:
         image_count = 0
         gt_stats = {}
 
-        localizer_diag_dir = os.path.join(self._output_dir, 'localizer_diag')
         try:
             if localizer.diag:
                 utils.make_clean_directory(localizer_diag_dir)
@@ -685,36 +685,10 @@ class Trainer:
             run_times.append((datetime.datetime.now() - start_time).total_seconds())
 
             gt_objects = data_element.objects
-            self._log(f'Image file {image_file}, ground truth objects: {len(gt_objects)}, predicted objects {len(pr_objects)}', 'd')
+            self._log(f'Image file {image_file}, ground truth objects: {len(gt_objects)}, '
+                      f'predicted objects {len(pr_objects)}', 'd')
 
-            # Cross-match ground truth and prediction
-            gt_unmatched = list(range(len(gt_objects)))
-            pr_unmatched = list(range(len(pr_objects)))
-            for obj in gt_objects:
-                obj.match = None
-            for obj in pr_objects:
-                obj.match = None
-            while True:
-                best_match = None
-                least_diff = INFINITE_DIFF
-                for gti in gt_unmatched:
-                    gt_object = gt_objects[gti]
-                    for pri in pr_unmatched:
-                        pr_object = pr_objects[pri]
-                        diff = self._object_diff(gt_object, pr_object)
-                        if abs(diff[0]) < abs(least_diff[0]):
-                            least_diff = diff
-                            best_match = (gti, pri)
-                if best_match is None:
-                    break
-                gt_object = gt_objects[best_match[0]]
-                pr_object = pr_objects[best_match[1]]
-                gt_object.match = pr_object
-                pr_object.match = gt_object
-                gt_object.error = least_diff
-                pr_object.error = least_diff
-                gt_unmatched.remove(best_match[0])
-                pr_unmatched.remove(best_match[1])
+            self._cross_match_objects(gt_objects, pr_objects)
 
             self._compute_statistics(gt_stats, gt_objects, pr_objects, 'd')
 
@@ -740,6 +714,36 @@ class Trainer:
 
         with open(os.path.join(self._model_dir, 'validation.log'), 'w') as f:
             print(self._details_log.getvalue(), file=f)
+
+    def _cross_match_objects(self, gt_objects, pr_objects):
+        # Cross-match ground truth and prediction
+        gt_unmatched = list(range(len(gt_objects)))
+        pr_unmatched = list(range(len(pr_objects)))
+        for obj in gt_objects:
+            obj.match = None
+        for obj in pr_objects:
+            obj.match = None
+        while True:
+            best_match = None
+            least_diff = INFINITE_DIFF
+            for gti in gt_unmatched:
+                gt_object = gt_objects[gti]
+                for pri in pr_unmatched:
+                    pr_object = pr_objects[pri]
+                    diff = self._object_diff(gt_object, pr_object)
+                    if abs(diff[0]) < abs(least_diff[0]):
+                        least_diff = diff
+                        best_match = (gti, pri)
+            if best_match is None:
+                break
+            gt_object = gt_objects[best_match[0]]
+            pr_object = pr_objects[best_match[1]]
+            gt_object.match = pr_object
+            pr_object.match = gt_object
+            gt_object.error = least_diff
+            pr_object.error = least_diff
+            gt_unmatched.remove(best_match[0])
+            pr_unmatched.remove(best_match[1])
 
     def _compute_statistics(self, stats, gt_objects, pr_objects, log_target):
         """
@@ -827,5 +831,3 @@ class Trainer:
             return INFINITE_DIFF
 
         return np.array([position_diff_pix, orientation_diff])
-
-

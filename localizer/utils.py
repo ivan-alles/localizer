@@ -156,7 +156,7 @@ def save_batch_as_images(batch, dst_dir, fmt, prefix=''):
 
 
 # See https://gist.github.com/seberg/3866040
-def rolling_window(array, window=(0,), asteps=None, wsteps=None, axes=None, toend=True):
+def rolling_window(array, window=(0,), asteps=None, wsteps=None, axes=None, toend=True):  # noqa: C901
     """
     Create a view of `array` which for every point gives the n-dimensional neighbourhood of size window.
 
@@ -333,7 +333,7 @@ def find_local_max(x, window_shape, threshold):
     pad_axes_count = len(window_shape)
     nonpad_axes_count = result.ndim - pad_axes_count
     pad_width_arg = tuple((0, 0) for _ in range(nonpad_axes_count))
-    pad_width_arg += tuple((pad_size[i:i+1]*2) for i in range(pad_axes_count))
+    pad_width_arg += tuple((pad_size[i:i + 1] * 2) for i in range(pad_axes_count))
 
     padded = np.pad(result, pad_width_arg, 'constant')
 
@@ -398,9 +398,7 @@ def draw_objects(image, objects, axis_length=10, thickness=1, scale=1, category_
         conf = conf * conf_a + (1 - conf_a)
         color = category_colors[obj.category % len(category_colors)] * conf
         color = tuple([float(c) for c in color])
-        t = make_transform2(1, obj.angle,
-                                  obj.origin[0] * scale,
-                                  obj.origin[1] * scale)
+        t = make_transform2(1, obj.angle, obj.origin[0] * scale, obj.origin[1] * scale)
         points = np.array([
             [0, 0, 1],
             [axis_length[0], 0, 1],
@@ -412,4 +410,3 @@ def draw_objects(image, objects, axis_length=10, thickness=1, scale=1, category_
 
         cv2.line(image, tuple(points[0]), tuple(points[1]), color, thickness)
         cv2.line(image, tuple(points[2]), tuple(points[3]), color, thickness)
-

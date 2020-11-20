@@ -6,7 +6,7 @@ import sys
 import cv2
 import numpy as np
 
-from localizer import  predict
+from localizer import predict
 from localizer import utils
 
 if len(sys.argv) < 3:
@@ -35,4 +35,3 @@ for file in os.listdir(image_dir):
 
     cv2.imshow('result', result_image)
     cv2.waitKey(500)
-
