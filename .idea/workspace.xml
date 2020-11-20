@@ -20,10 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0eeeabcf-bfe9-4782-9209-06e14ce42787" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/localizer/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/localizer/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/localizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/localizer/predict.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/localizer/predict_for_images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/localizer/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/localizer/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,8 +56,13 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ivan\projects\localizer\localizer" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration name="predict" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="predict_for_images" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="localizer" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -67,8 +74,8 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/predict.py" />
-      <option name="PARAMETERS" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/localizer/predict_for_images.py" />
+      <option name="PARAMETERS" value="data\models\tools data\datasets\tools" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -78,7 +85,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.predict" />
+        <item itemvalue="Python.predict_for_images" />
       </list>
     </recent_temporary>
   </component>
@@ -107,22 +114,42 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1899" height="348" key="GridCell.Tab.0.bottom" timestamp="1605871918755">
+    <state x="411" y="248" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1605872812359">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.bottom/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605871918755" />
-    <state width="1899" height="348" key="GridCell.Tab.0.center" timestamp="1605871918755">
+    <state x="411" y="248" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872812359" />
+    <state width="1899" height="348" key="GridCell.Tab.0.bottom" timestamp="1605872784993">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.center/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605871918755" />
-    <state width="1899" height="348" key="GridCell.Tab.0.left" timestamp="1605871918754">
+    <state width="1899" height="348" key="GridCell.Tab.0.bottom/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872784993" />
+    <state width="1899" height="348" key="GridCell.Tab.0.center" timestamp="1605872784993">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.left/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605871918754" />
-    <state width="1899" height="348" key="GridCell.Tab.0.right" timestamp="1605871918755">
+    <state width="1899" height="348" key="GridCell.Tab.0.center/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872784993" />
+    <state width="1899" height="348" key="GridCell.Tab.0.left" timestamp="1605872784993">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.right/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605871918755" />
+    <state width="1899" height="348" key="GridCell.Tab.0.left/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872784993" />
+    <state width="1899" height="348" key="GridCell.Tab.0.right" timestamp="1605872784993">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.0.right/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872784993" />
+    <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1605872787770">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.bottom/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872787770" />
+    <state width="1899" height="348" key="GridCell.Tab.1.center" timestamp="1605872787769">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.center/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872787769" />
+    <state width="1899" height="348" key="GridCell.Tab.1.left" timestamp="1605872787769">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.left/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872787769" />
+    <state width="1899" height="348" key="GridCell.Tab.1.right" timestamp="1605872787769">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.right/-1920.0.1920.1160/0.0.1920.1040@0.0.1920.1040" timestamp="1605872787769" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1605871859654">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -49,7 +49,7 @@ class PredictionModelOutputs(enum.IntEnum):
 
 class Localizer:
     """
-     Predicts object positions, orientations, and categories on an image.
+    Predicts object positions, orientations, and categories on an image.
     """
 
     def __init__(self, model_dir):
