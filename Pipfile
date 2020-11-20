@@ -8,22 +8,11 @@ pytest = "*"
 flake8 = "*"
 
 [packages]
-atomicwrites = "*"
-Django = "*"
-django-cors-headers = "*"
-djangorestframework = "*"
-drf-nested-routers  = "*"
-fasteners = "*"
 numpy = "*"
-opencv-contrib-python = "*"
-piexif = "*"
-pillow = "*"
-pydot_ng = "*"
-pypiwin32 = "*"
-pathvalidate = "*"
-requests = "*"
+opencv-python = "*"
 tensorflow = "*"
 robogym = {git = "https://github.com/ivan-alles/robogym.git",ref = "v1.0.2"}
+pydot = "*"
 
 [requires]
 python_version = "3.6"

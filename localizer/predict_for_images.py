@@ -10,7 +10,8 @@ from localizer import predict
 from localizer import utils
 
 if len(sys.argv) < 3:
-    print('Usage: predict_for_images model_dir image_dir')
+    print('Wrong command line argument. Usage: predict_for_images model_dir image_dir')
+    sys.exit(-1)
 
 model_dir = sys.argv[1]
 image_dir = sys.argv[2]
