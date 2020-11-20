@@ -1,0 +1,6 @@
+{
+  "name":  "localizer",
+  "author":  "Ivan Alles",
+  "version":  "1.0.0",
+  "description": "A neural network predicting object coordinates and orientation angles on 2d images."
+}
