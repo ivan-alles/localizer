@@ -28,7 +28,7 @@ class Dataset:
         self.image_mean = None
 
         self.data_elements = []
-        
+
         for i, data_element_data in enumerate(self._data['files']):
             self.data_elements.append(DataElement(i, cfg, root_dir, data_element_data))
 
@@ -40,8 +40,6 @@ class Dataset:
 
         self.image_mean = (mean_sum / mean_count).astype(np.float32)
         print(f'Image mean {self.image_mean}')
-
-
 
 
 class DataElement:
@@ -93,9 +91,7 @@ class DataElement:
 
         image_shape = image.shape[:2]
         target_scale = self._cfg['input_scale'] * self._cfg['model_scale']
-        target_shape = tuple(np.ceil(
-            np.array(image_shape, dtype=np.float32) *
-            target_scale).astype(int))
+        target_shape = tuple(np.ceil(np.array(image_shape, dtype=np.float32) * target_scale).astype(int))
 
         output_dir = os.path.dirname(self.data_file)
         os.makedirs(output_dir, exist_ok=True)
@@ -149,49 +145,17 @@ class DataElement:
 
         image = data_element_tensors['image']
 
-        obj = self.objects[rng.randint(len(self.objects))]
-
         category_count = batch.weight.shape[1]
         input_shape = batch.input.shape[1:]
         output_shape = batch.target_window.shape[1:]
 
-        if rng.uniform(0, 1) <= self._cfg['random_background_probability']:
-            random_center = np.array(
-                [
-                    rng.uniform(0, image.shape[1]),
-                    rng.uniform(0, image.shape[0])
-                ])
-            random_angle = rng.uniform(-np.pi, np.pi)
-        else:
-            # It is enough to vary the position within model scale radius to cover all possible
-            # object placements for the convnet.
-            offset = rng.uniform(-.5, .5, size=(2,)) / self._cfg['model_scale']
-            random_center = obj.origin + offset
-            random_angle = obj.angle + rng.uniform(-np.pi, np.pi)
+        random_angle, random_center = self._select_random_pose(image, rng)
 
         # Test code
         # random_center = np.array([319.5 + 0, 239.5 - 0])
         # random_angle = 0
 
-        # Compute data augmentation transformation
-        #
-        shear_scale = rng.uniform(*self._cfg['data_augmentation_shear_scale'])
-        shear_rot = rng.uniform(*self._cfg['data_augmentation_shear_rotation'])
-        scale = rng.uniform(*self._cfg['data_augmentation_scale'])
-
-        # Test code
-        # scale = 1
-        # shear_scale_x = 2
-        # shear_scale_y = 1
-        # shear_rot = 0.5
-
-        t_shear_rot = utils.make_transform2(1, shear_rot)  # Rotation to make shear scaling
-        t_shear_scale = utils.make_transform2(shear_scale)  # Shear scaling
-        t_scale = utils.make_transform2(scale)  # Uniform scaling
-
-        daug_t_pose = np.linalg.multi_dot([t_scale, t_shear_rot.T, t_shear_scale, t_shear_rot])
-        # Test code
-        # daug_t_pose = np.eye(3)
+        daug_t_pose = self._make_data_augmentation_transform(rng)
 
         # Transform to the selected pose
         pose_t_image = np.dot(
@@ -227,15 +191,6 @@ class DataElement:
             target_t_image,
             utils.make_transform2(1 / self._cfg['model_scale'] / self._cfg['input_scale']))
 
-        def make_window(x, y, angle):
-            sigma = float(self._cfg['sigma'])
-            g = np.exp(-0.5 * (np.square(x) + np.square(y)) / np.square(sigma))
-            wx = x / sigma * g
-            wy = y / sigma * g
-            wsa = np.sin(angle) * g
-            wca = np.cos(angle) * g
-            return wx, wy, wsa, wca
-
         # A tensor with homogeneous target pixel coordinates
         target_xy = utils.make_xy_tensor(output_shape[1:3])
 
@@ -253,7 +208,7 @@ class DataElement:
 
                 t = pos.reshape(1, 1, -1) - target_xy
                 a = np.full(output_shape[1:3], geometry.normalize_angle(obj.angle - random_angle))
-                wx, wy, wsa, wca = make_window(t[:, :, 0], t[:, :, 1], a)
+                wx, wy, wsa, wca = make_window(t[:, :, 0], t[:, :, 1], a, self._cfg['sigma'])
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.X] += wx
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.Y] += wy
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.SA] += wsa
@@ -298,6 +253,42 @@ class DataElement:
 
         if show_diag_images:
             cv2.waitKey(0)
+
+    def _select_random_pose(self, image, rng):
+        obj = self.objects[rng.randint(len(self.objects))]
+        if rng.uniform(0, 1) <= self._cfg['random_background_probability']:
+            random_center = np.array(
+                [
+                    rng.uniform(0, image.shape[1]),
+                    rng.uniform(0, image.shape[0])
+                ])
+            random_angle = rng.uniform(-np.pi, np.pi)
+        else:
+            # It is enough to vary the position within model scale radius to cover all possible
+            # object placements for the convnet.
+            offset = rng.uniform(-.5, .5, size=(2,)) / self._cfg['model_scale']
+            random_center = obj.origin + offset
+            random_angle = obj.angle + rng.uniform(-np.pi, np.pi)
+        return random_angle, random_center
+
+    def _make_data_augmentation_transform(self, rng):
+        # Compute data augmentation transformation
+        #
+        shear_scale = rng.uniform(*self._cfg['data_augmentation_shear_scale'])
+        shear_rot = rng.uniform(*self._cfg['data_augmentation_shear_rotation'])
+        scale = rng.uniform(*self._cfg['data_augmentation_scale'])
+        # Test code
+        # scale = 1
+        # shear_scale_x = 2
+        # shear_scale_y = 1
+        # shear_rot = 0.5
+        t_shear_rot = utils.make_transform2(1, shear_rot)  # Rotation to make shear scaling
+        t_shear_scale = utils.make_transform2(shear_scale)  # Shear scaling
+        t_scale = utils.make_transform2(scale)  # Uniform scaling
+        daug_t_pose = np.linalg.multi_dot([t_scale, t_shear_rot.T, t_shear_scale, t_shear_rot])
+        # Test code
+        # daug_t_pose = np.eye(3)
+        return daug_t_pose
 
     @property
     def data_file(self):
@@ -355,3 +346,12 @@ class Object:
         patch = cv2.warpAffine(image, t[:2, :3], size, **warp_affine_kwargs)
 
         return patch
+
+
+def make_window(x, y, angle, sigma):
+    g = np.exp(-0.5 * (np.square(x) + np.square(y)) / np.square(sigma))
+    wx = x / sigma * g
+    wy = y / sigma * g
+    wsa = np.sin(angle) * g
+    wca = np.cos(angle) * g
+    return wx, wy, wsa, wca

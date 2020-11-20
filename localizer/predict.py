@@ -16,7 +16,7 @@ class Object:
     """ A predicted object. Duck-type compatible with dataset.Object. """
     def __init__(self, x, y, angle, category, confidence):
         self.origin = np.array([x, y], dtype=np.float32)
-        self.angle = angle # Angle in radiance
+        self.angle = angle  # Angle in radiance
         self.category = int(category)
         self.confidence = confidence
 
@@ -134,7 +134,7 @@ class Localizer:
         pos[:, :, 1] = np.broadcast_to(row, (size, size))
         pos[:, :, 0] = pos[:, :, 1].T
 
-        nr2 = ((pos/sigma) ** 2).sum(axis=2)
+        nr2 = ((pos / sigma) ** 2).sum(axis=2)
         gaussian = np.exp(-0.5 * nr2)
         return pos, gaussian
 
@@ -142,7 +142,7 @@ class Localizer:
         model = keras.models.load_model(self._model_path)
 
         if self._diag:
-            keras.utils.plot_model(model, to_file=os.path.join(self._diag_dir,  'model.svg'), dpi=50, show_shapes=True)
+            keras.utils.plot_model(model, to_file=os.path.join(self._diag_dir, 'model.svg'), dpi=50, show_shapes=True)
 
         # Compute model with dummy values to let it compute the output shape.
         dummy_input = np.zeros((1,) + self._model_input_shape)
