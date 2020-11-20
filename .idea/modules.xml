@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/object-localization-with-orientation.iml" filepath="$PROJECT_DIR$/.idea/object-localization-with-orientation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/localizer.iml" filepath="$PROJECT_DIR$/.idea/localizer.iml" />
     </modules>
   </component>
 </project>
