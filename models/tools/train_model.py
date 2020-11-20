@@ -2,10 +2,10 @@
 
 import os
 
-import train
+from localizer import train
 
 if __name__ == '__main__':
-    trainer = train.Trainer(os.path.join(r'data\models\tools\config.json'))
+    trainer = train.Trainer(os.path.join(os.path.dirname(__file__), 'config.json'))
     trainer.run()
 
 

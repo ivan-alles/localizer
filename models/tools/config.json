@@ -1,5 +1,5 @@
 {
-  "dataset": "data/datasets/tools/dataset.json",
+  "dataset": "../../datasets/tools/dataset.json",
   "validation_fraction": 0.2,
   "validated_training_examples_count": 100000,
   "final_training_examples_count": 50000,

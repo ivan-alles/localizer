@@ -23,9 +23,9 @@ from tensorflow import keras
 from robogym import geometry
 from robogym import random
 
-import dataset
-from localizer import Localizer, TrainingModelOutputs
-import utils
+from localizer import dataset
+from localizer import predict
+from localizer import utils
 
 logger = logging.getLogger(__name__)
 
@@ -501,7 +501,7 @@ class Trainer:
             category_model = keras.layers.Conv2D(32, (11, 11), **conv_params)(category_model)
             category_model = keras.layers.Dropout(0.3)(category_model)
             conv_params['activation'] = None
-            category_model = keras.layers.Conv2D(TrainingModelOutputs.COUNT, (1, 1),
+            category_model = keras.layers.Conv2D(predict.TrainingModelChannels.COUNT, (1, 1),
                                                  **conv_params, name=f'category_model{cat}')(category_model)
             category_models.append(category_model)
 
@@ -651,7 +651,7 @@ class Trainer:
 
 
     def _validate_model(self, train_phase_params, extended_validation):
-        localizer = Localizer(self._model_dir)
+        localizer = predict.Localizer(self._model_dir)
         localizer.diag = False
 
         result_dir = os.path.join(self._output_dir, 'validate')

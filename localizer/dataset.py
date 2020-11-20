@@ -8,8 +8,8 @@ import numpy as np
 
 from robogym import geometry
 
-from localizer import TrainingModelOutputs
-import utils
+from localizer import predict
+from localizer import utils
 
 
 class Dataset:
@@ -254,10 +254,10 @@ class DataElement:
                 t = pos.reshape(1, 1, -1) - target_xy
                 a = np.full(output_shape[1:3], geometry.normalize_angle(obj.angle - random_angle))
                 wx, wy, wsa, wca = make_window(t[:, :, 0], t[:, :, 1], a)
-                batch.target_window[batch_index, cat, :, :, TrainingModelOutputs.X] += wx
-                batch.target_window[batch_index, cat, :, :, TrainingModelOutputs.Y] += wy
-                batch.target_window[batch_index, cat, :, :, TrainingModelOutputs.SA] += wsa
-                batch.target_window[batch_index, cat, :, :, TrainingModelOutputs.CA] += wca
+                batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.X] += wx
+                batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.Y] += wy
+                batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.SA] += wsa
+                batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.CA] += wca
                 if show_diag_images:
                     cv2.imshow(f'{i}-wsa', utils.red_green(wsa))
                     cv2.imshow(f'{i}-wca', utils.red_green(wca))

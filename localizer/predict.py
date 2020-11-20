@@ -9,7 +9,7 @@ import cv2
 import tensorflow as tf
 from tensorflow import keras
 
-import utils
+from localizer import utils
 
 
 class Object:
@@ -25,9 +25,9 @@ class Object:
                f'{self.category} {self.confidence:.2f}'
 
 
-class TrainingModelOutputs(enum.IntEnum):
+class TrainingModelChannels(enum.IntEnum):
     """
-    Indices of output channels for each category.
+    Indices of output channels.
     """
     Y = 0  # y-coordinate.
     X = 1  # x-coordinate.
@@ -148,8 +148,8 @@ class Localizer:
         dummy_input = np.zeros((1,) + self._model_input_shape)
         self._model_output_shape = model.predict(dummy_input).shape[1:]
 
-        output_pos = model.output[:, :, :, :, TrainingModelOutputs.Y:TrainingModelOutputs.X + 1]
-        output_angle = model.output[:, :, :, :, TrainingModelOutputs.SA:TrainingModelOutputs.CA + 1]
+        output_pos = model.output[:, :, :, :, TrainingModelChannels.Y:TrainingModelChannels.X + 1]
+        output_angle = model.output[:, :, :, :, TrainingModelChannels.SA:TrainingModelChannels.CA + 1]
 
         scale = np.full(2, 1. / self._sigma)
 
