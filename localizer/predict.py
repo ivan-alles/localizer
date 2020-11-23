@@ -302,7 +302,7 @@ class Localizer:
 
                 predictions.append(Object(pos[0], pos[1], angle, index[0], confidence))
 
-            local_max_map = utils.find_local_max(objectness, (3, 3), self._cfg['confidence_thr'])
+            local_max_map = utils.local_max(objectness, (3, 3), self._cfg['confidence_thr'])
             local_max = np.transpose(np.nonzero(local_max_map))
             for i in range(len(local_max)):
                 compute_pose(local_max[i])

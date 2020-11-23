@@ -323,7 +323,7 @@ def rolling_window(array, window=(0,), asteps=None, wsteps=None, axes=None, toen
     return np.lib.stride_tricks.as_strided(array, shape=new_shape, strides=new_strides)
 
 
-def find_local_max(x, window_shape, threshold):
+def local_max(x, window_shape, threshold):
     if not all([s % 2 == 1 for s in window_shape]):
         raise ValueError("all window_shape dimensions must be odd")
 
