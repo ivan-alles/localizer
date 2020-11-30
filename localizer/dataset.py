@@ -19,17 +19,12 @@ class Dataset:
     def __init__(self, file_name, cfg):
         self._file_name = file_name
         with open(file_name) as f:
-            self._data = json.load(f)
-
-        root_dir = self._data['definitions']['files_root_dir']
-        if not os.path.isabs(root_dir):
-            root_dir = os.path.join(os.path.dirname(self._file_name), root_dir)
+            data = json.load(f)
 
         self.image_mean = None
-
         self.data_elements = []
-
-        for i, data_element_data in enumerate(self._data['files']):
+        root_dir = os.path.dirname(self._file_name)
+        for i, data_element_data in enumerate(data):
             self.data_elements.append(DataElement(i, cfg, root_dir, data_element_data))
 
     def save(self, file_name):
@@ -81,12 +76,11 @@ class DataElement:
     def __init__(self, id, cfg, root_dir, data):
         self.id = id
         self._cfg = cfg
-        self.path = os.path.join(root_dir, data['name'])
+        self.path = os.path.join(root_dir, data['image'])
         self.objects = []
 
-        for i, obj_label in enumerate(data['markers']):
-            if obj_label['type'] == 'Object':
-                self.objects.append(Object(i, obj_label, data['markers'], self.path))
+        for i, obj_label in enumerate(data['objects']):
+            self.objects.append(Object(i, obj_label))
 
     def read_image(self):
         image = cv2.imread(self.path, cv2.IMREAD_COLOR)
@@ -331,37 +325,24 @@ class DataElement:
 class Object:
     """
     A ground-truth object with labeled coordinate system (origin, angle) and an oriented bounding box.
+
+    Angle values are in radians.
     """
-    def __init__(self, id, label_data, all_labels_data, path):
+    def __init__(self, id, data):
         self.id = id
-        self.category = label_data['category']
+        self.category = data['category']
 
-        raw_data = [float(v) for v in label_data['value'].split()]
-        self.origin = np.array(raw_data[:2])  # x, y
-        self.angle = raw_data[2]  # angle in radians
+        self.origin = np.array([data['origin']['x'], data['origin']['y']])
+        self.angle = data['origin']['angle']
 
-        bounding_box_found = False
-
-        for bb_label in all_labels_data:
-            if bb_label['type'] == 'Bounding box':
-                raw_data = [float(v) for v in bb_label['value'].split()]
-                x = raw_data[0]
-                y = raw_data[1]
-                angle = raw_data[4]
-                sx = raw_data[2]
-                sy = raw_data[3]
-
-                image_t_bb = utils.make_transform2(1, angle, x, y)
-                bb_t_image = np.linalg.inv(image_t_bb)
-                d = np.abs(np.dot(bb_t_image, np.append(self.origin, 1)))
-                if d[0] < sx / 2 and d[1] < sy / 2:
-                    bounding_box_found = True
-                    self.bounding_box_t_image = bb_t_image
-                    self.bounding_box_sx = sx
-                    self.bounding_box_sy = sy
-                    break
-        if not bounding_box_found:
-            raise ValueError(f'No bounding box for object {label_data["value"]} on image {path}')
+        image_t_bb = utils.make_transform2(
+            1,
+            data['bounding_box']['angle'],
+            data['bounding_box']['x'],
+            data['bounding_box']['y'])
+        self.bounding_box_t_image = np.linalg.inv(image_t_bb)
+        self.bounding_box_sx = data['bounding_box']['size_x']
+        self.bounding_box_sy = data['bounding_box']['size_y']
 
     def __str__(self):
         return f'{self.origin[0]:.2f} {self.origin[1]:.2f} {np.rad2deg(self.angle):.2f} {self.category}'
