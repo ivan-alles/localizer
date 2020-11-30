@@ -87,7 +87,7 @@ def convert(input_file):
             file['markers'].append({
                 'type': 'origin',
                 'category': obj['category'],
-                'value': f"{obj['origin']['x']} {obj['origin']['y']} 100 100 {obj['origin']['angle']}",
+                'value': f"{obj['origin']['x']} {obj['origin']['y']} {obj['origin']['angle']}",
             })
             file['markers'].append({
                 'type': 'bounding_box',

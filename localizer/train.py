@@ -409,6 +409,8 @@ class Trainer:
         }
 
         self._dataset = dataset.Dataset(self._cfg['dataset'], self._cfg)
+        # Test code
+        # self._dataset.save(os.path.splitext(self._cfg['dataset'])[0]+'-1.json')
 
         accepted_data_element_indices = []
         categories = set()

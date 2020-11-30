@@ -32,6 +32,38 @@ class Dataset:
         for i, data_element_data in enumerate(self._data['files']):
             self.data_elements.append(DataElement(i, cfg, root_dir, data_element_data))
 
+    def save(self, file_name):
+        data_elements = []
+
+        for data_element in self.data_elements:
+            objects = []
+            for obj in data_element.objects:
+                image_t_bounding_box = np.linalg.inv(obj.bounding_box_t_image)
+                objects.append({
+                    'category': obj.category,
+                    'origin': {
+                        'x': obj.origin[0],
+                        'y': obj.origin[1],
+                        'angle': obj.angle
+                    },
+                    'bounding_box': {
+                        'x': image_t_bounding_box[0, 2],
+                        'y': image_t_bounding_box[1, 2],
+                        'size_x': obj.bounding_box_sx,
+                        'size_y': obj.bounding_box_sy,
+                        'angle': np.arctan2(image_t_bounding_box[1, 0], image_t_bounding_box[0, 0])
+                    },
+                })
+            data_elements.append(
+                {
+                    'image': os.path.relpath(data_element.path, os.path.dirname(file_name)),
+                    'objects': objects
+                }
+            )
+
+        with open(file_name, 'w') as f:
+            json.dump(data_elements, f, indent=1)
+
     def precompute_training_data(self, data_element_indices):
         mean_sum = np.zeros(3)
         mean_count = np.zeros(3)
