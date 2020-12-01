@@ -30,7 +30,7 @@ ANNO_TEMPLATE = {
                 "rendering_script": [
                     "p.SetBaseTransform(true, true)",
                     "p.SetDefaultPen()",
-                    "p.DrawEllipse(-10, -10, 20, 20)",
+                    "p.DrawEllipse(-5, -5, 10, 10)",
                     "p.SetPen(255, 0, 0, -2)",
                     "p.DrawLine(0, 0, 50, 0)",
                     "p.DrawLine(45, 5, 50, 0)",
