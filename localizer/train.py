@@ -495,7 +495,9 @@ class Trainer:
         f = keras.layers.Conv2D(feature_sizes[2], (3, 3), **conv_params)(f)
         f = keras.layers.AveragePooling2D(**pool_params)(f)
 
-        tf.keras.utils.plot_model(keras.Model(inputs=self._image_input, outputs=f),
+        self._features_model = keras.Model(inputs=self._image_input, outputs=f)
+
+        tf.keras.utils.plot_model(self._features_model,
                                   to_file=self._output_dir + '/features.svg', dpi=50, show_shapes=True)
 
         category_models = []
@@ -647,6 +649,11 @@ class Trainer:
             te_per_sec = training_examples_in_epoch_done / epoch_run_time
             print(f'Training examples: {training_examples_done}, loss: {self._epoch_loss.result():.6f}, '
                   f'{te_per_sec:.2f} training examples/s.')
+
+            if self._cfg.get('save_features', False):
+                self._features_model.save(os.path.join(self._model_dir, 'features.tf'))
+
+            self._model.save(os.path.join(self._model_dir, 'model.tf'))
 
             self._model.save(os.path.join(self._model_dir, 'model.tf'))
             self._validate_model(train_phase_params,
