@@ -454,11 +454,10 @@ class Trainer:
         Creates a model and loss.
         :return:
         """
-        input_shape = tuple(self._cfg['input_shape'])
         self._sigma = float(self._cfg['sigma'])
-        self._image_input = keras.Input(shape=[None, None, input_shape[2]], dtype='float32', name='image')
 
-        print(f"Creating model, input shape {input_shape}")
+        self._image_input = keras.Input(shape=[None, None, self._cfg['input_shape'][2]], dtype='float32', name='image')
+        print(f"Creating model, input shape {self._cfg['input_shape']}")
         self._create_model()
         tf.keras.utils.plot_model(self._model, to_file=self._output_dir + '/model.svg', dpi=50, show_shapes=True)
 
@@ -480,22 +479,28 @@ class Trainer:
         Creates a new model (self._model).
         """
 
-        # Create feature extractor
-        f = self._image_input - tf.constant(self._dataset.image_mean, name='image_mean')
-        feature_sizes = [16, 32, 64]
         conv_params = {'activation': 'relu', 'padding': 'same'}
-        pool_params = {'pool_size': (2, 2), 'pool_size': (2, 2), 'padding': 'valid'}
-        f = keras.layers.Conv2D(feature_sizes[0], (3, 3), **conv_params)(f)
-        f = keras.layers.Conv2D(feature_sizes[0], (3, 3), **conv_params)(f)
-        f = keras.layers.AveragePooling2D(**pool_params)(f)
-        f = keras.layers.Conv2D(feature_sizes[1], (3, 3), **conv_params)(f)
-        f = keras.layers.Conv2D(feature_sizes[1], (3, 3), **conv_params)(f)
-        f = keras.layers.AveragePooling2D(**pool_params)(f)
-        f = keras.layers.Conv2D(feature_sizes[2], (3, 3), **conv_params)(f)
-        f = keras.layers.Conv2D(feature_sizes[2], (3, 3), **conv_params)(f)
-        f = keras.layers.AveragePooling2D(**pool_params)(f)
 
-        self._features_model = keras.Model(inputs=self._image_input, outputs=f)
+        if 'transfer_learning_base' in self._cfg:
+            self._features_model = keras.models.load_model(self._cfg['transfer_learning_base'])
+            self._features_model.trainable = False
+            f = self._features_model(self._image_input, training=False)
+        else:
+            # Create feature extractor
+            f = self._image_input - tf.constant(self._dataset.image_mean, name='image_mean')
+            feature_sizes = [16, 32, 64]
+            pool_params = {'pool_size': (2, 2), 'pool_size': (2, 2), 'padding': 'valid'}
+            f = keras.layers.Conv2D(feature_sizes[0], (3, 3), **conv_params)(f)
+            f = keras.layers.Conv2D(feature_sizes[0], (3, 3), **conv_params)(f)
+            f = keras.layers.AveragePooling2D(**pool_params)(f)
+            f = keras.layers.Conv2D(feature_sizes[1], (3, 3), **conv_params)(f)
+            f = keras.layers.Conv2D(feature_sizes[1], (3, 3), **conv_params)(f)
+            f = keras.layers.AveragePooling2D(**pool_params)(f)
+            f = keras.layers.Conv2D(feature_sizes[2], (3, 3), **conv_params)(f)
+            f = keras.layers.Conv2D(feature_sizes[2], (3, 3), **conv_params)(f)
+            f = keras.layers.AveragePooling2D(**pool_params)(f)
+
+            self._features_model = keras.Model(inputs=self._image_input, outputs=f)
 
         tf.keras.utils.plot_model(self._features_model,
                                   to_file=self._output_dir + '/features.svg', dpi=50, show_shapes=True)
