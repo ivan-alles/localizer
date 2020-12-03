@@ -509,11 +509,14 @@ class Trainer:
 
         for cat in range(self._category_count):
             category_model = keras.layers.Dropout(0.3)(f)
-            category_model = keras.layers.Conv2D(32, (11, 11), **conv_params, name=f'category_model{cat}-1')(category_model)
+            category_model = keras.layers.Conv2D(32, (11, 11),
+                                                 **conv_params,
+                                                 name=f'category_model{cat}-1')(category_model)
             category_model = keras.layers.Dropout(0.3)(category_model)
             conv_params['activation'] = None
             category_model = keras.layers.Conv2D(predict.TrainingModelChannels.COUNT, (1, 1),
-                                                 **conv_params, name=f'category_model{cat}-2')(category_model)
+                                                 **conv_params,
+                                                 name=f'category_model{cat}-2')(category_model)
             category_models.append(category_model)
 
         category_models = tf.stack(category_models, axis=1)
@@ -666,7 +669,7 @@ class Trainer:
         localizer.diag = False  # Set to true to see diagnostic images
         localizer_diag_dir = os.path.join(self._output_dir, 'localizer_diag')
 
-        result_dir = os.path.join(self._output_dir, 'validate')
+        result_dir = os.path.join(self._output_dir, train_phase_params['name'])
         utils.make_clean_directory(result_dir)
 
         self._summary_log = io.StringIO()
@@ -723,7 +726,7 @@ class Trainer:
 
         print(self._summary_log.getvalue())
 
-        with open(os.path.join(self._model_dir, 'validation.log'), 'w') as f:
+        with open(os.path.join(self._model_dir, f'{train_phase_params["name"]}.log'), 'w') as f:
             print(self._details_log.getvalue(), file=f)
 
     def _cross_match_objects(self, gt_objects, pr_objects):
