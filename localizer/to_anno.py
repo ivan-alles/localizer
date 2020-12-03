@@ -84,11 +84,10 @@ def convert(input_file):
     random.seed(1)
     for i, category in enumerate(categories):
         color = f'#{random.randrange(100, 255):02x}{random.randrange(100, 255):02x}{random.randrange(100, 255):02x}'
-        category_data = {
-                            'color': color,
-                            'id': i,
-                            'name': f'object {i}'
-                        }
+        category_data = {'color': color,
+                         'id': i,
+                         'name': f'object {i}'
+                         }
         anno['definitions']['marker_types']['bounding_box']['categories'].append(category_data)
         anno['definitions']['marker_types']['origin']['categories'].append(category_data)
 
