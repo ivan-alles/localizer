@@ -52,14 +52,14 @@ class Localizer:
     Predicts object positions, orientations, and categories on an image.
     """
 
-    def __init__(self, model_dir):
-        with open(os.path.join(model_dir, 'config.json'), encoding='utf-8') as f:
+    def __init__(self, config_file_name):
+        with open(os.path.join(config_file_name), encoding='utf-8') as f:
             self._cfg = json.load(f)
 
         self._diag = False
         self._diag_dir = 'localizer_diag'
 
-        self._model_path = os.path.join(model_dir, 'model.tf')
+        self._model_path = os.path.join(os.path.dirname(config_file_name), 'model.tf')
 
         self._sigma = self._cfg['sigma']
 
