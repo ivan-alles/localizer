@@ -657,9 +657,6 @@ class Trainer:
 
             if self._cfg.get('save_features', False):
                 self._features_model.save(os.path.join(self._model_dir, 'features.tf'))
-
-            self._model.save(os.path.join(self._model_dir, 'model.tf'))
-
             self._model.save(os.path.join(self._model_dir, 'model.tf'))
             self._validate_model(train_phase_params,
                                  train_phase_params['name'] == 'final' and is_phase_finished())
