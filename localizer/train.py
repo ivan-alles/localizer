@@ -510,7 +510,7 @@ class Trainer:
         category_models = []
 
         for cat in range(self._category_count):
-            category_model = keras.layers.Dropout(0.3)(f)
+            category_model = keras.layers.SpatialDropout2D(0.3)(f)
             conv_params['activation'] = None
             category_model = keras.layers.Conv2D(predict.TrainingModelChannels.COUNT, (1, 1),
                                                  **conv_params,
