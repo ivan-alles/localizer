@@ -366,11 +366,11 @@ class Trainer:
     Trains and validates a model.
     """
 
-    def __init__(self, config_path):
-        self._model_dir = os.path.dirname(config_path)
-        with open(config_path, encoding='utf-8') as f:
-            cfg = json.load(f)
-        self._cfg = cfg
+    def __init__(self, config_file_name):
+        with open(config_file_name, encoding='utf-8') as f:
+            self._cfg = json.load(f)
+        self._config_file_name = config_file_name
+        self._model_dir = os.path.dirname(config_file_name)
         # The config will be augmented by some parameters and objects in run-time
         # (one object configures another).
         self._cfg['runtime'] = {}
@@ -509,11 +509,11 @@ class Trainer:
 
         for cat in range(self._category_count):
             category_model = keras.layers.Dropout(0.3)(f)
-            category_model = keras.layers.Conv2D(32, (11, 11), **conv_params)(category_model)
+            category_model = keras.layers.Conv2D(32, (11, 11), **conv_params, name=f'category_model{cat}-1')(category_model)
             category_model = keras.layers.Dropout(0.3)(category_model)
             conv_params['activation'] = None
             category_model = keras.layers.Conv2D(predict.TrainingModelChannels.COUNT, (1, 1),
-                                                 **conv_params, name=f'category_model{cat}')(category_model)
+                                                 **conv_params, name=f'category_model{cat}-2')(category_model)
             category_models.append(category_model)
 
         category_models = tf.stack(category_models, axis=1)
@@ -662,7 +662,7 @@ class Trainer:
                                  train_phase_params['name'] == 'final' and is_phase_finished())
 
     def _validate_model(self, train_phase_params, extended_validation):
-        localizer = predict.Localizer(self._model_dir)
+        localizer = predict.Localizer(self._config_file_name)
         localizer.diag = False  # Set to true to see diagnostic images
         localizer_diag_dir = os.path.join(self._output_dir, 'localizer_diag')
 
