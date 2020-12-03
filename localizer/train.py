@@ -501,7 +501,6 @@ class Trainer:
             f = keras.layers.AveragePooling2D(**pool_params)(f)
             f = keras.layers.Conv2D(feature_sizes[3], (11, 11), **conv_params)(f)
 
-
             self._features_model = keras.Model(inputs=self._image_input, outputs=f)
 
         tf.keras.utils.plot_model(self._features_model,
