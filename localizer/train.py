@@ -546,9 +546,9 @@ class Trainer:
 
         output_window = make_window(self._model.output, 'output_window')
 
-        w_loss = np.array(self._cfg['w_loss'], dtype=np.float32)
-        w_loss /= w_loss.sum()
-        loss = w_loss * tf.square(output_window - self._target_window_input)
+        loss_weight = np.ones(predict.TrainingModelChannels.COUNT, dtype=np.float32)
+        loss_weight /= loss_weight.sum()
+        loss = loss_weight * tf.square(output_window - self._target_window_input)
 
         weight = self._weight_input
 

@@ -42,11 +42,5 @@
     360,
     3
   ],
-  "random_background_probability": 0.1,
-  "w_loss": [
-    1,
-    1,
-    1,
-    1
-  ]
+  "random_background_probability": 0.1
 }
