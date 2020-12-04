@@ -225,6 +225,12 @@ class DataElement:
                                         flags=cv2.INTER_NEAREST, borderValue=-1)
 
         for cat in range(category_count):
+            weight_mask = np.ones_like(data_element_tensors['nearest_object'], dtype=np.float32)
+            weight_mask = cv2.warpAffine(weight_mask, target_t_precomputed[:2, :3],
+                                         (output_shape[2], output_shape[1]),
+                                         flags=cv2.INTER_NEAREST)
+            weight = weight_mask * self._cfg['background_weight']
+
             for i, obj in enumerate(self.objects):
                 if obj.category != cat:
                     continue
@@ -239,16 +245,18 @@ class DataElement:
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.Y] += wy
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.SA] += wsa
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.CA] += wca
+
+                obj_weight = np.exp(-0.5 * (np.square(t[:, :, 0]) + np.square(t[:, :, 1])) /
+                                    np.square(self._cfg['object_weight_sigma_factor'] *
+                                              self._cfg['sigma'])) > 0.01
+
+                weight = np.maximum(weight, obj_weight * weight_mask)
+
                 if show_diag_images:
                     cv2.imshow(f'{i}-wsa', utils.red_green(wsa))
                     cv2.imshow(f'{i}-wca', utils.red_green(wca))
                     cv2.imshow(f'{i}-tx', utils.red_green(wx) * 0.5)
                     cv2.imshow(f'{i}-ty', utils.red_green(wy) * 0.5)
-
-            weight = np.ones_like(data_element_tensors['nearest_object'], dtype=np.float32)
-            weight = cv2.warpAffine(weight, target_t_precomputed[:2, :3],
-                                    (output_shape[2], output_shape[1]),
-                                    flags=cv2.INTER_NEAREST)
 
             object_map = cv2.warpAffine(data_element_tensors['object_map'][cat], target_t_precomputed[:2, :3],
                                         (output_shape[2], output_shape[1]),
