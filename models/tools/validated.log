@@ -1,70 +1,70 @@
 Image file 20180514-130943-426-0.png, ground truth objects: 4, predicted objects 4
-found, gt: 100.37 221.62 37.00 0 <-> pr 102.78 219.19 42.92 0 0.85, err pos 3.41, err orient 5.92
-found, gt: 403.98 82.48 30.00 0 <-> pr 402.66 82.68 25.42 0 0.90, err pos 1.33, err orient -4.58
-found, gt: 327.95 320.50 80.00 1 <-> pr 329.42 320.92 78.41 1 0.93, err pos 1.53, err orient -1.59
-found, gt: 484.47 355.78 63.00 1 <-> pr 481.93 354.87 62.12 1 0.79, err pos 2.70, err orient -0.88
+found, gt: 100.37 221.62 37.00 0 <-> pr 102.38 218.35 44.16 0 0.89, err pos 3.83, err orient 7.16
+found, gt: 403.98 82.48 30.00 0 <-> pr 402.04 83.42 32.22 0 0.86, err pos 2.15, err orient 2.22
+found, gt: 327.95 320.50 80.00 1 <-> pr 329.53 321.27 81.01 1 0.86, err pos 1.76, err orient 1.01
+found, gt: 484.47 355.78 63.00 1 <-> pr 482.33 355.82 62.91 1 0.85, err pos 2.14, err orient -0.09
 Image file 20180514-131007-348-0.png, ground truth objects: 4, predicted objects 4
-found, gt: 348.85 59.80 118.00 0 <-> pr 351.03 59.68 119.82 0 0.89, err pos 2.18, err orient 1.82
-found, gt: 507.28 366.69 -151.00 0 <-> pr 510.49 367.38 -144.50 0 0.87, err pos 3.28, err orient 6.50
-found, gt: 472.18 160.05 151.00 1 <-> pr 471.18 159.94 149.47 1 0.96, err pos 1.00, err orient -1.53
-found, gt: 214.38 355.62 -154.00 1 <-> pr 215.30 355.77 -152.52 1 1.00, err pos 0.93, err orient 1.48
+found, gt: 348.85 59.80 118.00 0 <-> pr 345.78 59.65 117.35 0 0.78, err pos 3.07, err orient -0.65
+found, gt: 507.28 366.69 -151.00 0 <-> pr 505.63 366.27 -145.75 0 0.74, err pos 1.70, err orient 5.26
+found, gt: 472.18 160.05 151.00 1 <-> pr 470.68 160.16 148.44 1 0.84, err pos 1.50, err orient -2.56
+found, gt: 214.38 355.62 -154.00 1 <-> pr 215.82 356.07 -152.65 1 0.96, err pos 1.51, err orient 1.35
 Image file 20180514-131033-348-0.png, ground truth objects: 4, predicted objects 4
-found, gt: 438.03 243.41 106.07 0 <-> pr 437.54 243.03 103.82 0 0.97, err pos 0.62, err orient -2.25
-found, gt: 442.75 134.29 -156.00 1 <-> pr 443.41 134.83 -153.94 1 0.99, err pos 0.84, err orient 2.06
-found, gt: 234.54 154.63 34.80 1 <-> pr 232.78 155.82 32.00 1 0.88, err pos 2.13, err orient -2.80
-found, gt: 145.69 271.32 -146.00 1 <-> pr 145.74 271.12 -146.14 1 0.99, err pos 0.20, err orient -0.14
+found, gt: 438.03 243.41 106.07 0 <-> pr 437.93 243.21 104.79 0 0.91, err pos 0.23, err orient -1.28
+found, gt: 442.75 134.29 -156.00 1 <-> pr 443.98 135.35 -155.69 1 0.90, err pos 1.62, err orient 0.31
+found, gt: 234.54 154.63 34.80 1 <-> pr 231.92 156.66 34.73 1 0.80, err pos 3.32, err orient -0.07
+found, gt: 145.69 271.32 -146.00 1 <-> pr 145.78 272.44 -146.33 1 0.90, err pos 1.12, err orient -0.33
 Image file 20180514-131140-162-0.png, ground truth objects: 4, predicted objects 4
-found, gt: 278.03 198.82 -138.56 0 <-> pr 276.31 197.62 -135.87 0 0.87, err pos 2.10, err orient 2.69
-found, gt: 383.48 279.08 9.66 0 <-> pr 386.19 277.36 7.67 0 0.88, err pos 3.22, err orient -1.99
-found, gt: 455.34 148.46 2.58 1 <-> pr 456.68 146.86 2.49 1 1.00, err pos 2.08, err orient -0.10
-found, gt: 250.75 325.25 -131.08 1 <-> pr 251.15 323.57 -131.01 1 1.00, err pos 1.72, err orient 0.08
+found, gt: 278.03 198.82 -138.56 0 <-> pr 276.17 196.76 -139.95 0 0.77, err pos 2.78, err orient -1.39
+found, gt: 383.48 279.08 9.66 0 <-> pr 385.15 277.47 13.91 0 0.78, err pos 2.32, err orient 4.25
+found, gt: 455.34 148.46 2.58 1 <-> pr 456.37 147.66 2.91 1 0.95, err pos 1.30, err orient 0.33
+found, gt: 250.75 325.25 -131.08 1 <-> pr 251.65 324.55 -131.70 1 0.96, err pos 1.13, err orient -0.62
 Image file 20180514-131153-262-0.png, ground truth objects: 4, predicted objects 4
-found, gt: 112.26 190.95 -45.21 0 <-> pr 113.26 192.62 -48.48 0 0.88, err pos 1.95, err orient -3.27
-found, gt: 376.13 50.36 39.89 0 <-> pr 375.73 48.87 36.92 0 0.86, err pos 1.55, err orient -2.97
-found, gt: 500.98 385.57 -147.38 0 <-> pr 502.51 387.15 -145.19 0 0.93, err pos 2.20, err orient 2.19
-found, gt: 219.73 352.07 110.57 1 <-> pr 219.23 352.94 110.25 1 0.85, err pos 1.00, err orient -0.32
+found, gt: 112.26 190.95 -45.21 0 <-> pr 112.65 192.67 -46.19 0 0.88, err pos 1.76, err orient -0.97
+found, gt: 376.13 50.36 39.89 0 <-> pr 376.19 53.93 36.25 0 0.85, err pos 3.57, err orient -3.64
+found, gt: 500.98 385.57 -147.38 0 <-> pr 502.70 386.64 -148.04 0 0.81, err pos 2.02, err orient -0.66
+found, gt: 219.73 352.07 110.57 1 <-> pr 219.27 353.64 112.11 1 0.92, err pos 1.64, err orient 1.54
 Image file 20180514-131225-481-0.png, ground truth objects: 4, predicted objects 4
-found, gt: 362.49 364.07 -40.31 0 <-> pr 363.07 364.19 -41.88 0 0.80, err pos 0.59, err orient -1.57
-found, gt: 271.21 233.97 123.55 0 <-> pr 272.30 232.07 124.27 0 0.85, err pos 2.19, err orient 0.73
-found, gt: 502.56 159.47 36.60 1 <-> pr 502.90 158.99 33.44 1 0.97, err pos 0.59, err orient -3.16
-found, gt: 303.74 158.95 -152.10 1 <-> pr 304.63 159.11 -148.95 1 0.94, err pos 0.90, err orient 3.16
+found, gt: 362.49 364.07 -40.31 0 <-> pr 362.67 364.99 -37.64 0 0.70, err pos 0.94, err orient 2.67
+found, gt: 271.21 233.97 123.55 0 <-> pr 272.04 235.97 123.61 0 0.77, err pos 2.17, err orient 0.07
+found, gt: 502.56 159.47 36.60 1 <-> pr 502.68 159.20 38.56 1 0.92, err pos 0.30, err orient 1.96
+found, gt: 303.74 158.95 -152.10 1 <-> pr 305.14 159.48 -150.73 1 0.94, err pos 1.50, err orient 1.38
 Image file 20180514-131231-158-0.png, ground truth objects: 4, predicted objects 4
-found, gt: 391.87 290.62 21.55 0 <-> pr 390.43 294.63 21.87 0 0.73, err pos 4.26, err orient 0.32
-found, gt: 277.51 303.74 166.09 0 <-> pr 276.29 305.99 169.92 0 0.87, err pos 2.56, err orient 3.83
-found, gt: 328.92 151.61 66.00 1 <-> pr 329.27 150.49 60.65 1 0.91, err pos 1.17, err orient -5.35
-found, gt: 450.62 146.88 101.00 1 <-> pr 449.50 147.59 99.38 1 0.91, err pos 1.33, err orient -1.62
+found, gt: 391.87 290.62 21.55 0 <-> pr 390.08 294.46 27.55 0 0.58, err pos 4.23, err orient 6.00
+found, gt: 277.51 303.74 166.09 0 <-> pr 276.15 306.45 169.15 0 0.77, err pos 3.04, err orient 3.06
+found, gt: 328.92 151.61 66.00 1 <-> pr 329.67 150.89 64.72 1 0.94, err pos 1.03, err orient -1.28
+found, gt: 450.62 146.88 101.00 1 <-> pr 449.66 148.64 101.96 1 0.92, err pos 2.00, err orient 0.96
 Image file 20180515-094213-306.png, ground truth objects: 4, predicted objects 4
-found, gt: 144.79 348.33 -86.36 0 <-> pr 146.61 353.76 -86.22 0 0.78, err pos 5.73, err orient 0.14
-found, gt: 540.33 181.51 89.15 0 <-> pr 539.34 182.57 89.69 0 0.76, err pos 1.45, err orient 0.53
-found, gt: 333.64 144.26 115.80 1 <-> pr 333.55 144.97 117.37 1 0.90, err pos 0.71, err orient 1.57
-found, gt: 396.07 302.16 -104.23 1 <-> pr 397.00 305.36 -103.18 1 0.82, err pos 3.33, err orient 1.05
+found, gt: 144.79 348.33 -86.36 0 <-> pr 146.20 353.49 -88.74 0 0.65, err pos 5.35, err orient -2.38
+found, gt: 540.33 181.51 89.15 0 <-> pr 539.28 182.55 89.14 0 0.76, err pos 1.48, err orient -0.01
+found, gt: 333.64 144.26 115.80 1 <-> pr 334.01 145.21 119.96 1 0.92, err pos 1.02, err orient 4.16
+found, gt: 396.07 302.16 -104.23 1 <-> pr 396.30 306.00 -106.43 1 0.83, err pos 3.84, err orient -2.20
 Image file 20180515-094335-091.png, ground truth objects: 4, predicted objects 3
-found, gt: 182.56 362.49 -110.68 0 <-> pr 182.13 357.49 -111.23 0 0.77, err pos 5.02, err orient -0.55
+found, gt: 182.56 362.49 -110.68 0 <-> pr 182.74 357.04 -114.12 0 0.64, err pos 5.45, err orient -3.44
 missing, gt 494.69 368.79 -127.98 0
-found, gt: 350.43 138.49 138.70 1 <-> pr 351.40 136.85 137.27 1 0.81, err pos 1.90, err orient -1.43
-found, gt: 321.05 332.59 -57.78 1 <-> pr 321.59 332.39 -60.33 1 0.97, err pos 0.58, err orient -2.55
+found, gt: 350.43 138.49 138.70 1 <-> pr 351.69 137.56 139.16 1 0.84, err pos 1.57, err orient 0.46
+found, gt: 321.05 332.59 -57.78 1 <-> pr 321.71 332.14 -59.30 1 0.96, err pos 0.79, err orient -1.53
 Image file 20180515-094344-740.png, ground truth objects: 4, predicted objects 4
-found, gt: 183.61 359.87 -112.35 0 <-> pr 182.18 364.00 -109.68 0 0.72, err pos 4.37, err orient 2.67
-found, gt: 494.16 367.74 -129.79 0 <-> pr 493.76 368.11 -127.70 0 0.70, err pos 0.55, err orient 2.09
-found, gt: 321.57 333.64 -59.11 1 <-> pr 321.54 332.00 -62.09 1 0.93, err pos 1.64, err orient -2.99
-found, gt: 349.90 135.87 138.18 1 <-> pr 351.20 137.38 137.28 1 0.91, err pos 1.99, err orient -0.89
+found, gt: 183.61 359.87 -112.35 0 <-> pr 182.23 364.11 -114.80 0 0.55, err pos 4.46, err orient -2.45
+found, gt: 494.16 367.74 -129.79 0 <-> pr 493.35 367.31 -130.15 0 0.58, err pos 0.92, err orient -0.36
+found, gt: 321.57 333.64 -59.11 1 <-> pr 321.69 332.59 -58.75 1 0.91, err pos 1.06, err orient 0.35
+found, gt: 349.90 135.87 138.18 1 <-> pr 350.75 138.22 137.99 1 0.91, err pos 2.50, err orient -0.19
 Image file 20180515-094436-470.png, ground truth objects: 7, predicted objects 7
-found, gt: 403.93 345.18 -152.76 1 <-> pr 402.88 344.64 -152.28 1 0.91, err pos 1.19, err orient 0.48
-found, gt: 182.56 324.72 -147.52 1 <-> pr 183.63 327.88 -146.00 1 0.96, err pos 3.33, err orient 1.52
-found, gt: 488.39 197.77 114.95 1 <-> pr 488.82 197.26 113.81 1 0.82, err pos 0.67, err orient -1.14
-found, gt: 534.56 247.61 123.94 1 <-> pr 535.80 248.36 123.60 1 0.79, err pos 1.45, err orient -0.34
-found, gt: 395.54 165.77 -97.26 1 <-> pr 397.22 163.79 -98.04 1 0.92, err pos 2.60, err orient -0.78
-found, gt: 287.48 161.05 65.50 1 <-> pr 287.29 159.57 63.70 1 0.93, err pos 1.49, err orient -1.80
-found, gt: 203.34 220.11 33.00 1 <-> pr 203.99 218.36 31.71 1 0.93, err pos 1.87, err orient -1.29
+found, gt: 403.93 345.18 -152.76 1 <-> pr 402.70 344.38 -153.47 1 0.89, err pos 1.47, err orient -0.71
+found, gt: 182.56 324.72 -147.52 1 <-> pr 183.78 328.30 -146.33 1 0.90, err pos 3.78, err orient 1.19
+found, gt: 488.39 197.77 114.95 1 <-> pr 485.48 198.82 113.75 1 0.81, err pos 3.09, err orient -1.20
+found, gt: 534.56 247.61 123.94 1 <-> pr 535.42 249.11 124.90 1 0.86, err pos 1.74, err orient 0.96
+found, gt: 395.54 165.77 -97.26 1 <-> pr 396.79 163.35 -96.87 1 0.91, err pos 2.72, err orient 0.39
+found, gt: 287.48 161.05 65.50 1 <-> pr 287.78 160.20 65.78 1 0.94, err pos 0.91, err orient 0.28
+found, gt: 203.34 220.11 33.00 1 <-> pr 204.41 218.92 33.51 1 0.91, err pos 1.61, err orient 0.51
 Image file 20180515-094623-381.png, ground truth objects: 4, predicted objects 4
-found, gt: 475.28 92.85 53.45 0 <-> pr 478.74 91.89 61.46 0 0.56, err pos 3.60, err orient 8.01
-found, gt: 250.75 117.51 22.29 0 <-> pr 251.32 116.16 19.84 0 0.90, err pos 1.46, err orient -2.45
-found, gt: 326.30 276.46 10.45 0 <-> pr 328.73 275.72 9.10 0 0.82, err pos 2.54, err orient -1.35
-found, gt: 265.44 359.34 -134.22 0 <-> pr 264.60 355.34 -136.00 0 0.96, err pos 4.09, err orient -1.77
+found, gt: 475.28 92.85 53.45 0 <-> pr 469.48 90.58 60.86 0 0.63, err pos 6.23, err orient 7.40
+found, gt: 250.75 117.51 22.29 0 <-> pr 250.32 117.61 25.45 0 0.91, err pos 0.45, err orient 3.16
+found, gt: 326.30 276.46 10.45 0 <-> pr 326.93 276.49 11.95 0 0.86, err pos 0.64, err orient 1.50
+found, gt: 265.44 359.34 -134.22 0 <-> pr 263.52 355.08 -136.50 0 0.78, err pos 4.67, err orient -2.28
 Summary based on ground truth:
  Cat|  Total|  Found|     %|RMSE pos|RMSE or|Max  pos|Max  or|MCl   0|     %|MCl   1|     %|MCl ALL|     %|Missing|     %|    UFO|     %
-   0|     24|     23| 95.83|    2.97|   3.28|    5.73|   8.01|-------|------|      0|  0.00|      0|  0.00|      1|  4.17|      0|  0.00
-   1|     27|     27|100.00|    1.71|   1.95|    3.33|   5.35|      0|  0.00|-------|------|      0|  0.00|      0|  0.00|      0|  0.00
-ALL |     51|     50| 98.04|    2.37|   2.64|    5.73|   8.01|      0|  0.00|      0|  0.00|      0|  0.00|      1|  1.96|      0|  0.00
-Images 12, run time 1.359 s; per image min: 0.037, max: 0.937, mean: 0.113, median: 0.038
+   0|     24|     23| 95.83|    3.23|   3.42|    6.23|   7.40|-------|------|      0|  0.00|      0|  0.00|      1|  4.17|      0|  0.00
+   1|     27|     27|100.00|    1.98|   1.37|    3.84|   4.16|      0|  0.00|-------|------|      0|  0.00|      0|  0.00|      0|  0.00
+ALL |     51|     50| 98.04|    2.63|   2.53|    6.23|   7.40|      0|  0.00|      0|  0.00|      0|  0.00|      1|  1.96|      0|  0.00
+Images 12, run time 1.431 s; per image min: 0.038, max: 0.967, mean: 0.119, median: 0.042
 

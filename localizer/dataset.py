@@ -224,12 +224,13 @@ class DataElement:
                                         (output_shape[2], output_shape[1]),
                                         flags=cv2.INTER_NEAREST, borderValue=-1)
 
+        all_obj_weight = np.zeros(output_shape[1:3], dtype=np.float32)
         for cat in range(category_count):
-            weight_mask = np.ones_like(data_element_tensors['nearest_object'], dtype=np.float32)
-            weight_mask = cv2.warpAffine(weight_mask, target_t_precomputed[:2, :3],
-                                         (output_shape[2], output_shape[1]),
-                                         flags=cv2.INTER_NEAREST)
-            weight = weight_mask * self._cfg['background_weight']
+            weight = np.ones_like(data_element_tensors['nearest_object'], dtype=np.float32)
+            weight = cv2.warpAffine(weight, target_t_precomputed[:2, :3],
+                                    (output_shape[2], output_shape[1]),
+                                    flags=cv2.INTER_NEAREST)
+            weight = weight * self._cfg['background_weight']
 
             for i, obj in enumerate(self.objects):
                 if obj.category != cat:
@@ -248,8 +249,7 @@ class DataElement:
 
                 s2 = np.square(self._cfg['object_weight_sigma_factor'] * self._cfg['sigma'])
                 obj_weight = np.exp(-0.5 * (np.square(t[:, :, 0]) + np.square(t[:, :, 1])) / s2) > 0.01
-
-                weight = np.maximum(weight, obj_weight * weight_mask)
+                all_obj_weight = np.maximum(all_obj_weight, obj_weight)
 
                 if show_diag_images:
                     cv2.imshow(f'{i}-wsa', utils.red_green(wsa))
@@ -283,6 +283,9 @@ class DataElement:
                 cv2.imshow(f'{cat}-om', (object_map + 1).astype(float) / d)
                 cv2.imshow(f'{cat}-no', (nearest_object + 1).astype(float) / d)
                 cv2.imshow(f'{cat}-w', weight)
+
+        batch.weight[batch_index, :, :, :, 0] = batch.weight[batch_index, :, :, :, 0] * (all_obj_weight == 0) + \
+            all_obj_weight
 
         if show_diag_images:
             cv2.waitKey(0)

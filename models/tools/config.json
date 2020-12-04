@@ -2,7 +2,7 @@
   "dataset": "datasets/tools/dataset.json",
   "validation_fraction": 0.2,
   "background_weight": 0.1,
-  "object_weight_sigma_factor": 1.5,
+  "object_weight_sigma_factor": 1.4,
   "validated_training_examples_count": 100000,
   "final_training_examples_count": 50000,
   "process_count": 4,
