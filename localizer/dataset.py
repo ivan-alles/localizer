@@ -246,9 +246,8 @@ class DataElement:
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.SA] += wsa
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.CA] += wca
 
-                obj_weight = np.exp(-0.5 * (np.square(t[:, :, 0]) + np.square(t[:, :, 1])) /
-                                    np.square(self._cfg['object_weight_sigma_factor'] *
-                                              self._cfg['sigma'])) > 0.01
+                s2 = np.square(self._cfg['object_weight_sigma_factor'] * self._cfg['sigma'])
+                obj_weight = np.exp(-0.5 * (np.square(t[:, :, 0]) + np.square(t[:, :, 1])) / s2) > 0.01
 
                 weight = np.maximum(weight, obj_weight * weight_mask)
 
