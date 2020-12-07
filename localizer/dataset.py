@@ -76,16 +76,17 @@ class DataElement:
     def __init__(self, id, cfg, root_dir, data):
         self.id = id
         self._cfg = cfg
-        self.path = os.path.join(root_dir, data['image'])
+        self.rel_path = data['image']
+        self.full_path = os.path.join(root_dir, self.rel_path)
         self.objects = []
 
         for i, obj_label in enumerate(data['objects']):
             self.objects.append(Object(i, obj_label))
 
     def read_image(self):
-        image = cv2.imread(self.path, cv2.IMREAD_COLOR)
+        image = cv2.imread(self.full_path, cv2.IMREAD_COLOR)
         if image is None:
-            raise ValueError(f'Cannot read image {self.path}')
+            raise ValueError(f'Cannot read image {self.full_path}')
         dtype = image.dtype
         image = image.astype(np.float32)
         if dtype == np.uint8:
@@ -93,7 +94,7 @@ class DataElement:
         elif dtype == np.uint16:
             image *= 1 / 65535
         else:
-            raise ValueError(f'Unsupported image type {dtype} for {self.path}')
+            raise ValueError(f'Unsupported image type {dtype} for {self.full_path}')
         return image
 
     def precompute_training_data(self, mean_sum, mean_count):
@@ -110,7 +111,7 @@ class DataElement:
         for obj in self.objects:
             directory = os.path.join(object_thumbnail_dir, f"{obj.category}")
             os.makedirs(directory, exist_ok=True)
-            fn = os.path.splitext(os.path.basename(self.path))[0]
+            fn = os.path.splitext(os.path.basename(self.full_path))[0]
             file_name = f'{fn}-{obj.id:03d}.png'
             data_element_image = obj.get_bounding_box_patch(image) * 255
             cv2.imwrite(os.path.join(directory, file_name), data_element_image.astype(np.uint8))

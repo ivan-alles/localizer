@@ -76,30 +76,12 @@ class DataElementFilter:
         self.data_element_indices = []  # Will be populated in add_data_element()
 
         # A numpy 1d array of the same size as self.data_element_indices
-        # containing their weights. Must be populated by the user.
+        # containing their weights. Must be populated by the caller.
         self.data_element_weights = None
 
     @property
     def size(self):
         return len(self.data_element_indices)
-
-    def add_data_element(self, data_element_index, hash_string=None):
-        """
-        Check if data element matches the filter. Name and hast_string matches are ANDed together.
-        If matches, add it to the filter.
-        :param data_element_index: data element index.
-        :param hash_string: hash string, e.g. marker coordinates as text. None: skip this check.
-        :return: True if the data element has been added to the filter.
-        """
-        is_accepted = True
-        if hash_string is not None and self.hash_range is not None:
-            hash_value = random.str_to_random(hash_string)
-            is_accepted = self.hash_range[0] <= hash_value < self.hash_range[1]
-
-        if is_accepted:
-            self.data_element_indices.append(data_element_index)
-
-        return is_accepted
 
 
 class BatchGenerator:
@@ -398,12 +380,12 @@ class Trainer:
         Read the dataset and assign weights for data elements.
         """
 
-        validation_fraction = self._cfg['validation_fraction']
+        training_fraction = self._cfg['training_fraction']
         self._filters = {
             flt.id: flt for flt in
             [
-                DataElementFilter('validate', hash_range=(0, validation_fraction)),
-                DataElementFilter('train', hash_range=(validation_fraction, 1)),
+                DataElementFilter('validate'),
+                DataElementFilter('train'),
                 DataElementFilter('all')
             ]
         }
@@ -416,13 +398,12 @@ class Trainer:
         categories = set()
 
         for i, data_element in enumerate(self._dataset.data_elements):
-            is_accepted = False
-            for flt in self._filters.values():
-                distinct_name = data_element.path
-                if flt.add_data_element(i, hash_string=distinct_name):
-                    is_accepted = True
-            if not is_accepted:
-                continue
+            hash_value = random.str_to_random(os.path.basename(data_element.rel_path))
+            if hash_value < training_fraction:
+                self._filters['train'].data_element_indices.append(i)
+            else:
+                self._filters['validate'].data_element_indices.append(i)
+            self._filters['all'].data_element_indices.append(i)
             accepted_data_element_indices.append(i)
             for obj in data_element.objects:
                 categories.add(obj.category)
@@ -684,8 +665,7 @@ class Trainer:
         validate_filter = self._filters[train_phase_params['validate_filter_name']]
         for i in validate_filter.data_element_indices:
             data_element = self._dataset.data_elements[i]
-            image_path = data_element.path
-            image_file = os.path.basename(image_path)
+            image_file = data_element.rel_path.replace(os.path.sep, '_')
             image_count += 1
             localizer.diag_dir = os.path.join(localizer_diag_dir, image_file)
 
@@ -695,7 +675,7 @@ class Trainer:
             run_times.append((datetime.datetime.now() - start_time).total_seconds())
 
             gt_objects = data_element.objects
-            self._log(f'Image file {image_file}, ground truth objects: {len(gt_objects)}, '
+            self._log(f'Image file {data_element.rel_path}, ground truth objects: {len(gt_objects)}, '
                       f'predicted objects {len(pr_objects)}', 'd')
 
             self._cross_match_objects(gt_objects, pr_objects)
@@ -710,7 +690,7 @@ class Trainer:
                 utils.draw_objects(image, pr_objects, axis_length=25, thickness=1)
                 cv2.imwrite(os.path.join(result_dir, image_file) + '.png', (image * 255).astype(np.uint8))
 
-        self._finalize_statistics(gt_stats, 'Summary based on ground truth:', log_target='sd')
+        self._finalize_statistics(gt_stats, log_target='sd')
 
         run_times = np.array(run_times)
         text = f'Images {image_count}'
@@ -795,14 +775,13 @@ class Trainer:
                 self._log(f'ufo, pr {pr_object}', log_target)
         np.set_printoptions()
 
-    def _finalize_statistics(self, stats, header, log_target):
+    def _finalize_statistics(self, stats, log_target):
         """
         Compute total statistics.
         """
         categories = list(stats.keys())
         categories.sort()
         total_stats = CategoryStatistics(CATEGORY_ALL)
-        self._log(header, log_target)
         self._log(total_stats.get_header(categories), log_target)
         for category in categories:
             if category == CATEGORY_ALL:
