@@ -464,8 +464,9 @@ class Trainer:
 
         if 'transfer_learning_base' in self._cfg:
             self._features_model = keras.models.load_model(self._cfg['transfer_learning_base'])
-            self._features_model.trainable = True
-            f = self._features_model(self._image_input, training=True)
+            retrain_tl = self._cfg['retrain_transfer_learning']
+            self._features_model.trainable = retrain_tl
+            f = self._features_model(self._image_input, training=retrain_tl)
         else:
             # Create feature extractor
             f = self._image_input - tf.constant(self._dataset.image_mean, name='image_mean')
