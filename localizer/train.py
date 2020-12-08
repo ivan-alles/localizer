@@ -666,7 +666,7 @@ class Trainer:
         validate_filter = self._filters[train_phase_params['validate_filter_name']]
         for i in validate_filter.data_element_indices:
             data_element = self._dataset.data_elements[i]
-            image_file = data_element.rel_path.replace(os.path.sep, '_')
+            image_file = data_element.rel_path.replace(os.path.sep, '_').replace('/', '_')
             image_count += 1
             localizer.diag_dir = os.path.join(localizer_diag_dir, image_file)
 
