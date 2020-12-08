@@ -96,8 +96,9 @@ def convert(input_file):
         json.dump(anno, f, indent=1)
 
 
-if len(sys.argv) != 2:
-    print('Usage: python to_anno.py {DATASET.json}')
-    sys.exit(-1)
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print('Usage: python to_anno.py {DATASET.json}')
+        sys.exit(-1)
 
-convert(sys.argv[1])
+    convert(sys.argv[1])
