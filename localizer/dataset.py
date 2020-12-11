@@ -33,21 +33,13 @@ class Dataset:
         for data_element in self.data_elements:
             objects = []
             for obj in data_element.objects:
-                image_t_bounding_box = np.linalg.inv(obj.bounding_box_t_image)
                 objects.append({
                     'category': obj.category,
                     'origin': {
                         'x': obj.origin[0],
                         'y': obj.origin[1],
                         'angle': obj.angle
-                    },
-                    'bounding_box': {
-                        'x': image_t_bounding_box[0, 2],
-                        'y': image_t_bounding_box[1, 2],
-                        'size_x': obj.bounding_box_sx,
-                        'size_y': obj.bounding_box_sy,
-                        'angle': np.arctan2(image_t_bounding_box[1, 0], image_t_bounding_box[0, 0])
-                    },
+                    }
                 })
             data_elements.append(
                 {
@@ -113,7 +105,11 @@ class DataElement:
             os.makedirs(directory, exist_ok=True)
             fn = os.path.splitext(os.path.basename(self.full_path))[0]
             file_name = f'{fn}-{obj.id:03d}.png'
-            data_element_image = obj.get_bounding_box_patch(image) * 255
+
+            size = (self._cfg['object_size'], self._cfg['object_size'])
+            t = np.dot(np.array([[1.0, 0, size[0] / 2], [0, 1, size[1] / 2], [0, 0, 1]]),
+                       obj.object_t_image)
+            data_element_image = cv2.warpAffine(image, t[:2, :3], size) * 255
             cv2.imwrite(os.path.join(directory, file_name), data_element_image.astype(np.uint8))
 
     def make_training_data(self, batch, batch_index, rng):
@@ -243,7 +239,7 @@ class DataElement:
 
 class Object:
     """
-    A ground-truth object with labeled coordinate system (origin, angle) and an oriented bounding box.
+    A ground-truth object with labeled coordinate system (origin, angle).
 
     Angle values are in radians.
     """
@@ -254,30 +250,15 @@ class Object:
         self.origin = np.array([data['origin']['x'], data['origin']['y']])
         self.angle = data['origin']['angle']
 
-        image_t_bb = utils.make_transform2(
+        image_t_object = utils.make_transform2(
             1,
-            data['bounding_box']['angle'],
-            data['bounding_box']['x'],
-            data['bounding_box']['y'])
-        self.bounding_box_t_image = np.linalg.inv(image_t_bb)
-        self.bounding_box_sx = data['bounding_box']['size_x']
-        self.bounding_box_sy = data['bounding_box']['size_y']
+            self.angle,
+            self.origin[0],
+            self.origin[1])
+        self.object_t_image = np.linalg.inv(image_t_object)
 
     def __str__(self):
         return f'{self.origin[0]:.2f} {self.origin[1]:.2f} {np.rad2deg(self.angle):.2f} {self.category}'
-
-    def get_bounding_box_patch(self, image, warp_affine_kwargs={'flags': cv2.INTER_LINEAR}):
-        """
-        Gets an image patch corresponding to the bounding box.
-        :param image: full image.
-        :return:
-        """
-        size = (int(self.bounding_box_sx), int(self.bounding_box_sy))
-        t = np.dot(np.array([[1.0, 0, size[0] / 2], [0, 1, size[1] / 2], [0, 0, 1]]),
-                   self.bounding_box_t_image)
-        patch = cv2.warpAffine(image, t[:2, :3], size, **warp_affine_kwargs)
-
-        return patch
 
 
 def make_window(x, y, angle, sigma):

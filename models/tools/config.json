@@ -1,5 +1,6 @@
 {
   "dataset": "datasets/tools/dataset.json",
+  "object_size": 88,
   "background_weight": 0.1,
   "object_weight_sigma_factor": 3.2,
   "weight_border": 7,
