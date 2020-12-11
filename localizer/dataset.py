@@ -116,61 +116,9 @@ class DataElement:
             data_element_image = obj.get_bounding_box_patch(image) * 255
             cv2.imwrite(os.path.join(directory, file_name), data_element_image.astype(np.uint8))
 
-        image_shape = image.shape[:2]
-        target_scale = self._cfg['input_scale'] * self._cfg['model_scale']
-        target_shape = tuple(np.ceil(np.array(image_shape, dtype=np.float32) * target_scale).astype(int))
-
-        output_dir = os.path.dirname(self.data_file)
-        os.makedirs(output_dir, exist_ok=True)
-
-        # A tensor with homogeneous target pixel coordinates
-        target_xy = utils.make_xy_tensor(target_shape)
-
-        image_t_target = utils.make_transform2(1 / target_scale)
-        image_xy = np.dot(target_xy, image_t_target.T)
-
-        category_count = self._cfg['runtime']['category_count']
-
-        object_map = np.full((category_count,) + target_shape, -1, dtype=int)
-        dist_to_obj = []
-
-        for cat in range(category_count):
-            for i, obj in enumerate(self.objects):
-                if obj.category != cat:
-                    continue
-                obj_t_image = obj.bounding_box_t_image
-                scaled_obj_t_image = np.dot(
-                    np.diag([2 / obj.bounding_box_sx, 2 / obj.bounding_box_sy, 1]),
-                    obj_t_image)
-
-                dist_to_obj.append(np.linalg.norm(image_xy[:, :, :2] - obj.origin, axis=2))
-
-                obj_xy = np.abs(np.dot(image_xy, scaled_obj_t_image.T))
-                obj_map_one = np.logical_and(obj_xy[:, :, 0] < 1, obj_xy[:, :, 1] < 1)
-
-                object_map[cat] = object_map[cat] * (1 - obj_map_one) + obj_map_one * i
-
-        nearest_object = np.argmin(np.stack(dist_to_obj), axis=0)
-
-        # Save tensors
-        np.savez(self.data_file,
-                 image=image,
-                 object_map=object_map,
-                 nearest_object=nearest_object)
-
-        # Save diagnostic images
-        cv2.imwrite(os.path.join(output_dir, 'image.png'), image * 255)
-        cv2.imwrite(os.path.join(output_dir, 'nearest_object.png'),
-                    ((nearest_object + 1) * 255 / (len(self.objects) + 1.001)).astype(np.uint8))
-        for cat in range(category_count):
-            cv2.imwrite(os.path.join(output_dir, f'{cat:03d}-object_map.png'),
-                        ((object_map[cat] + 1) * 255 / (len(self.objects) + 1.001)).astype(np.uint8))
-
     def make_training_data(self, batch, batch_index, rng):
         show_diag_images = False  # Set to true to see diag images.
-        data_element_tensors = np.load(self.data_file)
-
-        image = data_element_tensors['image']
+        image = self.read_image()
 
         category_count = batch.weight.shape[1]
         input_shape = batch.input.shape[1:]
@@ -210,13 +158,6 @@ class DataElement:
 
         target_t_input = utils.make_transform2(self._cfg['model_scale'])
         target_t_image = np.dot(target_t_input, input_t_image)
-
-        # We store the target tensors in target resolution, but input_t_image is in image resolution,
-        # so scale back to image first, than do the same transform as for the input,
-        # and finally scale to target.
-        target_t_precomputed = np.dot(
-            target_t_image,
-            utils.make_transform2(1 / self._cfg['model_scale'] / self._cfg['input_scale']))
 
         # A tensor with homogeneous target pixel coordinates
         target_xy = utils.make_xy_tensor(output_shape[1:3])
@@ -298,11 +239,6 @@ class DataElement:
         # Test code
         # daug_t_pose = np.eye(3)
         return daug_t_pose
-
-    @property
-    def data_file(self):
-        return os.path.abspath(os.path.join(self._cfg['runtime']['output_dir'], 'data_elements', f'{self.id:05d}',
-                                            'tensors.npz'))
 
 
 class Object:
