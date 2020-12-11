@@ -318,7 +318,7 @@ class CategoryStatistics:
         total_misclassified = 0
         for k, v in self.misclassified.items():
             total_misclassified += v
-        text += f'{self.category:3}->all {total_misclassified:5} {total_misclassified * total_pc:6.2f}%'
+        text += f'{self.category:3}->any {total_misclassified:5} {total_misclassified * total_pc:6.2f}%'
 
         return text
 

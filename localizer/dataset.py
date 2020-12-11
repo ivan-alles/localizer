@@ -176,10 +176,8 @@ class DataElement:
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.SA] += wsa
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.CA] += wca
 
-                obj_weight = np.zeros(output_shape[1:3])
-                c = tuple(int(x) for x in np.round(pos[:2]))
-                r = int(np.round(self._cfg['object_weight_sigma_factor'] * self._cfg['sigma'] + 0.5))
-                cv2.circle(obj_weight, c, r, 1, cv2.FILLED)
+                r = self._cfg['object_weight_sigma_factor'] * self._cfg['sigma']
+                obj_weight = np.square(t[:, :, 0]) + np.square(t[:, :, 1]) <= r*r
                 batch.weight[batch_index] = np.maximum(batch.weight[batch_index], np.expand_dims(obj_weight, 2))
 
                 if show_diag_images:
