@@ -221,18 +221,9 @@ class DataElement:
         # A tensor with homogeneous target pixel coordinates
         target_xy = utils.make_xy_tensor(output_shape[1:3])
 
-        nearest_object = cv2.warpAffine(data_element_tensors['nearest_object'], target_t_precomputed[:2, :3],
-                                        (output_shape[2], output_shape[1]),
-                                        flags=cv2.INTER_NEAREST, borderValue=-1)
+        batch.weight[batch_index] = self._cfg['background_weight']
 
-        obj_weight = np.zeros(output_shape[1:3], dtype=np.float32)
         for cat in range(category_count):
-            weight = np.ones_like(data_element_tensors['nearest_object'], dtype=np.float32)
-            weight = cv2.warpAffine(weight, target_t_precomputed[:2, :3],
-                                    (output_shape[2], output_shape[1]),
-                                    flags=cv2.INTER_NEAREST)
-            weight = weight * self._cfg['background_weight']
-
             for i, obj in enumerate(self.objects):
                 if obj.category != cat:
                     continue
@@ -248,9 +239,11 @@ class DataElement:
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.SA] += wsa
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.CA] += wca
 
-                s2 = np.square(self._cfg['object_weight_sigma_factor'] * self._cfg['sigma'])
-                one_obj_weight = np.exp(-0.5 * (np.square(t[:, :, 0]) + np.square(t[:, :, 1])) / s2) > 0.01
-                obj_weight = np.maximum(obj_weight, one_obj_weight)
+                obj_weight = np.zeros(output_shape[1:3])
+                c = tuple(int(x) for x in np.round(pos[:2]))
+                r = int(np.round(self._cfg['object_weight_sigma_factor'] * self._cfg['sigma'] + 0.5))
+                cv2.circle(obj_weight, c, r, 1, cv2.FILLED)
+                batch.weight[batch_index] = np.maximum(batch.weight[batch_index], np.expand_dims(obj_weight, 2))
 
                 if show_diag_images:
                     cv2.imshow(f'{i}-wsa', utils.red_green(wsa))
@@ -258,35 +251,14 @@ class DataElement:
                     cv2.imshow(f'{i}-tx', utils.red_green(wx) * 0.5)
                     cv2.imshow(f'{i}-ty', utils.red_green(wy) * 0.5)
 
-            object_map = cv2.warpAffine(data_element_tensors['object_map'][cat], target_t_precomputed[:2, :3],
-                                        (output_shape[2], output_shape[1]),
-                                        flags=cv2.INTER_NEAREST, borderValue=-1)
-
-            # The border of the object map. Corners are taken twice, but this does not matter.
-            border = np.concatenate([
-                object_map[:, 0],
-                object_map[:, -1],
-                object_map[0, :],
-                object_map[-1, :]
-            ])
-
-            object_ids = list(np.unique(object_map))
-            if -1 in object_ids:
-                object_ids.remove(-1)
-            for obj in object_ids:
-                if np.any(border == obj):
-                    # This object intersects (more precisely touches) the border.
-                    weight *= 1 - (nearest_object == obj)
-
-            batch.weight[batch_index, cat, :, :, 0] = weight
-            if show_diag_images:
-                d = max(object_map.max(), nearest_object.max()) + 1.0001
-                cv2.imshow(f'{cat}-om', (object_map + 1).astype(float) / d)
-                cv2.imshow(f'{cat}-no', (nearest_object + 1).astype(float) / d)
-                cv2.imshow(f'{cat}-w', weight)
-
-        ow_masked = obj_weight * (batch.weight[batch_index, :, :, :, 0] != 0)
-        batch.weight[batch_index, :, :, :, 0] = np.maximum(batch.weight[batch_index, :, :, :, 0], ow_masked)
+        # Zero out weight in border areas, where the model kernel does not fit.
+        # The border shall be a half of the model kernel size plus optionally some pixels for
+        # convnet padding.
+        border = self._cfg['weight_border']
+        batch.weight[batch_index, :, :border, :, :] = 0
+        batch.weight[batch_index, :, -border:, :, :] = 0
+        batch.weight[batch_index, :, :, :border, :] = 0
+        batch.weight[batch_index, :, :, -border:, :] = 0
 
         if show_diag_images:
             cv2.waitKey(0)

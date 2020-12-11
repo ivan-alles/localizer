@@ -1,7 +1,8 @@
 {
   "dataset": "datasets/tools/dataset.json",
   "background_weight": 0.1,
-  "object_weight_sigma_factor": 1.4,
+  "object_weight_sigma_factor": 3.2,
+  "weight_border": 7,
   "validated_training_examples_count": 50000,
   "final_training_examples_count": 25000,
   "training_fraction": 0.8,
