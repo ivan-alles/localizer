@@ -1,3 +1,4 @@
 .temp
 .venv
+*.anno
 __pycache__
