@@ -280,13 +280,10 @@ class CategoryStatistics:
 
     def get_header(self, categories):
         header = ' Cat|  Total|  Found|     %|RMSE pos|RMSE or|Max  pos|Max  or|'
-        for c in categories:
-            header += 'MCl{0:4}|     %|'.format(c)
-        header += 'MCl ALL|     %|'
         header += 'Missing|     %|    UFO|     %'
         return header
 
-    def get_text(self, categories):
+    def get_text(self):
         total_pc = 100 / self.total if self.total > 0 else 0
         text = '{0:4}|{1:7}|{2:7}|{3:6.2f}|{4:8.2f}|{5:7.2f}|{6:8.2f}|{7:7.2f}|'.format(
             self.category,
@@ -299,22 +296,6 @@ class CategoryStatistics:
             self.max_err_orientation
         )
 
-        for c in categories:
-            if c == self.category:
-                text += '-------|------|'
-            else:
-                text += '{0:7}|{1:6.2f}|'.format(
-                    self.misclassified.get(c, 0),
-                    self.misclassified.get(c, 0) * total_pc)
-
-        total_misclassified = 0
-        for k, v in self.misclassified.items():
-            total_misclassified += v
-
-        text += '{0:7}|{1:6.2f}|'.format(
-            total_misclassified,
-            total_misclassified * total_pc)
-
         object_count = self.found + sum(self.misclassified.values()) + self.ufo
 
         text += '{0:7}|{1:6.2f}|{2:7}|{3:6.2f}'.format(
@@ -322,6 +303,22 @@ class CategoryStatistics:
             self.missing * total_pc,
             self.ufo,
             self.ufo * 100 / object_count if object_count > 0 else 0)
+
+        return text
+
+    def get_misclassified_text(self):
+        total_pc = 100 / self.total if self.total > 0 else 0
+        text = ''
+
+        categories = list(self.misclassified.keys())
+        categories.sort()
+        for c in categories:
+            text += f'{self.category:3}->{c:3} {self.misclassified.get(c, 0):5} ' \
+                    f'{self.misclassified.get(c, 0) * total_pc:6.2f}%\n'
+        total_misclassified = 0
+        for k, v in self.misclassified.items():
+            total_misclassified += v
+        text += f'{self.category:3}->all {total_misclassified:5} {total_misclassified * total_pc:6.2f}%'
 
         return text
 
@@ -391,8 +388,6 @@ class Trainer:
         }
 
         self._dataset = dataset.Dataset(self._cfg['dataset'], self._cfg)
-        # Test code
-        # self._dataset.save(os.path.splitext(self._cfg['dataset'])[0]+'-1.json')
 
         accepted_data_element_indices = []
         categories = set()
@@ -790,10 +785,17 @@ class Trainer:
             cat_stats = stats[category]
             total_stats.add(cat_stats)
             cat_stats.finalize()
-            self._log(cat_stats.get_text(categories), log_target)
+            self._log(cat_stats.get_text(), log_target)
         total_stats.finalize()
         stats[total_stats.category] = total_stats
-        self._log(total_stats.get_text(categories), log_target)
+        self._log(total_stats.get_text(), log_target)
+
+        if total_stats.misclassified:
+            self._log('Misclassified:', log_target)
+            for category in categories:
+                self._log(stats[category].get_misclassified_text(), log_target)
+            self._log(total_stats.get_misclassified_text(), log_target)
+
 
     def _log(self, data, target='ds'):
         """
@@ -807,13 +809,8 @@ class Trainer:
     def _object_diff(self, obj1, obj2):
         """
         Compute a difference in position and orientation between 2 objects.
-        comparison.
         :return: an array [position_diff, orientation_diff].
         """
-        # Assume that objects of different categories are incomparable.
-        if obj1.category != obj2.category:
-            return INFINITE_DIFF
-
         position_diff_pix = np.linalg.norm(obj2.origin - obj1.origin)
         orientation_diff = geometry.normalize_angle(obj2.angle - obj1.angle)
 
