@@ -796,7 +796,6 @@ class Trainer:
                 self._log(stats[category].get_misclassified_text(), log_target)
             self._log(total_stats.get_misclassified_text(), log_target)
 
-
     def _log(self, data, target='ds'):
         """
         Validation log.

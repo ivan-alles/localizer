@@ -177,7 +177,7 @@ class DataElement:
                 batch.target_window[batch_index, cat, :, :, predict.TrainingModelChannels.CA] += wca
 
                 r = self._cfg['object_weight_sigma_factor'] * self._cfg['sigma']
-                obj_weight = np.square(t[:, :, 0]) + np.square(t[:, :, 1]) <= r*r
+                obj_weight = np.square(t[:, :, 0]) + np.square(t[:, :, 1]) <= r * r
                 batch.weight[batch_index] = np.maximum(batch.weight[batch_index], np.expand_dims(obj_weight, 2))
 
                 if show_diag_images:
