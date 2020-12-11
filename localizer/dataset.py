@@ -43,7 +43,7 @@ class Dataset:
                 })
             data_elements.append(
                 {
-                    'image': os.path.relpath(data_element.path, os.path.dirname(file_name)),
+                    'image': os.path.relpath(data_element.full_path, os.path.dirname(file_name)),
                     'objects': objects
                 }
             )
