@@ -650,7 +650,7 @@ class Trainer:
         self._details_log = io.StringIO()
 
         image_count = 0
-        gt_stats = {}
+        stats = {}
 
         try:
             if localizer.diag:
@@ -677,7 +677,7 @@ class Trainer:
 
             self._cross_match_objects(gt_objects, pr_objects)
 
-            self._compute_statistics(gt_stats, gt_objects, pr_objects, 'd')
+            self._compute_statistics(stats, gt_objects, pr_objects, 'd')
 
             if extended_validation:
                 if image.ndim == 2:
@@ -687,7 +687,7 @@ class Trainer:
                 utils.draw_objects(image, pr_objects, axis_length=25, thickness=1)
                 cv2.imwrite(os.path.join(result_dir, image_file) + '.png', (image * 255).astype(np.uint8))
 
-        self._finalize_statistics(gt_stats, log_target='sd')
+        self._finalize_statistics(stats, log_target='sd')
 
         run_times = np.array(run_times)
         text = f'Images {image_count}'
@@ -701,6 +701,8 @@ class Trainer:
 
         with open(os.path.join(self._model_dir, f'{train_phase_params["name"]}.log'), 'w') as f:
             print(self._details_log.getvalue(), file=f)
+
+        return stats
 
     def _cross_match_objects(self, gt_objects, pr_objects):
         # Cross-match ground truth and prediction
@@ -794,7 +796,8 @@ class Trainer:
         if total_stats.misclassified:
             self._log('Misclassified:', log_target)
             for category in categories:
-                self._log(stats[category].get_misclassified_text(), log_target)
+                if stats[category].misclassified:
+                    self._log(stats[category].get_misclassified_text(), log_target)
             self._log(total_stats.get_misclassified_text(), log_target)
 
     def _log(self, data, target='ds'):
