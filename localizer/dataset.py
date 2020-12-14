@@ -112,7 +112,7 @@ class DataElement:
             data_element_image = cv2.warpAffine(image, t[:2, :3], size) * 255
             cv2.imwrite(os.path.join(directory, file_name), data_element_image.astype(np.uint8))
 
-    def make_training_data(self, batch, batch_index, rng):
+    def make_training_data(self, batch, batch_index, rng, **kwargs):
         show_diag_images = False  # Set to true to see diag images.
         image = self.read_image()
 

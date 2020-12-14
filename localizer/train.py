@@ -117,7 +117,7 @@ class BatchGenerator:
         # Initialize rng with a distinct value for each process.
         self._rng = np.random.RandomState(os.getpid() + self._rng_seed)
 
-    def generate_batch(self, batch_size, filter_id):
+    def generate_batch(self, batch_size, filter_id, **kwargs):
         """
         Generate a batch.
         :return a batch object (a dictionary or an instance of a user-defined class)
@@ -136,7 +136,7 @@ class BatchGenerator:
                       tuple(self._cfg['input_shape']),
                       self._cfg['runtime']['output_shape'])
         for i, data_element_idx in enumerate(data_element_indices):
-            self._data_elements[data_element_idx].make_training_data(batch, i, self._rng)
+            self._data_elements[data_element_idx].make_training_data(batch, i, self._rng, **kwargs)
 
         return batch
 
@@ -182,7 +182,7 @@ class MultiProcessBatchGenerator:
 
         super().__init__()
 
-    def start_generation(self, batch_size, filter_id):
+    def start_generation(self, batch_size, filter_id, **kwargs):
         """
         Must be called before generation a series of batches. If previous generation is running, stops it first.
         :param batch_size required number of training examples in a batch.
@@ -192,6 +192,7 @@ class MultiProcessBatchGenerator:
         self._generate_batch_args = {
             'batch_size': batch_size,
             'filter_id': filter_id,
+            **kwargs
         }
 
     def stop_generation(self):
