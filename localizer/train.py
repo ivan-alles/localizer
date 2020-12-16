@@ -364,7 +364,6 @@ class Trainer:
         utils.make_clean_directory(self._output_dir)
         self._read_dataset()
         self._train()
-        print('Done.')
 
     @property
     def _category_count(self):
@@ -584,9 +583,11 @@ class Trainer:
 
         self._batchgen.close()
 
-        print('Training done')
-
     def _train_phase(self, train_phase_params):
+        training_examples_to_make = self._cfg[train_phase_params['name'] + '_training_examples_count']
+        if not training_examples_to_make:
+            return
+
         train_filter_name = train_phase_params['train_filter_name']
         validate_filter_name = train_phase_params['validate_filter_name']
 
@@ -594,7 +595,6 @@ class Trainer:
         print(f'Train on {self._filters[train_filter_name].size} data elements.')
         print(f'Validate on {self._filters[validate_filter_name].size} data elements.')
 
-        training_examples_to_make = self._cfg[train_phase_params['name'] + '_training_examples_count']
         training_examples_done = 0
 
         def is_phase_finished():
