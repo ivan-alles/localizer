@@ -687,7 +687,7 @@ class Trainer:
                 utils.draw_objects(image, pr_objects, axis_length=25, thickness=1)
                 cv2.imwrite(os.path.join(result_dir, image_file) + '.png', (image * 255).astype(np.uint8))
 
-        self._finalize_statistics(stats, log_target='sd')
+        self._finalize_statistics(stats)
 
         run_times = np.array(run_times)
         text = f'Images {image_count}'
@@ -774,31 +774,31 @@ class Trainer:
                 self._log(f'ufo, pr {pr_object}', log_target)
         np.set_printoptions()
 
-    def _finalize_statistics(self, stats, log_target):
+    def _finalize_statistics(self, stats):
         """
         Compute total statistics.
         """
         categories = list(stats.keys())
         categories.sort()
         total_stats = CategoryStatistics(CATEGORY_ALL)
-        self._log(total_stats.get_header(categories), log_target)
+        self._log(total_stats.get_header(categories))
         for category in categories:
             if category == CATEGORY_ALL:
                 continue
             cat_stats = stats[category]
             total_stats.add(cat_stats)
             cat_stats.finalize()
-            self._log(cat_stats.get_text(), log_target)
+            self._log(cat_stats.get_text())
         total_stats.finalize()
         stats[total_stats.category] = total_stats
-        self._log(total_stats.get_text(), log_target)
+        self._log(total_stats.get_text())
 
         if total_stats.misclassified:
-            self._log('Misclassified:', log_target)
+            self._log('Misclassified:')
             for category in categories:
                 if stats[category].misclassified:
-                    self._log(stats[category].get_misclassified_text(), log_target)
-            self._log(total_stats.get_misclassified_text(), log_target)
+                    self._log(stats[category].get_misclassified_text())
+            self._log(total_stats.get_misclassified_text())
 
     def _log(self, data, target='ds'):
         """
