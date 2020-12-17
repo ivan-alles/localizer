@@ -266,6 +266,8 @@ class CategoryStatistics:
     Collects validation data for one category.
     """
 
+    HEADER = ' Cat|  Total|  Found|     %|RMSE pos|RMSE or|Max  pos|Max  or|Missing|     %|    UFO|     %'
+
     def __init__(self, category):
         self.category = category
         self.total = 0
@@ -278,11 +280,6 @@ class CategoryStatistics:
         self.misclassified = {}  # Pose matches but category is wrong.
         self.missing = 0  # No matching predicted object found.
         self.ufo = 0  # Predicted object is unmatched to any ground truth objects.
-
-    def get_header(self, categories):
-        header = ' Cat|  Total|  Found|     %|RMSE pos|RMSE or|Max  pos|Max  or|'
-        header += 'Missing|     %|    UFO|     %'
-        return header
 
     def get_text(self):
         total_pc = 100 / self.total if self.total > 0 else 0
@@ -600,6 +597,12 @@ class Trainer:
         def is_phase_finished():
             return training_examples_done >= training_examples_to_make
 
+        self._training_progress_log = open(
+            os.path.join(self._model_dir, f'{train_phase_params["name"]}-progress.csv'),
+            'w', buffering=1)
+
+        print('Examples\t', CategoryStatistics.HEADER.replace('|', '\t'), file=self._training_progress_log)
+
         # Loop over epochs
         while not is_phase_finished():
             epoch_start_time = datetime.datetime.now()
@@ -632,11 +635,14 @@ class Trainer:
             te_per_sec = training_examples_in_epoch_done / epoch_run_time
             print(f'Training examples: {training_examples_done}, loss: {self._epoch_loss.result():.6f}, '
                   f'{te_per_sec:.2f} training examples/s.')
+            print(training_examples_done, end='\t', file=self._training_progress_log)
 
             if self._cfg.get('save_features', False):
                 self._features_model.save(os.path.join(self._model_dir, 'features.tf'))
             self._model.save(os.path.join(self._model_dir, 'model.tf'))
             self._validate_model(train_phase_params, is_phase_finished())
+
+        self._training_progress_log.close()
 
     def _validate_model(self, train_phase_params, extended_validation):
         localizer = predict.Localizer(self._config_file_name)
@@ -781,7 +787,7 @@ class Trainer:
         categories = list(stats.keys())
         categories.sort()
         total_stats = CategoryStatistics(CATEGORY_ALL)
-        self._log(total_stats.get_header(categories))
+        self._log(CategoryStatistics.HEADER)
         for category in categories:
             if category == CATEGORY_ALL:
                 continue
@@ -792,6 +798,7 @@ class Trainer:
         total_stats.finalize()
         stats[total_stats.category] = total_stats
         self._log(total_stats.get_text())
+        print(total_stats.get_text().replace(' ', '').replace('|', '\t'), file=self._training_progress_log)
 
         if total_stats.misclassified:
             self._log('Misclassified:')
