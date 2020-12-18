@@ -462,7 +462,7 @@ class Trainer:
         else:
             # Create feature extractor
             f = self._image_input - tf.constant(self._dataset.image_mean, name='image_mean')
-            feature_sizes = [16, 32, 64, 64]
+            feature_sizes = [32, 64, 128, 128]
             pool_params = {'pool_size': (2, 2), 'pool_size': (2, 2), 'padding': 'valid'}
             f = keras.layers.Conv2D(feature_sizes[0], (3, 3), **conv_params)(f)
             f = keras.layers.Conv2D(feature_sizes[0], (3, 3), **conv_params)(f)
