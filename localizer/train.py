@@ -440,7 +440,7 @@ class Trainer:
         self._cfg['runtime']['output_shape'] = self._output_shape
         print(f'Output shape: {self._model.output.shape}, parameters: {self._model.count_params()}')
         print(f'Feature model parameters: {self._features_model.count_params()} '
-              f'({self._features_model.count_params() / self._model.count_params() * 100:.1f}%)')
+              f'({self._features_model.count_params() / self._model.count_params() * 100:.3f}%)')
 
         self._target_window_input = keras.Input(shape=self._model.output.shape[1:], dtype='float32',
                                                 name='target_window')
