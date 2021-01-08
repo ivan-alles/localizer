@@ -109,7 +109,11 @@ def red_green(image):
 
 
 def save_batch_as_images(batch, dst_dir, fmt, prefix=''):
-    make_clean_directory(dst_dir)
+    try:
+        make_clean_directory(dst_dir)
+    except PermissionError:
+        # This can be caused by Windows Explorer indexing images, so just ignore it.
+        pass
 
     maxcol = 230
 
