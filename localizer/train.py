@@ -834,22 +834,11 @@ def configure_logging(model_path):
     model_dir = os.path.dirname(model_path)
     logging_cfg = {
         'version': 1,
-        # 'filters': {
-        #     'stdout_filter': {
-        #         '()': 'logdemo.StdOutFilter'
-        #     }
-        # },
         'handlers': {
             'console_handler': {
                 'class': 'logging.StreamHandler',
                 'stream': 'ext://sys.stdout',
-                # 'filters': ['stdout_filter']
             },
-            # 'stderr_handler': {
-            #     'class': 'logging.StreamHandler',
-            #     'level': 'WARNING',
-            # },
-
             'train_file_handler': {
                 'level': 'INFO',
                 'class': 'logging.FileHandler',
