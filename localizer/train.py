@@ -605,8 +605,6 @@ class Trainer:
         logger.info(f'Train on {self._filters[train_filter_name].size} data elements.')
         logger.info(f'Validate on {self._filters[validate_filter_name].size} data elements.')
 
-        t = np.arange(0.01, 10.0, 0.01)
-
         fig, ax1 = plt.subplots()
         fig.suptitle(train_phase_params["name"], fontsize=16)
         plt.xlim([0, training_examples_to_make * 1.1])

@@ -107,7 +107,7 @@ class DataElement:
             directory = os.path.join(object_thumbnail_dir, f"{obj.category}")
             os.makedirs(directory, exist_ok=True)
             fn = os.path.splitext(os.path.basename(self.full_path))[0]
-            file_name = f'{fn}-{obj.id:03d}.png'
+            file_name = f'{fn}-{obj.id:03d}.jpg'
 
             size = (self._cfg['object_size'], self._cfg['object_size'])
             t = np.dot(np.array([[1.0, 0, size[0] / 2], [0, 1, size[1] / 2], [0, 0, 1]]),
