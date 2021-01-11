@@ -8,9 +8,8 @@ Terms:
 """
 
 import datetime
-import io
 import json
-import logging
+import logging.config
 from multiprocessing import Pool
 import os
 import sys
@@ -27,7 +26,9 @@ from localizer import dataset
 from localizer import predict
 from localizer import utils
 
-logger = logging.getLogger(__name__)
+logger = None
+validation_details_logger = None
+train_progress_logger = None
 
 g_batch_gen = None
 
@@ -351,7 +352,7 @@ class Trainer:
         # The config will be augmented by some parameters and objects in run-time
         # (one object configures another).
         self._cfg['runtime'] = {}
-        self._output_dir = os.path.join(self._model_dir, '.temp/train')
+        self._output_dir = os.path.join(self._model_dir, '.temp', 'train')
         self._cfg['runtime']['output_dir'] = self._output_dir
 
     def run(self):
@@ -405,7 +406,7 @@ class Trainer:
         self._dataset.precompute_training_data(accepted_data_element_indices)
 
         for flt_name, flt in self._filters.items():
-            print(f'Filter "{flt.id}" contains {flt.size} data elements')
+            logger.info(f'Filter "{flt.id}" contains {flt.size} data elements')
             if flt.size == 0:
                 continue
             # Assign probabilities to ensure category balance
@@ -430,16 +431,17 @@ class Trainer:
         self._sigma = float(self._cfg['sigma'])
 
         self._image_input = keras.Input(shape=[None, None, self._cfg['input_shape'][2]], dtype='float32', name='image')
-        print(f"Creating model, input shape {self._cfg['input_shape']}")
+        logger.info(f"Creating model, input shape {self._cfg['input_shape']}")
         self._create_model()
-        tf.keras.utils.plot_model(self._model, to_file=self._output_dir + '/model.svg', dpi=50, show_shapes=True)
+        tf.keras.utils.plot_model(self._model, to_file=os.path.join(self._model_dir, 'model.svg'),
+                                  dpi=50, show_shapes=True)
 
         # Run a model once to find out its output shape for the training input shape.
         dummy_input = np.expand_dims(np.zeros(self._cfg['input_shape']), 0)
         self._output_shape = self._model.predict(dummy_input).shape[1:]
         self._cfg['runtime']['output_shape'] = self._output_shape
-        print(f'Output shape: {self._model.output.shape}, parameters: {self._model.count_params()}')
-        print(f'Feature model parameters: {self._features_model.count_params()} '
+        logger.info(f'Output shape: {self._model.output.shape}, parameters: {self._model.count_params()}')
+        logger.info(f'Feature model parameters: {self._features_model.count_params()} '
               f'({self._features_model.count_params() / self._model.count_params() * 100:.3f}%)')
 
         self._target_window_input = keras.Input(shape=self._model.output.shape[1:], dtype='float32',
@@ -480,7 +482,7 @@ class Trainer:
             self._features_model = keras.Model(inputs=self._image_input, outputs=f)
 
         tf.keras.utils.plot_model(self._features_model,
-                                  to_file=self._output_dir + '/features.svg', dpi=50, show_shapes=True)
+                                  to_file=os.path.join(self._model_dir, 'features.svg'), dpi=50, show_shapes=True)
 
         category_models = []
 
@@ -533,13 +535,18 @@ class Trainer:
 
         self._loss = keras.Model(inputs=(self._image_input, self._target_window_input, self._weight_input),
                                  outputs=(loss, self._model.output), name='loss')
-        tf.keras.utils.plot_model(self._loss, to_file=self._output_dir + '/loss.svg', dpi=50, show_shapes=True)
+        # TODO(ia): make working with TF 2.4
+        # tf.keras.utils.plot_model(self._loss,
+        #                           to_file=os.path.join(self._model_dir, 'loss.svg'),
+        #                           dpi=50, show_shapes=True)
 
         self._diag_window_image_input = keras.Input(self._model.output.shape[1:], dtype='float32')
         diag_window_func = make_window(self._diag_window_image_input)
         self._diag_window_func = keras.Model(inputs=self._diag_window_image_input, outputs=diag_window_func)
-        tf.keras.utils.plot_model(self._diag_window_func, to_file=self._output_dir + '/diag_window_func.svg',
-                                  dpi=50, show_shapes=True)
+        # TODO(ia): make working with TF 2.4
+        # tf.keras.utils.plot_model(self._diag_window_func,
+        #                           to_file=os.path.join(self._output_dir, 'diag_window_func.svg'),
+        #                           dpi=50, show_shapes=True)
 
     def _train(self):
         """
@@ -590,20 +597,17 @@ class Trainer:
         train_filter_name = train_phase_params['train_filter_name']
         validate_filter_name = train_phase_params['validate_filter_name']
 
-        print(f'----------------------- {train_phase_params["name"]} training -------------------------------------')
-        print(f'Train on {self._filters[train_filter_name].size} data elements.')
-        print(f'Validate on {self._filters[validate_filter_name].size} data elements.')
+        logger.info(f'TRAIN PHASE: {train_phase_params["name"]}')
+        logger.info(f'Train on {self._filters[train_filter_name].size} data elements.')
+        logger.info(f'Validate on {self._filters[validate_filter_name].size} data elements.')
 
-        training_examples_done = 0
+        self._training_examples_done = 0
 
         def is_phase_finished():
-            return training_examples_done >= training_examples_to_make
+            return self._training_examples_done >= training_examples_to_make
 
-        self._training_progress_log = open(
-            os.path.join(self._model_dir, f'{train_phase_params["name"]}-progress.csv'),
-            'w', buffering=1)
-
-        print('Examples\t', CategoryStatistics.HEADER.replace('|', '\t'), file=self._training_progress_log)
+        train_progress_logger.info(f'TRAIN PHASE: {train_phase_params["name"]}')
+        train_progress_logger.info(f'Examples\t {CategoryStatistics.HEADER}'.replace('|', '\t'))
 
         # Loop over epochs
         while not is_phase_finished():
@@ -615,7 +619,7 @@ class Trainer:
             while not is_phase_finished() and \
                     training_examples_in_epoch_done < self._cfg['training_examples_per_epoch']:
                 batch = self._batchgen.generate_batch()
-                training_examples_done += len(batch.input)
+                self._training_examples_done += len(batch.input)
                 training_examples_in_epoch_done += len(batch.input)
 
                 arguments = (batch.input, batch.target_window, batch.weight)
@@ -635,16 +639,13 @@ class Trainer:
 
             epoch_run_time = (datetime.datetime.now() - epoch_start_time).total_seconds()
             te_per_sec = training_examples_in_epoch_done / epoch_run_time
-            print(f'Training examples: {training_examples_done}, loss: {self._epoch_loss.result():.6f}, '
+            logger.info(f'Training examples: {self._training_examples_done}, loss: {self._epoch_loss.result():.6f}, '
                   f'{te_per_sec:.2f} training examples/s.')
-            print(training_examples_done, end='\t', file=self._training_progress_log)
 
             if self._cfg.get('save_features', False):
                 self._features_model.save(os.path.join(self._model_dir, 'features.tf'))
             self._model.save(os.path.join(self._model_dir, 'model.tf'))
             self._validate_model(train_phase_params, is_phase_finished())
-
-        self._training_progress_log.close()
 
     def _validate_model(self, train_phase_params, extended_validation):
         localizer = predict.Localizer(self._config_file_name)
@@ -654,8 +655,7 @@ class Trainer:
         result_dir = os.path.join(self._output_dir, train_phase_params['name'])
         utils.make_clean_directory(result_dir)
 
-        self._summary_log = io.StringIO()
-        self._details_log = io.StringIO()
+        self._log(f'TRAIN PHASE: {train_phase_params["name"]}', 'd')
 
         image_count = 0
         stats = {}
@@ -704,11 +704,6 @@ class Trainer:
                     f'per image min: {run_times.min():.3f}, max: {run_times.max():.3f}, ' \
                     f'mean: {run_times.mean():.3f}, median: {np.median(run_times):.3f}'
         self._log(text)
-
-        print(self._summary_log.getvalue())
-
-        with open(os.path.join(self._model_dir, f'{train_phase_params["name"]}.log'), 'w') as f:
-            print(self._details_log.getvalue(), file=f)
 
         return stats
 
@@ -800,7 +795,8 @@ class Trainer:
         total_stats.finalize()
         stats[total_stats.category] = total_stats
         self._log(total_stats.get_text())
-        print(total_stats.get_text().replace(' ', '').replace('|', '\t'), file=self._training_progress_log)
+        train_progress_logger.info(
+            f'{self._training_examples_done}\t{total_stats.get_text()}'.replace(' ', '').replace('|', '\t'))
 
         if total_stats.misclassified:
             self._log('Misclassified:')
@@ -814,9 +810,11 @@ class Trainer:
         Validation log.
         """
         if 'd' in target:
-            print(data, file=self._details_log)
+            validation_details_logger.info(data)
+            pass
         if 's' in target:
-            print(data, file=self._summary_log)
+            logger.info(data)
+            pass
 
     def _object_diff(self, obj1, obj2):
         """
@@ -832,8 +830,74 @@ class Trainer:
         return np.array([position_diff_pix, orientation_diff])
 
 
+def configure_logging(model_path):
+    model_dir = os.path.dirname(model_path)
+    logging_cfg = {
+        'version': 1,
+        # 'filters': {
+        #     'stdout_filter': {
+        #         '()': 'logdemo.StdOutFilter'
+        #     }
+        # },
+        'handlers': {
+            'console_handler': {
+                'class': 'logging.StreamHandler',
+                'stream': 'ext://sys.stdout',
+                # 'filters': ['stdout_filter']
+            },
+            # 'stderr_handler': {
+            #     'class': 'logging.StreamHandler',
+            #     'level': 'WARNING',
+            # },
+
+            'train_file_handler': {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': os.path.join(model_dir, 'train.log'),
+                'mode': 'w'
+            },
+            'validation_details_file_handler': {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': os.path.join(model_dir, 'validation.log'),
+                'mode': 'w'
+            },
+            'train_progress_file_handler': {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': os.path.join(model_dir, 'train_progress.csv'),
+                'mode': 'w'
+            },
+        },
+        'root': {
+            'level': 'INFO',
+            'handlers': ['console_handler', 'train_file_handler']
+        },
+        'loggers': {
+            'validation_details_logger': {
+                'level': 'INFO',
+                'propagate': False,
+                'handlers': ['validation_details_file_handler']
+            },
+            'train_progress_logger': {
+                'level': 'INFO',
+                'propagate': False,
+                'handlers': ['train_progress_file_handler']
+            },
+        }
+    }
+
+    logging.config.dictConfig(logging_cfg)
+    global logger, validation_details_logger, train_progress_logger
+    logger = logging.getLogger(__name__)
+    validation_details_logger = logging.getLogger('validation_details_logger')
+    train_progress_logger = logging.getLogger('train_progress_logger')
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print('Usage python train {config.json}')
+        sys.exit(1)
+    configure_logging(sys.argv[1])
     trainer = Trainer(sys.argv[1])
     trainer.run()

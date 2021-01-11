@@ -1,6 +1,7 @@
 # Copyright 2018-2020 Ivan Alles. See also the LICENSE file.
 
 import json
+import logging
 import os
 
 import cv2
@@ -10,6 +11,8 @@ from robogym import geometry
 
 from localizer import predict
 from localizer import utils
+
+logger = logging.getLogger(__name__)
 
 
 class Dataset:
@@ -58,7 +61,7 @@ class Dataset:
             self.data_elements[i].precompute_training_data(mean_sum, mean_count)
 
         self.image_mean = (mean_sum / mean_count).astype(np.float32)
-        print(f'Image mean {self.image_mean}')
+        logger.info(f'Image mean {self.image_mean}')
 
 
 class DataElement:
