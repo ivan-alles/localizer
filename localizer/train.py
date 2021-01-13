@@ -286,6 +286,10 @@ class CategoryStatistics:
         self.missing = 0  # No matching predicted object found.
         self.ufo = 0  # Predicted object is unmatched to any ground truth objects.
 
+    def get_ufo_percentage(self):
+        object_count = self.found + sum(self.misclassified.values()) + self.ufo
+        return self.ufo * 100 / object_count if object_count > 0 else 0
+
     def get_text(self):
         total_pc = 100 / self.total if self.total > 0 else 0
         text = '{0:4}|{1:7}|{2:7}|{3:6.2f}|{4:8.2f}|{5:7.2f}|{6:8.2f}|{7:7.2f}|'.format(
@@ -299,13 +303,11 @@ class CategoryStatistics:
             self.max_err_orientation
         )
 
-        object_count = self.found + sum(self.misclassified.values()) + self.ufo
-
         text += '{0:7}|{1:6.2f}|{2:7}|{3:6.2f}'.format(
             self.missing,
             self.missing * total_pc,
             self.ufo,
-            self.ufo * 100 / object_count if object_count > 0 else 0)
+            self.get_ufo_percentage())
 
         return text
 
@@ -605,7 +607,7 @@ class Trainer:
         logger.info(f'Train on {self._filters[train_filter_name].size} data elements.')
         logger.info(f'Validate on {self._filters[validate_filter_name].size} data elements.')
 
-        series1, series2 = self._create_plot(train_phase_params)
+        found_line, ufo_line, loss_line = self._create_plot(train_phase_params)
 
         self._training_examples_done = 0
 
@@ -633,8 +635,6 @@ class Trainer:
                 self._optimizer.apply_gradients(zip(grads, self._loss.trainable_variables))
                 self._epoch_loss(loss_value)
 
-                if self._training_examples_done == 0:
-                    plt.ylim([0, loss_value * 1.5])
                 self._training_examples_done += len(batch.input)
                 training_examples_in_epoch_done += len(batch.input)
 
@@ -651,18 +651,21 @@ class Trainer:
             logger.info(f'Training examples: {self._training_examples_done}, loss: {self._epoch_loss.result():.6f}, '
                   f'{te_per_sec:.2f} training examples/s.')
 
-            series2.set_xdata(np.append(series2.get_xdata(), self._training_examples_done))
-            series2.set_ydata(np.append(series2.get_ydata(), self._epoch_loss.result()))
-
             if self._cfg.get('save_features', False):
                 self._features_model.save(os.path.join(self._model_dir, 'features.tf'))
             self._model.save(os.path.join(self._model_dir, 'model.tf'))
             stats = self._validate_model(train_phase_params, is_phase_finished())
 
-            series1.set_xdata(np.append(series1.get_xdata(), self._training_examples_done))
-            series1.set_ydata(np.append(series1.get_ydata(), stats['ALL'].found / stats['ALL'].total * 100))
+            loss_line.set_xdata(np.append(loss_line.get_xdata(), self._training_examples_done))
+            loss_line.set_ydata(np.append(loss_line.get_ydata(), self._epoch_loss.result()))
+            loss_line.axes.set_ylim([0, loss_line.get_ydata().max() * 1.1])
+            found_line.set_xdata(np.append(found_line.get_xdata(), self._training_examples_done))
+            found_line.set_ydata(np.append(found_line.get_ydata(), stats['ALL'].found / stats['ALL'].total * 100))
+            ufo_line.set_xdata(np.append(ufo_line.get_xdata(), self._training_examples_done))
+            ufo_line.set_ydata(np.append(ufo_line.get_ydata(), stats['ALL'].get_ufo_percentage()))
             plt.draw()
             plt.pause(0.001)
+
         plt.savefig(os.path.join(self._model_dir, train_phase_params['name'] + '.png'))
 
     def _create_plot(self, train_phase_params):
@@ -670,21 +673,22 @@ class Trainer:
         fig.suptitle(train_phase_params["name"], fontsize=16)
         plt.xlim([0, self._cfg[train_phase_params['name'] + '_training_examples_count'] * 1.1])
         plt.ylim([0, 100])
-        color = 'tab:green'
+
         ax1.set_xlabel('training examples')
-        ax1.set_ylabel('found %', color=color)
-        series1, = ax1.plot([], [], color=color)
-        ax1.tick_params(axis='y', labelcolor=color)
+        ax1.set_ylabel('%')
+        found_line, = ax1.plot([], [], color='green')
+        ufo_line, = ax1.plot([], [], color='blue')
+
         ax2 = ax1.twinx()
-        color = 'tab:red'
-        ax2.set_ylabel('loss', color=color)
-        plt.ylim([0, 1])
-        series2, = ax2.plot([], [], color=color)
-        ax2.tick_params(axis='y', labelcolor=color)
+        ax2.set_ylabel('loss')
+        loss_line, = ax2.plot([], [], color='red')
         fig.tight_layout()  # otherwise the right y-label is slightly clipped
+
+        plt.legend((found_line, ufo_line, loss_line), ('found %', 'ufo %', 'loss'))
+
         plt.ion()
         plt.show()
-        return series1, series2
+        return found_line, ufo_line, loss_line
 
     def _validate_model(self, train_phase_params, extended_validation):
         localizer = predict.Localizer(self._config_file_name)
