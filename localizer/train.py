@@ -672,7 +672,7 @@ class Trainer:
         fig, ax1 = plt.subplots()
         fig.suptitle(train_phase_params["name"], fontsize=16)
         plt.xlim([0, self._cfg[train_phase_params['name'] + '_training_examples_count'] * 1.1])
-        plt.ylim([0, 100])
+        plt.ylim([0, 105])
 
         ax1.set_xlabel('training examples')
         ax1.set_ylabel('%')
