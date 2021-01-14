@@ -397,8 +397,11 @@ class Trainer:
         categories = set()
 
         for i, data_element in enumerate(self._dataset.data_elements):
-            hash_value = random.str_to_random(os.path.basename(data_element.rel_path))
-            if hash_value < training_fraction:
+            if type(training_fraction) == list:
+                accepted = data_element.rel_path in training_fraction
+            else:
+                accepted = random.str_to_random(os.path.basename(data_element.rel_path)) < training_fraction
+            if accepted:
                 self._filters['train'].data_element_indices.append(i)
             else:
                 self._filters['validate'].data_element_indices.append(i)
