@@ -687,7 +687,7 @@ class Trainer:
         loss_line, = ax2.plot([], [], color='red')
         fig.tight_layout()  # otherwise the right y-label is slightly clipped
 
-        plt.legend((found_line, ufo_line, loss_line), ('found %', 'ufo %', 'loss'))
+        plt.legend((found_line, ufo_line, loss_line), ('found %', 'ufo %', 'loss'), loc='center left')
 
         plt.ion()
         plt.show()
