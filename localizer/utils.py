@@ -10,23 +10,24 @@ import numpy as np
 def make_clean_directory(path):
     """
     Creates an empty directory.
-
     If it exists, delete its content.
-    If the directory is opened in Windows Explorer, may throw PermissionError,
-    although the directory is usually cleaned. The caller may catch this exception to avoid program termination.
     :param path: path to the directory.
     """
     need_create = True
-    if os.path.isdir(path):
-        for file in os.listdir(path):
-            file_path = os.path.join(path, file)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        need_create = False
-    elif os.path.isfile(path):
-        os.remove(path)
+    try:
+        if os.path.isdir(path):
+            for file in os.listdir(path):
+                file_path = os.path.join(path, file)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            need_create = False
+        elif os.path.isfile(path):
+            os.remove(path)
+    except PermissionError:
+        # This can be caused by Windows Explorer indexing images, so just ignore it.
+        pass
     if need_create:
         os.makedirs(path)
 
@@ -109,11 +110,7 @@ def red_green(image):
 
 
 def save_batch_as_images(batch, dst_dir, fmt, prefix=''):
-    try:
-        make_clean_directory(dst_dir)
-    except PermissionError:
-        # This can be caused by Windows Explorer indexing images, so just ignore it.
-        pass
+    make_clean_directory(dst_dir)
 
     maxcol = 230
 
