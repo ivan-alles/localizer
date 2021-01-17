@@ -100,20 +100,21 @@ class DataElement:
         mean_sum += image.sum(axis=(0, 1))
         mean_count += image.shape[0] * image.shape[1]
 
-        object_thumbnail_dir = os.path.abspath(os.path.join(output_dir, 'objects'))
-        os.makedirs(object_thumbnail_dir, exist_ok=True)
+        if self._cfg.get('dump_objects', True):
+            dump_objects_dir = os.path.abspath(os.path.join(output_dir, 'objects'))
+            os.makedirs(dump_objects_dir, exist_ok=True)
 
-        for obj in self.objects:
-            directory = os.path.join(object_thumbnail_dir, f"{obj.category}")
-            os.makedirs(directory, exist_ok=True)
-            fn = os.path.splitext(os.path.basename(self.full_path))[0]
-            file_name = f'{fn}-{obj.id:03d}.jpg'
+            for obj in self.objects:
+                directory = os.path.join(dump_objects_dir, f"{obj.category}")
+                os.makedirs(directory, exist_ok=True)
+                fn = os.path.splitext(os.path.basename(self.full_path))[0]
+                file_name = f'{fn}-{obj.id:03d}.jpg'
 
-            size = (self._cfg['object_size'], self._cfg['object_size'])
-            t = np.dot(np.array([[1.0, 0, size[0] / 2], [0, 1, size[1] / 2], [0, 0, 1]]),
-                       obj.object_t_image)
-            data_element_image = cv2.warpAffine(image, t[:2, :3], size) * 255
-            cv2.imwrite(os.path.join(directory, file_name), data_element_image.astype(np.uint8))
+                size = (self._cfg['object_size'], self._cfg['object_size'])
+                t = np.dot(np.array([[1.0, 0, size[0] / 2], [0, 1, size[1] / 2], [0, 0, 1]]),
+                           obj.object_t_image)
+                data_element_image = cv2.warpAffine(image, t[:2, :3], size) * 255
+                cv2.imwrite(os.path.join(directory, file_name), data_element_image.astype(np.uint8))
 
     def make_training_data(self, batch, batch_index, rng, **kwargs):
         show_diag_images = False  # Set to true to see diag images.
