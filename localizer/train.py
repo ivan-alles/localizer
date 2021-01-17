@@ -590,7 +590,7 @@ class Trainer:
             BatchGenerator(self._cfg, self._dataset.data_elements, self._filters.values()),
             self._cfg['process_count'])
 
-        self._optimizer = keras.optimizers.Adam(learning_rate=0.0005)
+        self._optimizer = keras.optimizers.Adam(learning_rate=self._cfg.get('learning_rate', 0.0005))
 
         for p in train_phase_params:
             total_training_examples_count += self._cfg[p['name'] + '_training_examples_count']
