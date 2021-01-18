@@ -649,8 +649,6 @@ class Trainer:
                     te_dir = os.path.join(self._output_dir, TRAINING_EXAMPLES_DIAG_DIR_NAME)
                     utils.save_batch_as_images(batch, te_dir, fmt='{1:0>3}{2}.png')
 
-                plt.pause(0.001)
-
             epoch_run_time = (datetime.datetime.now() - epoch_start_time).total_seconds()
             te_per_sec = training_examples_in_epoch_done / epoch_run_time
             logger.info(f'Training examples: {self._training_examples_done}, loss: {self._epoch_loss.result():.6f}, '
