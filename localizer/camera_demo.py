@@ -1,12 +1,14 @@
 import enum
+import json
+import os
 import sys
 
 import cv2
 import numpy as np
 
+from localizer import dataset
 from localizer import predict
 from localizer import utils
-
 
 class CameraDemo:
 
@@ -15,12 +17,19 @@ class CameraDemo:
         TRAIN = 1
 
     def __init__(self, camera_id):
+        self._template_cfg_path = os.path.join(os.path.dirname(__file__), 'camera_demo.json')
+        self._model_dir = os.path.join('.temp', 'demo_model')
+        self._dataset_path = os.path.join(self._model_dir, 'dataset.json')
+        with open(self._dataset_path, 'w') as f:
+            json.dump([], f)  # Create an empty dataset
         self._scale_factor = None
         self._mode = self.__class__.Mode.DETECT
         self._localizer = predict.Localizer(r'models\.archive\tools_tl-20210118-145200/config.json')
+        self._dataset = dataset.Dataset(self._dataset_path, self._template_cfg_path)
         self._object_size = self._localizer.cfg['object_size']
         self._camera = cv2.VideoCapture(camera_id)
         self._key = -1
+        os.makedirs(self._model_dir, exist_ok=True)
 
     def run(self):
         while True:
@@ -36,6 +45,8 @@ class CameraDemo:
             if camera_image is None:
                 print('Cannot read image')
                 continue
+
+            np.fliplr(camera_image)
 
             if self._scale_factor is None:
                 actual_length = np.max(camera_image.shape[:2])
@@ -57,11 +68,27 @@ class CameraDemo:
         utils.draw_objects(camera_image, predictions, axis_length=20, thickness=2)
 
     def _train(self, camera_image):
-        cv2.circle(camera_image,
-                   (camera_image.shape[1] // 2, camera_image.shape[0] // 2),
-                   self._object_size // 2, (0, 255, 0))
+        x = camera_image.shape[1] / 2
+        y = camera_image.shape[0] / 2
+        cv2.circle(camera_image, (int(x), int(y)), self._object_size // 2, (0, 255, 0))
         if self._key == ord(' '):
-            print('Image added to the training set')
+            image_path = os.path.join(self._model_dir, 'image.png')
+            cv2.imwrite(image_path, camera_image)
+            data_element = {
+              "image": image_path,
+              "objects": [
+                   {
+                    "category": 0,
+                    "origin": {
+                     "x": x,
+                     "y": y,
+                     "angle": 0
+                    }
+                   }
+                ]
+            }
+            self._dataset.add(data_element)
+            self._dataset.save(self._dataset_path)
 
 
 if __name__ == '__main__':

@@ -21,14 +21,23 @@ class Dataset:
     """
     def __init__(self, file_name, cfg):
         self._file_name = file_name
-        with open(file_name) as f:
-            data = json.load(f)
+        self._cfg = cfg
 
         self.image_mean = None
         self.data_elements = []
-        root_dir = os.path.dirname(self._file_name)
-        for i, data_element_data in enumerate(data):
-            self.data_elements.append(DataElement(i, cfg, root_dir, data_element_data))
+
+        with open(file_name) as f:
+            data = json.load(f)
+        for data_element_data in data:
+            self.add(data_element_data)
+
+    def add(self, data_element_data):
+        self.data_elements.append(
+            DataElement(len(self.data_elements),
+                        self._cfg,
+                        os.path.dirname(self._file_name),
+                        data_element_data)
+        )
 
     def save(self, file_name):
         data_elements = []

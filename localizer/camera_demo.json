@@ -1,0 +1,52 @@
+{
+  "save_features": false,
+  "dataset": ".temp/dataset.json",
+  "-transfer_learning_base": "models/.archive/tl_base-20210118-082845/features.tf",
+  "retrain_transfer_learning": false,
+  "object_size": 88,
+  "input_scale": 1,
+  "model_scale": 0.125,
+  "background_weight": 0.1,
+  "object_weight_sigma_factor": 3,
+  "weight_border": 7,
+  "training_fraction": 0.045,
+  "validated_training_examples_count": 0,
+  "final_training_examples_count": 50000,
+  "training_examples_per_batch": 16,
+  "training_examples_per_epoch": 5000,
+  "data_augmentation_rotation": [
+    -3.1416,
+    3.1416
+  ],
+  "data_augmentation_shear_rotation": [
+    -0.05,
+    0.05
+  ],
+  "data_augmentation_shear_scale": [
+    0.95,
+    1.05
+  ],
+  "data_augmentation_scale": [
+    0.95,
+    1.05
+  ],
+  "data_augmentation_color": [
+    0.9,
+    1.1
+  ],
+  "rng_seed": 1,
+  "sigma": 1.5,
+  "objectness_ksize": 7,
+  "angle_ksize": 3,
+  "pos_ksize": 3,
+  "confidence_thr": 0.5,
+  "position_diff_thr": 15,
+  "angle_diff_thr": 15,
+  "input_shape": [
+    384,
+    384,
+    3
+  ],
+  "random_background_probability": 0.1,
+  "process_count": 4
+}
