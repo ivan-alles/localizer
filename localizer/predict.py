@@ -218,12 +218,20 @@ class Localizer:
     def predict(self, image):
         """
         param: image. Must have the correct number of input channels (RGB or grayscale).
-        may be applied to reduce the computation time. The positions are nevertheless computed in image coordinates.
         return: a list of predicted objects.
         """
 
-        # Check and initialize all parameters.
         image = image.astype(np.float32)
+
+        def pad_size(size, pad_to):
+            return pad_to - size % pad_to if size % pad_to > 0 else 0
+
+        pad_to = self._cfg.get('pad_to', 0)
+        if pad_to:
+            image = np.pad(image, (
+                (0, pad_size(image.shape[0], pad_to)),
+                (0, pad_size(image.shape[1], pad_to)),
+                (0, 0)))
 
         self._update_input_image_parameters(image.shape)
 
