@@ -8,7 +8,8 @@ import sys
 import cv2
 import numpy as np
 
-from localizer import train
+# from localizer import train
+import train
 from localizer import predict
 from localizer import utils
 
@@ -49,7 +50,7 @@ class CameraDemo:
                 print('Cannot read image')
                 continue
 
-            np.fliplr(camera_image)
+            camera_image = np.fliplr(camera_image)
 
             if self._scale_factor is None:
                 actual_length = np.max(camera_image.shape[:2])
