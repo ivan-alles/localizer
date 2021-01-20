@@ -1,6 +1,6 @@
 {
   "save_features": false,
-  "dataset": ".temp/dataset.json",
+  "dataset": ".temp/demo_model/dataset.json",
   "-transfer_learning_base": "models/.archive/tl_base-20210118-082845/features.tf",
   "retrain_transfer_learning": false,
   "object_size": 88,
@@ -11,9 +11,9 @@
   "weight_border": 7,
   "training_fraction": 0.045,
   "validated_training_examples_count": 0,
-  "final_training_examples_count": 50000,
+  "final_training_examples_count": 5000,
   "training_examples_per_batch": 16,
-  "training_examples_per_epoch": 5000,
+  "training_examples_per_epoch": 1000,
   "data_augmentation_rotation": [
     -3.1416,
     3.1416
@@ -27,12 +27,12 @@
     1.05
   ],
   "data_augmentation_scale": [
-    0.95,
-    1.05
+    0.7,
+    1.5
   ],
   "data_augmentation_color": [
-    0.9,
-    1.1
+    0.7,
+    1.5
   ],
   "rng_seed": 1,
   "sigma": 1.5,
