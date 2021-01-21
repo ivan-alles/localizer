@@ -47,7 +47,7 @@ class CameraDemo:
                 self._mode = self.__class__.Mode.NEW_MODEL
             elif self._key == ord('d'):
                 self._mode = self.__class__.Mode.DETECT
-            elif self._key == ord('R'):
+            elif self._key == ord('r'):
                 self._train()  # Retrain model on existing data, useful for tests.
 
             ret, camera_frame = self._camera.read()
