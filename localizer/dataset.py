@@ -151,6 +151,9 @@ class DataElement:
                                flags=cv2.INTER_LINEAR)
         input *= rng.uniform(*self._cfg['data_augmentation_color'])
 
+        if 'clip_color' in self._cfg:
+            input = np.clip(input, *self._cfg['clip_color'])
+
         batch.input[batch_index] = input
 
         if show_diag_images:
