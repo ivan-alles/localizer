@@ -497,9 +497,10 @@ class Trainer:
         category_models = []
 
         for cat in range(self._category_count):
-            category_model = keras.layers.SpatialDropout2D(0.3)(f)
-            category_model = keras.layers.Conv2D(32, (1, 1), **conv_params)(category_model)
+            #category_model = keras.layers.SpatialDropout2D(0.3)(f)
+            category_model = f
             conv_params['activation'] = None
+            category_model = keras.layers.Conv2D(32, (1, 1), **conv_params)(category_model)
             category_model = keras.layers.Conv2D(predict.TrainingModelChannels.COUNT, (11, 11),
                                                  **conv_params)(category_model)
             category_models.append(category_model)
@@ -674,7 +675,7 @@ class Trainer:
 
     def _create_plot(self, train_phase_params):
         fig, ax1 = plt.subplots()
-        fig.suptitle(train_phase_params["name"], fontsize=16)
+        fig.suptitle(f'Train phase: {train_phase_params["name"]}', fontsize=16)
         plt.xlim([0, self._cfg[train_phase_params['name'] + '_training_examples_count'] * 1.1])
         plt.ylim([0, 105])
 
