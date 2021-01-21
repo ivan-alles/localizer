@@ -475,7 +475,7 @@ class Trainer:
         else:
             # Create feature extractor
             f = self._image_input - tf.constant(self._dataset.image_mean, name='image_mean')
-            feature_sizes = [32, 64, 128, 128]
+            feature_sizes = [32, 64, 128, 256]
             pool_params = {'pool_size': (2, 2), 'pool_size': (2, 2), 'padding': 'valid'}
             f = keras.layers.Conv2D(feature_sizes[0], (3, 3), **conv_params)(f)
             f = keras.layers.Conv2D(feature_sizes[0], (3, 3), **conv_params)(f)
@@ -486,7 +486,8 @@ class Trainer:
             f = keras.layers.Conv2D(feature_sizes[2], (3, 3), **conv_params)(f)
             f = keras.layers.Conv2D(feature_sizes[2], (3, 3), **conv_params)(f)
             f = keras.layers.AveragePooling2D(**pool_params)(f)
-            f = keras.layers.Conv2D(feature_sizes[3], (11, 11), **conv_params)(f)
+            f = keras.layers.Conv2D(feature_sizes[3], (3, 3), **conv_params)(f)
+            f = keras.layers.Conv2D(feature_sizes[3], (3, 3), **conv_params)(f)
 
             self._features_model = keras.Model(inputs=self._image_input, outputs=f)
 
@@ -497,10 +498,10 @@ class Trainer:
 
         for cat in range(self._category_count):
             category_model = keras.layers.SpatialDropout2D(0.3)(f)
+            category_model = keras.layers.Conv2D(32, (1, 1), **conv_params)(category_model)
             conv_params['activation'] = None
-            category_model = keras.layers.Conv2D(predict.TrainingModelChannels.COUNT, (1, 1),
-                                                 **conv_params,
-                                                 name=f'category_model{cat}')(category_model)
+            category_model = keras.layers.Conv2D(predict.TrainingModelChannels.COUNT, (11, 11),
+                                                 **conv_params)(category_model)
             category_models.append(category_model)
 
         category_models = tf.stack(category_models, axis=1)
