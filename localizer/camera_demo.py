@@ -8,8 +8,7 @@ import sys
 import cv2
 import numpy as np
 
-# from localizer import train
-import train
+from localizer import train
 from localizer import predict
 from localizer import utils
 
@@ -30,7 +29,7 @@ class CameraDemo:
         self._mode = self.__class__.Mode.DETECT
         self._localizer = None
         self._object_size = None
-        self._input_image = None
+        self._camera_image = None
         self._view_image = None
         self._key = -1
         os.makedirs(self._model_dir, exist_ok=True)
@@ -51,20 +50,20 @@ class CameraDemo:
             elif self._key == ord('R'):
                 self._train()  # Retrain model on existing data, useful for tests.
 
-            ret, camera_image = self._camera.read()
-            if camera_image is None:
-                print('Cannot read image')
+            ret, camera_frame = self._camera.read()
+            if camera_frame is None:
+                print('Cannot read camera frame')
                 continue
 
-            camera_image = np.fliplr(camera_image)
+            camera_frame = np.fliplr(camera_frame)
 
             if self._scale_factor is None:
-                actual_length = np.max(camera_image.shape[:2])
+                actual_length = np.max(camera_frame.shape[:2])
                 desired_length = self._object_size * 6
                 self._scale_factor = desired_length / actual_length
 
-            self._input_image = cv2.resize(camera_image, (0, 0), fx=self._scale_factor, fy=self._scale_factor)
-            self._view_image = np.copy(self._input_image)
+            self._camera_image = cv2.resize(camera_frame, (0, 0), fx=self._scale_factor, fy=self._scale_factor)
+            self._view_image = np.copy(self._camera_image)
 
             if self._mode == self.__class__.Mode.DETECT:
                 self._detect()
@@ -74,9 +73,14 @@ class CameraDemo:
             cv2.imshow('camera', self._view_image)
 
     def _detect(self):
-        input = self._input_image.astype(np.float32) / 255
+        input = self._make_input(self._camera_image)
         predictions = self._localizer.predict(input)
         utils.draw_objects(self._view_image, predictions, axis_length=20, thickness=2)
+
+    def _make_input(self, image):
+        image = image.astype(np.float32) / 255
+        image = np.power(image, 0.5)  # A slight gamma-correction
+        return image
 
     def _load_model(self):
         self._localizer = predict.Localizer('.temp/demo_model/config.json')
@@ -85,13 +89,14 @@ class CameraDemo:
 
     def _new_model(self):
         self._dataset = []
-        x = self._input_image.shape[1] / 2
-        y = self._input_image.shape[0] / 2
+        x = self._camera_image.shape[1] / 2
+        y = self._camera_image.shape[0] / 2
         cv2.circle(self._view_image, (int(x), int(y)), self._object_size // 2, (0, 255, 0))
         if self._key == ord(' '):
             image_file = datetime.datetime.now().strftime('image-1.png')
             image_path = os.path.join(self._model_dir, image_file)
-            cv2.imwrite(image_path, self._input_image)
+            input_image = self._make_input(self._camera_image) * 255
+            cv2.imwrite(image_path, input_image)
             data_element = {
               "image": image_file,
               "objects": [
