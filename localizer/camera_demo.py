@@ -12,14 +12,18 @@ from localizer import train
 from localizer import predict
 from localizer import utils
 
-class CameraDemo:
 
+class CameraDemo:
     class Mode(enum.Enum):
         DETECT = 0  # Detect using current model
         NEW_MODEL = 1  # Create a new dataset and train a new model
 
     def __init__(self, camera_id):
         self._template_cfg_path = os.path.join(os.path.dirname(__file__), 'camera_demo.json')
+
+        with open(self._template_cfg_path) as f:
+            cfg = json.load(f)
+
         self._model_dir = os.path.join('.temp', 'demo_model')
         self._dataset_path = os.path.join(self._model_dir, 'dataset.json')
         self._cfg_path = os.path.join(self._model_dir, 'config.json')
@@ -28,7 +32,7 @@ class CameraDemo:
         self._scale_factor = None
         self._mode = self.__class__.Mode.DETECT
         self._localizer = None
-        self._object_size = None
+        self._object_size = cfg['object_size']
         self._camera_image = None
         self._view_image = None
         self._image_idx = 0
@@ -37,7 +41,6 @@ class CameraDemo:
 
         self._camera = cv2.VideoCapture(camera_id)
         self._load_model()
-
 
     def run(self):
         while True:
@@ -84,6 +87,8 @@ class CameraDemo:
         cv2.circle(self._view_image, (int(x), int(y)), self._object_size // 2, color, thickness=2)
 
     def _detect(self):
+        if not self._localizer:
+            return
         input = self._make_input(self._camera_image)
         objects = self._localizer.predict(input)
         for obj in objects:
@@ -95,19 +100,21 @@ class CameraDemo:
         return image
 
     def _load_model(self):
-        self._localizer = predict.Localizer('.temp/demo_model/config.json')
-        self._object_size = self._localizer.cfg['object_size']
-        self._mode = self.__class__.Mode.DETECT
+        try:
+            self._localizer = predict.Localizer('.temp/demo_model/config.json')
+            self._mode = self.__class__.Mode.DETECT
+        except Exception:
+            self._localizer = None
 
     def _new_model(self):
         s = self._camera_image.shape
         positions = [
-                [s[1] / 2, s[0] / 2],
-                [self._object_size, self._object_size],
-                [s[1] - self._object_size, self._object_size],
-                [s[1] - self._object_size, s[0] - self._object_size],
-                [self._object_size, s[0] - self._object_size],
-            ]
+            [s[1] / 2, s[0] / 2],
+            [self._object_size, self._object_size],
+            [s[1] - self._object_size, self._object_size],
+            [s[1] - self._object_size, s[0] - self._object_size],
+            [self._object_size, s[0] - self._object_size],
+        ]
 
         angle = 2 * np.pi / len(positions) * self._image_idx
         self._draw_pose(*positions[self._image_idx], angle)
@@ -117,16 +124,16 @@ class CameraDemo:
             input_image = self._make_input(self._camera_image) * 255
             cv2.imwrite(image_path, input_image)
             data_element = {
-              "image": image_file,
-              "objects": [
-                   {
-                    "category": 0,
-                    "origin": {
-                     "x": positions[self._image_idx][0],
-                     "y": positions[self._image_idx][1],
-                     "angle": angle
+                "image": image_file,
+                "objects": [
+                    {
+                        "category": 0,
+                        "origin": {
+                            "x": positions[self._image_idx][0],
+                            "y": positions[self._image_idx][1],
+                            "angle": angle
+                        }
                     }
-                   }
                 ]
             }
             self._dataset.append(data_element)
