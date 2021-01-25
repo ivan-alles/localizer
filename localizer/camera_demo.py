@@ -72,10 +72,21 @@ class CameraDemo:
 
             cv2.imshow('camera', self._view_image)
 
+    def _draw_pose(self, image, x, y, angle, color=(0, 255, 0), draw_object_size=True):
+        arrow = np.array([0, 0, 0, -1, 0, -1, .1, -.8, 0, -1, -.1, -0.8]).reshape(-1, 2)
+        t = utils.make_transform2(self._object_size / 2, angle, x, y)
+        arrow = np.dot(np.append(arrow, np.ones((arrow.shape[0], 1)), axis=1), t.T)[:, :2].astype(int)
+        for i in range(0, len(arrow), 2):
+            cv2.line(image, tuple(arrow[i]), tuple(arrow[i + 1]), color)
+        if draw_object_size:
+            cv2.circle(self._view_image, (int(x), int(y)), self._object_size // 2, color)
+
     def _detect(self):
         input = self._make_input(self._camera_image)
         predictions = self._localizer.predict(input)
         utils.draw_objects(self._view_image, predictions, axis_length=20, thickness=2)
+        for object in predictions:
+            self._draw_pose(self._view_image, object.origin[0], object.origin[1], object.angle)
 
     def _make_input(self, image):
         image = image.astype(np.float32) / 255
