@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 import sys
+import traceback
 
 import cv2
 import numpy as np
@@ -24,7 +25,7 @@ class CameraDemo:
         with open(self._template_cfg_path) as f:
             cfg = json.load(f)
 
-        self._model_dir = os.path.join('.temp', 'demo_model')
+        self._model_dir = os.path.join('.temp', 'camera_demo_model')
         self._dataset_path = os.path.join(self._model_dir, 'dataset.json')
         self._cfg_path = os.path.join(self._model_dir, 'config.json')
 
@@ -89,10 +90,14 @@ class CameraDemo:
     def _detect(self):
         if not self._localizer:
             return
-        input = self._make_input(self._camera_image)
-        objects = self._localizer.predict(input)
-        for obj in objects:
-            self._draw_pose(obj.origin[0], obj.origin[1], obj.angle)
+        try:
+            input = self._make_input(self._camera_image)
+            objects = self._localizer.predict(input)
+            for obj in objects:
+                self._draw_pose(obj.origin[0], obj.origin[1], obj.angle)
+        except Exception:
+            traceback.print_exc()
+            self._localizer = None
 
     def _make_input(self, image):
         image = image.astype(np.float32) / 255
@@ -101,9 +106,10 @@ class CameraDemo:
 
     def _load_model(self):
         try:
-            self._localizer = predict.Localizer('.temp/demo_model/config.json')
+            self._localizer = predict.Localizer(self._cfg_path)
             self._mode = self.__class__.Mode.DETECT
         except Exception:
+            traceback.print_exc()
             self._localizer = None
 
     def _new_model(self):
