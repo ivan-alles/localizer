@@ -79,7 +79,7 @@ class CameraDemo:
             self._view_image[:self._camera_image.shape[0], :self._camera_image.shape[1], :] = self._camera_image
 
             if self._mode == self.__class__.Mode.DETECT:
-                self._put_text('Press n - new model, q - exit', -10)
+                self._put_text('Press n - new model, q - exit', 50)
                 self._detect()
             else:
                 self._new_model()
@@ -97,7 +97,7 @@ class CameraDemo:
     def _put_text(self, text, y, color=(0, 255, 0)):
         cv2.putText(self._view_image,
                     text,
-                    (10, self._view_image.shape[0] + y),
+                    (10, self._camera_image.shape[0] + y),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.65,
                     color,
@@ -110,12 +110,12 @@ class CameraDemo:
                 objects = self._localizer.predict(input)
                 for obj in objects:
                     self._draw_pose(obj.origin[0], obj.origin[1], obj.angle)
-                self._put_text('Detecting...', -60)
+                self._put_text('Detecting...', 20)
         except Exception:
             traceback.print_exc()
             self._localizer = None
         if not self._localizer:
-            self._put_text('Failed to run model', -60, (0, 0, 255))
+            self._put_text('No model loaded', 80, (0, 0, 255))
 
     def _make_input(self, image):
         image = image.astype(np.float32) / 255
@@ -143,10 +143,6 @@ class CameraDemo:
         angle = 2 * np.pi / len(positions) * self._image_idx
         self._draw_pose(*positions[self._image_idx], angle)
 
-        self._put_text(f'Image #{self._image_idx + 1} of {len(positions)}', -70)
-        self._put_text('Place object to shown position and orientation', -40)
-        self._put_text('and press space', -10)
-
         if self._key == ord(' '):
             image_file = datetime.datetime.now().strftime(f'image-{self._image_idx}.png')
             image_path = os.path.join(self._model_dir, image_file)
@@ -172,13 +168,21 @@ class CameraDemo:
                     json.dump(self._dataset, f, indent=' ')
                 shutil.copyfile(self._template_cfg_path, self._cfg_path)
                 self._train()
+        else:
+            self._put_text(f'Image #{self._image_idx + 1} of {len(positions)}', 20)
+            self._put_text('Place object to shown position and orientation', 50)
+            self._put_text('and press space', 80)
 
     def _train(self):
+        self._put_text(f'Training, please wait...', 20)
+        cv2.imshow('camera', self._view_image)
+        cv2.waitKey(1)
         train.configure_logging(self._cfg_path)
         trainer = train.Trainer(self._cfg_path)
         trainer.run()
         plt.close()
         self._load_model()
+        print('Training done!')
 
 
 if __name__ == '__main__':
