@@ -174,7 +174,7 @@ class CameraDemo:
             self._put_text('and press space', 80)
 
     def _train(self):
-        self._put_text(f'Training, please wait...', 20)
+        self._put_text('Training, please wait...', 20)
         cv2.imshow('camera', self._view_image)
         cv2.waitKey(1)
         train.configure_logging(self._cfg_path)
