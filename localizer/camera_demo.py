@@ -7,6 +7,7 @@ import sys
 import traceback
 
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 
 from localizer import train
@@ -78,13 +79,7 @@ class CameraDemo:
             self._view_image[:self._camera_image.shape[0], :self._camera_image.shape[1], :] = self._camera_image
 
             if self._mode == self.__class__.Mode.DETECT:
-                cv2.putText(self._view_image,
-                            'Press n: new model, q: exit',
-                            (10, self._view_image.shape[0] - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.65,
-                            (0, 255, 0),
-                            1)
+                self._put_text('Press n - new model, q - exit', -10)
                 self._detect()
             else:
                 self._new_model()
@@ -99,6 +94,15 @@ class CameraDemo:
             cv2.line(self._view_image, tuple(arrow[i]), tuple(arrow[i + 1]), color, thickness=2)
         cv2.circle(self._view_image, (int(x), int(y)), self._object_size // 2, color, thickness=2)
 
+    def _put_text(self, text, y, color=(0, 255, 0)):
+        cv2.putText(self._view_image,
+                    text,
+                    (10, self._view_image.shape[0] + y),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.65,
+                    color,
+                    1)
+
     def _detect(self):
         try:
             if self._localizer:
@@ -106,24 +110,12 @@ class CameraDemo:
                 objects = self._localizer.predict(input)
                 for obj in objects:
                     self._draw_pose(obj.origin[0], obj.origin[1], obj.angle)
-                cv2.putText(self._view_image,
-                            'Detecting...',
-                            (10, self._view_image.shape[0] - 60),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.65,
-                            (0, 255, 0),
-                            2)
+                self._put_text('Detecting...', -60)
         except Exception:
             traceback.print_exc()
             self._localizer = None
         if not self._localizer:
-            cv2.putText(self._view_image,
-                        'Failed to run model',
-                        (10, self._view_image.shape[0] - 60),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.65,
-                        (0, 0, 255),
-                        2)
+            self._put_text('Failed to run model', -60, (0, 0, 255))
 
     def _make_input(self, image):
         image = image.astype(np.float32) / 255
@@ -151,29 +143,9 @@ class CameraDemo:
         angle = 2 * np.pi / len(positions) * self._image_idx
         self._draw_pose(*positions[self._image_idx], angle)
 
-        cv2.putText(self._view_image,
-                    f'Image #{self._image_idx + 1} of {len(positions)}',
-                    (10, self._view_image.shape[0] - 70),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.65,
-                    (0, 255, 0),
-                    1)
-
-        cv2.putText(self._view_image,
-                    'Place object to shown position and orientation',
-                    (10, self._view_image.shape[0] - 40),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.65,
-                    (0, 255, 0),
-                    1)
-
-        cv2.putText(self._view_image,
-                    'and press space',
-                    (10, self._view_image.shape[0] - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.65,
-                    (0, 255, 0),
-                    1)
+        self._put_text(f'Image #{self._image_idx + 1} of {len(positions)}', -70)
+        self._put_text('Place object to shown position and orientation', -40)
+        self._put_text('and press space', -10)
 
         if self._key == ord(' '):
             image_file = datetime.datetime.now().strftime(f'image-{self._image_idx}.png')
@@ -205,7 +177,7 @@ class CameraDemo:
         train.configure_logging(self._cfg_path)
         trainer = train.Trainer(self._cfg_path)
         trainer.run()
-
+        plt.close()
         self._load_model()
 
 
