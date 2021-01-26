@@ -52,8 +52,6 @@ class CameraDemo:
                 self._mode = self.__class__.Mode.NEW_MODEL
                 self._image_idx = 0
                 self._dataset = []
-            elif self._key == ord('d'):
-                self._mode = self.__class__.Mode.DETECT
             elif self._key == ord('r'):
                 self._train()  # Retrain model on existing data, useful for tests.
 
@@ -73,13 +71,20 @@ class CameraDemo:
                 desired_length = self._object_size * 6
                 self._scale_factor = desired_length / actual_length
                 self._view_shape = (int(self._scale_factor * camera_frame.shape[0] + 100),
-                                   min(int(self._scale_factor * camera_frame.shape[1]) + 1, 640), 3)
+                                    min(int(self._scale_factor * camera_frame.shape[1]) + 1, 640), 3)
 
             self._camera_image = cv2.resize(camera_frame, (0, 0), fx=self._scale_factor, fy=self._scale_factor)
             self._view_image = np.zeros(self._view_shape, dtype=self._camera_image.dtype)
             self._view_image[:self._camera_image.shape[0], :self._camera_image.shape[1], :] = self._camera_image
 
             if self._mode == self.__class__.Mode.DETECT:
+                cv2.putText(self._view_image,
+                            'Press n: new model, q: exit',
+                            (10, self._view_image.shape[0] - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            0.65,
+                            (0, 255, 0),
+                            1)
                 self._detect()
             else:
                 self._new_model()
@@ -95,16 +100,30 @@ class CameraDemo:
         cv2.circle(self._view_image, (int(x), int(y)), self._object_size // 2, color, thickness=2)
 
     def _detect(self):
-        if not self._localizer:
-            return
         try:
-            input = self._make_input(self._camera_image)
-            objects = self._localizer.predict(input)
-            for obj in objects:
-                self._draw_pose(obj.origin[0], obj.origin[1], obj.angle)
+            if self._localizer:
+                input = self._make_input(self._camera_image)
+                objects = self._localizer.predict(input)
+                for obj in objects:
+                    self._draw_pose(obj.origin[0], obj.origin[1], obj.angle)
+                cv2.putText(self._view_image,
+                            'Detecting...',
+                            (10, self._view_image.shape[0] - 60),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            0.65,
+                            (0, 255, 0),
+                            2)
         except Exception:
             traceback.print_exc()
             self._localizer = None
+        if not self._localizer:
+            cv2.putText(self._view_image,
+                        'Failed to run model',
+                        (10, self._view_image.shape[0] - 60),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.65,
+                        (0, 0, 255),
+                        2)
 
     def _make_input(self, image):
         image = image.astype(np.float32) / 255
@@ -131,6 +150,31 @@ class CameraDemo:
 
         angle = 2 * np.pi / len(positions) * self._image_idx
         self._draw_pose(*positions[self._image_idx], angle)
+
+        cv2.putText(self._view_image,
+                    f'Image #{self._image_idx + 1} of {len(positions)}',
+                    (10, self._view_image.shape[0] - 70),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.65,
+                    (0, 255, 0),
+                    1)
+
+        cv2.putText(self._view_image,
+                    'Place object to shown position and orientation',
+                    (10, self._view_image.shape[0] - 40),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.65,
+                    (0, 255, 0),
+                    1)
+
+        cv2.putText(self._view_image,
+                    'and press space',
+                    (10, self._view_image.shape[0] - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.65,
+                    (0, 255, 0),
+                    1)
+
         if self._key == ord(' '):
             image_file = datetime.datetime.now().strftime(f'image-{self._image_idx}.png')
             image_path = os.path.join(self._model_dir, image_file)
