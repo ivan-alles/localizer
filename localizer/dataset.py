@@ -234,7 +234,7 @@ class DataElement:
         # shear_scale_y = 1
         # shear_rot = 0.5
         t_shear_rot = utils.make_transform2(1, shear_rot)  # Rotation to make shear scaling
-        t_shear_scale = utils.make_transform2(shear_scale)  # Shear scaling
+        t_shear_scale = np.diag([shear_scale, 1, 1])
         t_scale = utils.make_transform2(scale)  # Uniform scaling
         daug_t_pose = np.linalg.multi_dot([t_scale, t_shear_rot.T, t_shear_scale, t_shear_rot])
         # Test code

@@ -20,12 +20,12 @@
     3.1416
   ],
   "data_augmentation_shear_rotation": [
-    -0.05,
-    0.05
+    -0.2,
+    0.2
   ],
   "data_augmentation_shear_scale": [
-    0.95,
-    1.05
+    0.8,
+    1.2
   ],
   "data_augmentation_scale": [
     0.7,
