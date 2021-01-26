@@ -62,15 +62,22 @@ class CameraDemo:
                 print('Cannot read camera frame')
                 continue
 
+            if camera_frame.ndim != 3 or camera_frame.shape[2] != 3:
+                print('Must be a color image')
+                sys.exit(0)
+
             camera_frame = np.fliplr(camera_frame)
 
             if self._scale_factor is None:
                 actual_length = np.max(camera_frame.shape[:2])
                 desired_length = self._object_size * 6
                 self._scale_factor = desired_length / actual_length
+                self._view_shape = (int(self._scale_factor * camera_frame.shape[0] + 100),
+                                   min(int(self._scale_factor * camera_frame.shape[1]) + 1, 640), 3)
 
             self._camera_image = cv2.resize(camera_frame, (0, 0), fx=self._scale_factor, fy=self._scale_factor)
-            self._view_image = np.copy(self._camera_image)
+            self._view_image = np.zeros(self._view_shape, dtype=self._camera_image.dtype)
+            self._view_image[:self._camera_image.shape[0], :self._camera_image.shape[1], :] = self._camera_image
 
             if self._mode == self.__class__.Mode.DETECT:
                 self._detect()
