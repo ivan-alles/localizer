@@ -120,6 +120,11 @@ class DataElement:
         show_diag_images = False  # Set to true to see diag images.
         image = self.read_image()
 
+        if self._cfg.get('permute_colors', False):
+            m = np.random.uniform(0, 1, (3, 3))
+            m /= m.sum(axis=1)
+            image = np.dot(image, m)
+
         category_count = batch.weight.shape[1]
         input_shape = batch.input.shape[1:]
         output_shape = batch.target_window.shape[1:]
