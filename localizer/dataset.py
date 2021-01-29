@@ -211,8 +211,7 @@ class DataElement:
             cv2.waitKey(0)
 
     def _select_random_pose(self, image, rng):
-        obj = self.objects[rng.randint(len(self.objects))]
-        if rng.uniform(0, 1) <= self._cfg['random_background_probability']:
+        if rng.uniform(0, 1) <= self._cfg['random_background_probability'] or not self.objects:
             random_center = np.array(
                 [
                     rng.uniform(0, image.shape[1]),
@@ -220,6 +219,7 @@ class DataElement:
                 ])
             random_angle = rng.uniform(-np.pi, np.pi)
         else:
+            obj = self.objects[rng.randint(len(self.objects))]
             # It is enough to vary the position within model scale radius to cover all possible
             # object placements for the convnet.
             offset = rng.uniform(-.5, .5, size=(2,)) / self._cfg['model_scale']

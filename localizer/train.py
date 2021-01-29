@@ -432,6 +432,14 @@ class Trainer:
 
             assert np.allclose(1, flt.data_element_weights.sum()), flt_name
 
+            if len(flt.data_element_weights == 0) > 0:
+                # Assign weights to the images without objects (pure background)
+                flt.data_element_weights[flt.data_element_weights == 0] = np.min(
+                    flt.data_element_weights[flt.data_element_weights > 0])
+
+                flt.data_element_weights /= flt.data_element_weights.sum()
+
+
     def _make_model(self):
         """
         Creates a model and loss.
