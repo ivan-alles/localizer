@@ -202,6 +202,11 @@ class DataElement:
         batch.weight[batch_index, :, :, :border, :] = 0
         batch.weight[batch_index, :, :, -border:, :] = 0
 
+        # Zero out pixels outside image
+        image_mask = cv2.warpAffine(np.ones(image.shape[:2]), target_t_image[:2, :3],
+                                    output_shape[2:0:-1], flags=cv2.INTER_NEAREST)
+        batch.weight[batch_index] *= np.expand_dims(image_mask, -1)
+
         if show_diag_images:
             cv2.waitKey(0)
 
