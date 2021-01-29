@@ -434,9 +434,9 @@ class Trainer:
 
             if len(flt.data_element_weights == 0) > 0:
                 # Assign weights to the images without objects (pure background)
-                flt.data_element_weights[flt.data_element_weights == 0] = np.min(
-                    flt.data_element_weights[flt.data_element_weights > 0])
-
+                w = np.min(flt.data_element_weights[flt.data_element_weights > 0]) * \
+                    self._cfg['random_background_probability']
+                flt.data_element_weights[flt.data_element_weights == 0] = w
                 flt.data_element_weights /= flt.data_element_weights.sum()
 
 
