@@ -1,7 +1,7 @@
 {
   "save_features": false,
   "dataset": ".temp/camera_demo_model/dataset.json",
-  "transfer_learning_base": "models/.archive/tl_base-20210118-082845/features.tf",
+  "transfer_learning_base": "models/.archive/tl_base-20210128-192442/features.tf",
   "retrain_transfer_learning": true,
   "object_size": 88,
   "input_scale": 1,
