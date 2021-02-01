@@ -394,9 +394,8 @@ def draw_objects(image, objects, axis_length=10, thickness=1, scale=1, category_
     category_colors = np.array(category_colors, dtype=np.float32) * maxcol
 
     for obj in objects:
-        conf_a = 0.5
         conf = obj.confidence if hasattr(obj, 'confidence') else 1
-        conf = conf * conf_a + (1 - conf_a)
+        conf = conf * 0.5 + 0.5
         color = category_colors[obj.category % len(category_colors)] * conf
         color = tuple([float(c) for c in color])
         t = make_transform2(1, obj.angle, obj.origin[0] * scale, obj.origin[1] * scale)
