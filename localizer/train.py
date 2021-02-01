@@ -439,7 +439,6 @@ class Trainer:
 
             assert np.allclose(1, flt.data_element_weights.sum()), flt_name
 
-
     def _make_model(self):
         """
         Creates a model and loss.
