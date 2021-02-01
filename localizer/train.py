@@ -430,14 +430,14 @@ class Trainer:
                 for obj in self._dataset.data_elements[data_element_idx].objects:
                     flt.data_element_weights[i] += 1 / total_obj_count_by_cat[obj.category] / self._category_count
 
-            assert np.allclose(1, flt.data_element_weights.sum()), flt_name
-
-            if len(flt.data_element_weights == 0) > 0:
+            pure_background_count = (flt.data_element_weights == 0).sum()
+            if pure_background_count > 0:
                 # Assign weights to the images without objects (pure background)
-                w = np.min(flt.data_element_weights[flt.data_element_weights > 0]) * \
-                    self._cfg['random_background_probability']
-                flt.data_element_weights[flt.data_element_weights == 0] = w
-                flt.data_element_weights /= flt.data_element_weights.sum()
+                flt.data_element_weights *= (1 - self._cfg['pure_background_probability'])
+                flt.data_element_weights[flt.data_element_weights == 0] = \
+                    self._cfg['pure_background_probability'] / pure_background_count
+
+            assert np.allclose(1, flt.data_element_weights.sum()), flt_name
 
 
     def _make_model(self):
