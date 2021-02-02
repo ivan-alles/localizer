@@ -59,7 +59,8 @@ class Localizer:
         self._diag = False
         self._diag_dir = 'localizer_diag'
 
-        self._model_path = os.path.join(os.path.dirname(config_file_name), 'model.tf')
+        self._model_dir = os.path.dirname(config_file_name)
+        self._model_path = os.path.join(self._model_dir, 'model.tf')
 
         self._sigma = self._cfg['sigma']
 
@@ -214,6 +215,9 @@ class Localizer:
         if self._diag:
             tf.keras.utils.plot_model(self._model, to_file=os.path.join(self._diag_dir, 'localization_model.svg'),
                                       dpi=50, show_shapes=True)
+
+        if self._cfg.get('save_prediction_model', False):
+            self._model.save(os.path.join(self._model_dir, 'prediction_model.tf'))
 
     def predict(self, image):
         """
