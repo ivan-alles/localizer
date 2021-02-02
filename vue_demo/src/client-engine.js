@@ -31,9 +31,12 @@ class Localizer {
     let result = null;
     try {
       console.log('image', image)
-      const prediction = this.model.predict({'image': image});
-      // console.log('prediction', prediction);
-      const output = tf.clipByValue(tf.squeeze(prediction[3]), 0, 1);
+      let bgr = tf.unstack(image, 3);
+      bgr = tf.stack([bgr[2], bgr[1], bgr[0]], 3);
+      const prediction = this.model.predict({'image': bgr});
+      console.log('prediction', prediction);
+      let output = tf.clipByValue(prediction[3], 0, 1);
+      output = tf.squeeze(tf.unstack(output, 4)[0]);
       console.log('output', output)
 
       let canvas = document.createElement('canvas');
