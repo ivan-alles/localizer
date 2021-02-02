@@ -41,7 +41,7 @@ class PredictionModelOutputs(enum.IntEnum):
     Indices of prediction model outputs.
     """
     MODEL = 0  # Raw model output.
-    OBJECTNESS = 1  # Objectness. TODO(ia): rename this and similar variables
+    OBJECTNESS = 1  # Objectness. TODO(ia): rename into 'confidence' this and similar variables
     AVERAGE_POS = 2  # x, y positions.
     AVERAGE_ANGLE = 3  # sin(angle), cos(angle).
     OUTPUT_WINDOW_POS = 4  # Diagnostic output.

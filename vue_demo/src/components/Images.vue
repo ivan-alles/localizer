@@ -6,7 +6,8 @@
       <h1>Localizer</h1>
     </div>
     <template v-if="state === stateKind.WORKING">
-      <img :src="fullPicture.full" class="full-picture">
+      <img src="test_image.png" class="full-picture" id="cameraImage">
+      <img :src="tempResultPicture" class="full-picture">
     </template>
     <template v-if="state === stateKind.INIT">
       <h4>
@@ -93,12 +94,14 @@ export default {
         await this.engine.init(message => {this.progressMessage = message;});
         this.progressMessage = 'Warming up ...';
 
+        this.state = stateKind.WORKING;
+
         while(this.state != stateKind.EXIT) {
           await sleep(50);
           if(!this.isActive) {
             continue;
           }
-          this.tempResultPicture = await this.engine.predict();
+          this.tempResultPicture = await this.engine.predict(document.getElementById('cameraImage'));
         }
       }
       catch(error) {
@@ -157,8 +160,8 @@ function sleep(ms) {
   border-radius: 4px;
   box-shadow: 2px 2px 4px #0004;
   margin-top: 10px;  
-  width: 100%; 
-  height: 100%; 
+  width: 160px; 
+  height: 160px; 
 }
 
 .error {

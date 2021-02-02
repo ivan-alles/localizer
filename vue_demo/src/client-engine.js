@@ -30,9 +30,14 @@ class Localizer {
   async predict(image) {
     let result = null;
     try {
-      const result = this.model.predict(image);
+      console.log('image', image)
+      const prediction = this.model.predict({'image': image});
+      // console.log('prediction', prediction);
+      const output = tf.clipByValue(tf.squeeze(prediction[3]), 0, 1);
+      console.log('output', output)
+
       let canvas = document.createElement('canvas');
-      await tf.browser.toPixels(result, canvas);
+      await tf.browser.toPixels(output, canvas);
       // Use JPEG compression as potentially more compact.
       // The performance with the default quality is better than PNG.
       result = canvas.toDataURL('image/jpg');
@@ -85,23 +90,21 @@ export class Engine {
     }
 
     this.localizer = new Localizer(this.logger);
-    this.preferenceModel = new PreferenceModel();
 
     await this.localizer.init(onProgress);
   }
 
   async predict(image) {
     // console.log('tf.memory', tf.memory());
-    return this.localizer.predict(image);
-
-    // let latentsTensor = null;
-    // try {
-    //   latentsTensor = tf.tidy(() => this.preferenceModel.generate(size, variance));
-    //   return await this.generatePicturesFromTensor(latentsTensor, modelNames);
-    // }
-    // finally {
-    //   tf.dispose(latentsTensor);
-    // }
+    let imageTensor = null;
+    try {
+      let imageTensor = tf.tidy(() =>  
+        tf.div(tf.cast(tf.expandDims(tf.browser.fromPixels(image), 0), 'float32'), 255));
+      return await this.localizer.predict(imageTensor);
+    }
+    finally {
+      tf.dispose(imageTensor);
+    }
   }
 
 }
