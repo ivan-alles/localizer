@@ -1,0 +1,8 @@
+# TODO(ia): this file probably will not work, as google looks for robots.txt at the domain root (https://ivan-alles.github.io/robots.txt)
+# But this does not matter much, as there are no rules anyway, and the sitemap can be submitted directly.
+
+# Allow full access for all bots.
+User-agent: *
+Allow: /
+
+Sitemap: https://ivan-alles.github.io/preference-model/sitemap.xml
