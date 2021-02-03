@@ -161,10 +161,6 @@ class Localizer:
             return window
 
         output_window_pos = make_window(output_pos)
-        if self._diag:
-            tf.keras.utils.plot_model(keras.Model(inputs=model.input, outputs=output_window_pos),
-                                      to_file=os.path.join(self._diag_dir, 'output_window_pos.svg'),
-                                      dpi=50, show_shapes=True)
 
         def show_kernel(k, name, factor):
             for i in range(k.shape[2]):
@@ -216,9 +212,10 @@ class Localizer:
             all_outputs += [model.output, output_window_pos]
         self._model = keras.Model(inputs=model.input, outputs=all_outputs)
 
-        if self._diag:
-            tf.keras.utils.plot_model(self._model, to_file=os.path.join(self._diag_dir, 'localization_model.svg'),
-                                      dpi=50, show_shapes=True)
+        # This stopped working with TF 2.4.
+        # if self._diag:
+        #     tf.keras.utils.plot_model(self._model, to_file=os.path.join(self._diag_dir, 'prediction_model.svg'),
+        #                               dpi=50, show_shapes=True)
 
         if self._cfg.get('save_prediction_model', False):
             self._model.save(os.path.join(self._model_dir, 'prediction_model.tf'))
