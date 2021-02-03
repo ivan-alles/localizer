@@ -64,7 +64,7 @@ class Localizer:
 
         self._sigma = self._cfg['sigma']
 
-        self._objectness_ksize = self._cfg['objectness_ksize']
+        self._confidence_ksize = self._cfg['confidence_ksize']
         self._pos_ksize = self._cfg['pos_ksize']
         self._angle_ksize = self._cfg['angle_ksize']
 
@@ -172,20 +172,20 @@ class Localizer:
                 cv2.imshow(name + f'.i{i}', utils.red_green(im))
             cv2.waitKey(0)
 
-        p, g = self._compute_pos_kernels(self._objectness_ksize, self._sigma)
+        p, g = self._compute_pos_kernels(self._confidence_ksize, self._sigma)
         k = p / self._sigma * np.expand_dims(g, 2)
         # Normalize so that the convolution to itself gives 1.
         s = (k * k).sum(axis=(0, 1), keepdims=True) * 2
         if (s == 0).any():
-            raise ValueError('Objectness kernel is zero, increase kernel size')
-        objectness_kernel = k / s
+            raise ValueError('Confidence kernel is zero, increase kernel size')
+        confidence_kernel = k / s
 
         if False:  # Test code
-            show_kernel(objectness_kernel, 'objectness_kernel', 20)
+            show_kernel(confidence_kernel, 'confidence_kernel', 20)
 
-        objectness = tf.nn.conv2d(output_window_pos, np.expand_dims(objectness_kernel, 3),
+        confidence = tf.nn.conv2d(output_window_pos, np.expand_dims(confidence_kernel, 3),
                                  strides=1,
-                                 padding='SAME', name='objectness')
+                                 padding='SAME', name='confidence')
 
         def make_average_function(output, ksize, name):
             _, k = self._compute_pos_kernels(ksize, self._sigma)
@@ -207,7 +207,7 @@ class Localizer:
         average_angle = make_average_function(output_angle, self._angle_ksize, name='average_angle')
 
         # Add elements in the order defined by PredictionModelOutputs.
-        all_outputs = [objectness, average_pos, average_angle]
+        all_outputs = [confidence, average_pos, average_angle]
         if self._diag:
             all_outputs += [model.output, output_window_pos]
         self._model = keras.Model(inputs=model.input, outputs=all_outputs)
@@ -261,14 +261,14 @@ class Localizer:
         predictions = []
 
         for bi in range(batch_size):
-            objectness = result[PredictionModelOutputs.CONFIDENCE][bi]
+            confidence = result[PredictionModelOutputs.CONFIDENCE][bi]
             average_pos = result[PredictionModelOutputs.AVERAGE_POS][bi]
             average_angle = result[PredictionModelOutputs.AVERAGE_ANGLE][bi]
 
             if self._diag:
                 batch.outputs = np.expand_dims(result[PredictionModelOutputs.MODEL][bi], 0)
                 batch.output_window_pos = np.expand_dims(result[PredictionModelOutputs.OUTPUT_WINDOW_POS][bi], 0)
-                batch.objectness = np.expand_dims(objectness, 0)
+                batch.confidence = np.expand_dims(confidence, 0)
                 batch.average_pos = np.expand_dims(average_pos, 0)
                 batch.average_angle = np.expand_dims(average_angle, 0)
 
@@ -286,7 +286,7 @@ class Localizer:
 
                 utils.save_batch_as_images(batch, self._diag_dir, prefix='{:02}'.format(bi), fmt='{0}{2}.png')
 
-            objectness = objectness.squeeze(-1)
+            confidence = confidence.squeeze(-1)
 
             def compute_pose(index):
                 """
@@ -294,8 +294,6 @@ class Localizer:
 
                 :param index: a 1d tensor [cat, y, x] pointing to an output element.
                 """
-                confidence = min(objectness[index[0], index[1], index[2]], 1.0)
-
                 pos = average_pos[index[0], index[1], index[2]]
                 pos += index[1:]
 
@@ -311,9 +309,10 @@ class Localizer:
                 a = average_angle[index[0], index[1], index[2]]
                 angle = np.arctan2(a[0], a[1])
 
-                predictions.append(Object(pos[0], pos[1], angle, index[0], confidence))
+                conf = min(confidence[index[0], index[1], index[2]], 1.0)
+                predictions.append(Object(pos[0], pos[1], angle, index[0], conf))
 
-            local_max_map = utils.local_max(objectness, (3, 3), self._cfg['confidence_thr'])
+            local_max_map = utils.local_max(confidence, (3, 3), self._cfg['confidence_thr'])
             local_max = np.transpose(np.nonzero(local_max_map))
             for i in range(len(local_max)):
                 compute_pose(local_max[i])
