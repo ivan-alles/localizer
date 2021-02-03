@@ -30,20 +30,41 @@ class Localizer {
   async predict(image) {
     let result = null;
     try {
-      console.log('image', image)
+      // console.log('image', image)
       let bgr = tf.unstack(image, 3);
       bgr = tf.stack([bgr[2], bgr[1], bgr[0]], 3);
-      const prediction = this.model.predict({'image': bgr});
-      console.log('prediction', prediction);
-      let output = tf.clipByValue(prediction[3], 0, 1);
-      output = tf.squeeze(tf.unstack(output, 4)[0]);
-      console.log('output', output)
+      const prediction = await this.model.executeAsync({'image': bgr});
+      // console.log('prediction', prediction);
+      const objects = await prediction.data()
 
       let canvas = document.createElement('canvas');
-      await tf.browser.toPixels(output, canvas);
-      // Use JPEG compression as potentially more compact.
-      // The performance with the default quality is better than PNG.
-      result = canvas.toDataURL('image/jpg');
+      await tf.browser.toPixels(tf.squeeze(image), canvas);
+      
+      for(let o = 0; o < objects.length; o += 5) {
+        const x = objects[o] * 8
+        const y = objects[o + 1] * 8
+        const angle = objects[o + 2]
+        // console.log('x, y, angle', x, y, angle);
+
+        var ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "#00FF00";
+        ctx.lineWidth = 3;
+        ctx.setTransform(Math.cos(angle), Math.sin(angle), -Math.sin(angle), Math.cos(angle), x, y);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(44, 0);
+        ctx.lineTo(34, -10);
+        ctx.moveTo(44, 0);
+        ctx.lineTo(34, 10);
+        ctx.stroke();
+
+      }
+      
+      // let output = tf.clipByValue(prediction[2], 0, 1);
+      // output = tf.squeeze(tf.unstack(output, 4)[0]);
+      // console.log('output', output)
+
+      result = canvas.toDataURL('image/png');
       return result;
     }
     catch(error) {

@@ -160,8 +160,8 @@ function sleep(ms) {
   border-radius: 4px;
   box-shadow: 2px 2px 4px #0004;
   margin-top: 10px;  
-  width: 160px; 
-  height: 160px; 
+  width: 528px; 
+  height: 400px; 
 }
 
 .error {
