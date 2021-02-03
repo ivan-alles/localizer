@@ -40,11 +40,13 @@ class PredictionModelOutputs(enum.IntEnum):
     """
     Indices of prediction model outputs.
     """
-    CONFIDENCE = 0  # Confidence level.
-    AVERAGE_POS = 1  # x, y positions.
-    AVERAGE_ANGLE = 2  # sin(angle), cos(angle).
-    MODEL = 3  # Raw model output for diagnostics.
-    OUTPUT_WINDOW_POS = 4  # Window function output for diagnostics.
+    OBJECTS = 0  # Objects, a 2d array num_objects x (x, y, angle, category, confidence)
+    # The rest is used for diagnostics
+    MODEL = 1  # Training model output.
+    CONFIDENCE = 2  # Confidence level.
+    AVERAGE_POS = 3  # Average x, y positions.
+    AVERAGE_ANGLE = 4  # Average sin(angle), cos(angle).
+    OUTPUT_WINDOW_POS = 5  # Window function output.
 
 
 class Localizer:
@@ -149,6 +151,8 @@ class Localizer:
         dummy_input = np.zeros((1,) + self._model_input_shape)
         self._model_output_shape = model.predict(dummy_input).shape[1:]
 
+        self._category_count = model.output.shape[1]
+
         output_pos = model.output[:, :, :, :, TrainingModelChannels.Y:TrainingModelChannels.X + 1]
         output_angle = model.output[:, :, :, :, TrainingModelChannels.SA:TrainingModelChannels.CA + 1]
 
@@ -206,10 +210,19 @@ class Localizer:
         average_pos = make_average_function(output_pos, self._pos_ksize, name='average_pos')
         average_angle = make_average_function(output_angle, self._angle_ksize, name='average_angle')
 
-        # Add elements in the order defined by PredictionModelOutputs.
-        all_outputs = [confidence, average_pos, average_angle]
+        confidence = tf.squeeze(confidence, -1)
+        local_max_idx = tf.where(confidence)
+        category = tf.cast(local_max_idx[:, 1], tf.float32)
+        yx = tf.gather_nd(average_pos, local_max_idx) + tf.cast(local_max_idx[:, 2:], np.float32)
+        sc = tf.gather_nd(average_angle, local_max_idx)
+        angle = tf.math.atan2(sc[:, 0], sc[:, 1])
+        conf = tf.gather_nd(confidence, local_max_idx)
+        objects = tf.stack([yx[:, 1], yx[:, 0], angle, category, conf], 1)
+
+        # Add outputs in the order defined by PredictionModelOutputs.
+        all_outputs = [objects]
         if self._diag:
-            all_outputs += [model.output, output_window_pos]
+            all_outputs += [model.output, confidence, average_pos, average_angle, output_window_pos]
         self._model = keras.Model(inputs=model.input, outputs=all_outputs)
 
         # This stopped working with TF 2.4.
@@ -254,67 +267,45 @@ class Localizer:
 
         result = self._model.predict(batch.inputs)
 
-        category_count = result[PredictionModelOutputs.CONFIDENCE].shape[1]
-
         if self._diag:
-            batch.output_on_image = np.zeros((batch_size, category_count, 2) + image.shape)
+            batch.output_on_image = np.zeros((batch_size, self._category_count, 2) + image.shape)
+
+            for bi in range(batch_size):
+                confidence = result[PredictionModelOutputs.CONFIDENCE][bi]
+                average_pos = result[PredictionModelOutputs.AVERAGE_POS][bi]
+                average_angle = result[PredictionModelOutputs.AVERAGE_ANGLE][bi]
+
+                if self._diag:
+                    batch.outputs = np.expand_dims(result[PredictionModelOutputs.MODEL][bi], 0)
+                    batch.output_window_pos = np.expand_dims(result[PredictionModelOutputs.OUTPUT_WINDOW_POS][bi], 0)
+                    batch.confidence = np.expand_dims(confidence, 0)
+                    batch.average_pos = np.expand_dims(average_pos, 0)
+                    batch.average_angle = np.expand_dims(average_angle, 0)
+
+                    def blend(img, data, factor):
+                        alpha = 0.5
+                        data = cv2.warpAffine(data, self._image_t_output[:2, :],
+                                              (image.shape[1], image.shape[0]),
+                                              flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+                        data = utils.red_green(data * factor)
+                        return alpha * data + (1 - alpha) * img
+
+                    for cat in range(self._category_count):
+                        batch.output_on_image[bi][cat][0] = blend(image, batch.outputs[0, cat, :, :, 0], 1)
+                        batch.output_on_image[bi][cat][1] = blend(image, batch.outputs[0, cat, :, :, 1], 1)
+
+                    utils.save_batch_as_images(batch, self._diag_dir, prefix='{:02}'.format(bi), fmt='{0}{2}.png')
+
+        if type(result) == list:
+            objects = result[PredictionModelOutputs.OBJECTS]
+        else:
+            objects = result
+
+        pos = np.hstack([objects[:, :2], np.ones((objects.shape[0], 1))])
+        pos = np.dot(pos, self._image_t_output.T)[:, :2]
 
         predictions = []
-
-        for bi in range(batch_size):
-            confidence = result[PredictionModelOutputs.CONFIDENCE][bi]
-            average_pos = result[PredictionModelOutputs.AVERAGE_POS][bi]
-            average_angle = result[PredictionModelOutputs.AVERAGE_ANGLE][bi]
-
-            if self._diag:
-                batch.outputs = np.expand_dims(result[PredictionModelOutputs.MODEL][bi], 0)
-                batch.output_window_pos = np.expand_dims(result[PredictionModelOutputs.OUTPUT_WINDOW_POS][bi], 0)
-                batch.confidence = np.expand_dims(confidence, 0)
-                batch.average_pos = np.expand_dims(average_pos, 0)
-                batch.average_angle = np.expand_dims(average_angle, 0)
-
-                def blend(img, data, factor):
-                    alpha = 0.5
-                    data = cv2.warpAffine(data, self._image_t_output[:2, :],
-                                          (image.shape[1], image.shape[0]),
-                                          flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
-                    data = utils.red_green(data * factor)
-                    return alpha * data + (1 - alpha) * img
-
-                for cat in range(category_count):
-                    batch.output_on_image[bi][cat][0] = blend(image, batch.outputs[0, cat, :, :, 0], 1)
-                    batch.output_on_image[bi][cat][1] = blend(image, batch.outputs[0, cat, :, :, 1], 1)
-
-                utils.save_batch_as_images(batch, self._diag_dir, prefix='{:02}'.format(bi), fmt='{0}{2}.png')
-
-            confidence = confidence.squeeze(-1)
-
-            def compute_pose(index):
-                """
-                Compute a pose from prediction at index.
-
-                :param index: a 1d tensor [cat, y, x] pointing to an output element.
-                """
-                pos = average_pos[index[0], index[1], index[2]]
-                pos += index[1:]
-
-                # Convert to (x, y) to be able to use self._image_t_output for both warpAffine and here.
-                pos = np.flip(pos)
-
-                pos = np.hstack([pos, 1])
-                pos = np.dot(self._image_t_output, pos)[:2]
-
-                if pos[0] < 0 or pos[0] >= self._image_shape[1] or pos[1] < 0 or pos[1] >= self._image_shape[0]:
-                    return
-
-                a = average_angle[index[0], index[1], index[2]]
-                angle = np.arctan2(a[0], a[1])
-
-                conf = min(confidence[index[0], index[1], index[2]], 1.0)
-                predictions.append(Object(pos[0], pos[1], angle, index[0], conf))
-
-            local_max = np.transpose(np.nonzero(confidence))
-            for i in range(len(local_max)):
-                compute_pose(local_max[i])
+        for i in range(len(objects)):
+            predictions.append(Object(pos[i][0], pos[i][1], objects[i][2], objects[i][3], objects[i][4]))
 
         return predictions
