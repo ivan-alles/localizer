@@ -584,6 +584,7 @@ class Trainer:
         ]
 
         # Test code to validate without training.
+        # self._training_examples_done = 0
         # self._validate_model(train_phase_params[1], True)
         # return
 

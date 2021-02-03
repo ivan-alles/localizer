@@ -40,11 +40,11 @@ class PredictionModelOutputs(enum.IntEnum):
     """
     Indices of prediction model outputs.
     """
-    MODEL = 0  # Raw model output.
-    OBJECTNESS = 1  # Objectness. TODO(ia): rename into 'confidence' this and similar variables
-    AVERAGE_POS = 2  # x, y positions.
-    AVERAGE_ANGLE = 3  # sin(angle), cos(angle).
-    OUTPUT_WINDOW_POS = 4  # Diagnostic output.
+    CONFIDENCE = 0  # Confidence level.
+    AVERAGE_POS = 1  # x, y positions.
+    AVERAGE_ANGLE = 2  # sin(angle), cos(angle).
+    MODEL = 3  # Raw model output for diagnostics.
+    OUTPUT_WINDOW_POS = 4  # Window function output for diagnostics.
 
 
 class Localizer:
@@ -207,9 +207,9 @@ class Localizer:
         average_angle = make_average_function(output_angle, self._angle_ksize, name='average_angle')
 
         # Add elements in the order defined by PredictionModelOutputs.
-        all_outputs = [model.output, objectness, average_pos, average_angle]
+        all_outputs = [objectness, average_pos, average_angle]
         if self._diag:
-            all_outputs.append(output_window_pos)
+            all_outputs += [model.output, output_window_pos]
         self._model = keras.Model(inputs=model.input, outputs=all_outputs)
 
         if self._diag:
@@ -253,7 +253,7 @@ class Localizer:
 
         result = self._model.predict(batch.inputs)
 
-        category_count = result[PredictionModelOutputs.MODEL].shape[1]
+        category_count = result[PredictionModelOutputs.CONFIDENCE].shape[1]
 
         if self._diag:
             batch.output_on_image = np.zeros((batch_size, category_count, 2) + image.shape)
@@ -261,13 +261,12 @@ class Localizer:
         predictions = []
 
         for bi in range(batch_size):
-            output = result[PredictionModelOutputs.MODEL][bi]
-            objectness = result[PredictionModelOutputs.OBJECTNESS][bi]
+            objectness = result[PredictionModelOutputs.CONFIDENCE][bi]
             average_pos = result[PredictionModelOutputs.AVERAGE_POS][bi]
             average_angle = result[PredictionModelOutputs.AVERAGE_ANGLE][bi]
 
             if self._diag:
-                batch.outputs = np.expand_dims(output, 0)
+                batch.outputs = np.expand_dims(result[PredictionModelOutputs.MODEL][bi], 0)
                 batch.output_window_pos = np.expand_dims(result[PredictionModelOutputs.OUTPUT_WINDOW_POS][bi], 0)
                 batch.objectness = np.expand_dims(objectness, 0)
                 batch.average_pos = np.expand_dims(average_pos, 0)
@@ -282,8 +281,8 @@ class Localizer:
                     return alpha * data + (1 - alpha) * img
 
                 for cat in range(category_count):
-                    batch.output_on_image[bi][cat][0] = blend(image, output[cat, :, :, 0], 1)
-                    batch.output_on_image[bi][cat][1] = blend(image, output[cat, :, :, 1], 1)
+                    batch.output_on_image[bi][cat][0] = blend(image, batch.outputs[0, cat, :, :, 0], 1)
+                    batch.output_on_image[bi][cat][1] = blend(image, batch.outputs[0, cat, :, :, 1], 1)
 
                 utils.save_batch_as_images(batch, self._diag_dir, prefix='{:02}'.format(bi), fmt='{0}{2}.png')
 
