@@ -5,9 +5,10 @@
     <div>
       <h1>Localizer</h1>
     </div>
+    <video autoplay="true" id="videoElement"> </video>
     <template v-if="state === stateKind.WORKING">
-      <img src="test_image.png" class="full-picture" id="cameraImage">
       <img :src="tempResultPicture" class="full-picture">
+      <img src="test_image.png" class="full-picture" id="cameraImage">
     </template>
     <template v-if="state === stateKind.INIT">
       <h4>
@@ -79,7 +80,8 @@ export default {
       state: stateKind.INIT,
       isMobile: false,
       progressMessage: 'Loading ...',
-      tempResultPicture: null
+      tempResultPicture: null,
+      camera: null,
     };
   },
   computed: {
@@ -96,12 +98,13 @@ export default {
 
         this.state = stateKind.WORKING;
 
+      await sleep(1000);
         while(this.state != stateKind.EXIT) {
           await sleep(50);
           if(!this.isActive) {
             continue;
           }
-          this.tempResultPicture = await this.engine.predict(document.getElementById('cameraImage'));
+          this.tempResultPicture = await this.engine.predict(document.getElementById('videoElement'));
         }
       }
       catch(error) {
@@ -114,6 +117,24 @@ export default {
     reload() {
       location.reload();
     },
+    async startVideo() {
+      this.camera = document.querySelector("#videoElement");
+      console.log(this.camera);
+
+      // if (navigator.mediaDevices.getUserMedia) {
+      //   navigator.mediaDevices.getUserMedia({ video: true })
+      //     .then(function (stream) {
+      //       this.camera.srcObject = stream;
+      //     })
+      //     .catch(function (err0r) {
+      //       console.log("Something went wrong!");
+      //     });
+      // }
+
+      if (navigator.mediaDevices.getUserMedia) {
+        this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
+      }
+    },    
   },
 
   created() {
@@ -128,6 +149,7 @@ export default {
   },
 
   mounted() {
+    this.startVideo();
     this.getPicturesTask();
   },
 
@@ -166,6 +188,12 @@ function sleep(ms) {
 
 .error {
   color: var(--danger);
+}
+
+#videoElement {
+	width: 528px;
+	height: 400px;
+	background-color: #666;
 }
 
 </style>
