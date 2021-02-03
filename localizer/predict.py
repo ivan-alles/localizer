@@ -183,9 +183,13 @@ class Localizer:
         if False:  # Test code
             show_kernel(confidence_kernel, 'confidence_kernel', 20)
 
-        confidence = tf.nn.conv2d(output_window_pos, np.expand_dims(confidence_kernel, 3),
+        confidence_map = tf.nn.conv2d(output_window_pos, np.expand_dims(confidence_kernel, 3),
                                  strides=1,
-                                 padding='SAME', name='confidence')
+                                 padding='SAME', name='confidence_map')
+
+        confidence_loc_max = (tf.nn.max_pool(confidence_map, 3, 1, 'SAME', 'NCDHW') - confidence_map) == 0
+        confidence_thr = tf.math.logical_and(confidence_loc_max, confidence_map >= self._cfg['confidence_thr'])
+        confidence = confidence_map * tf.cast(confidence_thr, tf.float32)
 
         def make_average_function(output, ksize, name):
             _, k = self._compute_pos_kernels(ksize, self._sigma)
@@ -312,8 +316,7 @@ class Localizer:
                 conf = min(confidence[index[0], index[1], index[2]], 1.0)
                 predictions.append(Object(pos[0], pos[1], angle, index[0], conf))
 
-            local_max_map = utils.local_max(confidence, (3, 3), self._cfg['confidence_thr'])
-            local_max = np.transpose(np.nonzero(local_max_map))
+            local_max = np.transpose(np.nonzero(confidence))
             for i in range(len(local_max)):
                 compute_pose(local_max[i])
 
