@@ -5,7 +5,6 @@
     <div>
       <h1>Localizer</h1>
     </div>
-    <video autoplay="true" id="videoElement"> </video>
     <template v-if="state === stateKind.WORKING">
       <img :src="tempResultPicture" class="full-picture">
       <img src="test_image.png" class="full-picture" id="cameraImage">
@@ -104,7 +103,8 @@ export default {
           if(!this.isActive) {
             continue;
           }
-          this.tempResultPicture = await this.engine.predict(document.getElementById('videoElement'));
+          //this.tempResultPicture = await this.engine.predict(document.getElementById('videoElement'));
+          this.tempResultPicture = await this.engine.predict(this.camera);
         }
       }
       catch(error) {
@@ -118,22 +118,13 @@ export default {
       location.reload();
     },
     async startVideo() {
-      this.camera = document.querySelector("#videoElement");
+      // this.camera = document.querySelector("#videoElement");
+      this.camera = document.createElement("video");
       console.log(this.camera);
-
-      // if (navigator.mediaDevices.getUserMedia) {
-      //   navigator.mediaDevices.getUserMedia({ video: true })
-      //     .then(function (stream) {
-      //       this.camera.srcObject = stream;
-      //     })
-      //     .catch(function (err0r) {
-      //       console.log("Something went wrong!");
-      //     });
-      // }
-
       if (navigator.mediaDevices.getUserMedia) {
         this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
       }
+      this.camera.play();
     },    
   },
 
