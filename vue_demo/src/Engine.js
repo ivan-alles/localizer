@@ -7,6 +7,43 @@ import {loadGraphModel} from '@tensorflow/tfjs-converter';
 
 let MODEL_URL = '/prediction_model.tfjs/model.json';
 
+function padSize(size, padTo) {
+  if (size % padTo == 0)
+    return 0;
+  return padTo - size % padTo;
+}
+
+function resizeImage(image, maxSize=511, padTo=32) {
+  let sizeX = image.shape[1];
+  let sizeY = image.shape[0];
+  const scaleX = maxSize / sizeX;
+  const scaleY = maxSize / sizeY;
+  let scale = 0;
+  if (scaleX < 1 || scaleY < 1) {
+    if (scaleX < scaleY) {
+      scale = scaleX;
+      sizeX = maxSize;
+      sizeY = Math.floor(sizeY * scale);
+    }
+    else {
+      scale = scaleY;
+      sizeX = Math.floor(sizeX * scale);
+      sizeY = maxSize;
+    }
+    // console.log('sizeX, sizeY', sizeX, sizeY);
+    image = tf.image.resizeBilinear(image, [sizeY, sizeX]);
+  }
+  const padX = padSize(sizeX, padTo);
+  const padY = padSize(sizeY, padTo);
+  if(padX != 0 || padY != 0) {
+    image = tf.pad(image, [[0, padY], [0, padX], [0, 0]])
+  }
+  return {
+    image,
+    scale
+  };  
+}
+
 class Localizer {
   constructor(logger) {
     this.logger = logger;
@@ -31,18 +68,21 @@ class Localizer {
     let result = null;
     try {
       // console.log('image', image)
-      let bgr = tf.unstack(image, 3);
-      bgr = tf.stack([bgr[2], bgr[1], bgr[0]], 3);
+      let resized = resizeImage(image, 512, 32);
+      console.log('resized.image', resized.image);
+      let bgr = tf.unstack(resized.image, 2);
+      bgr = tf.stack([bgr[2], bgr[1], bgr[0]], 2);
+      bgr = tf.expandDims(bgr, 0); // Add batch dimension.
       const prediction = await this.model.executeAsync({'image': bgr});
       // console.log('prediction', prediction);
       const objects = await prediction.data()
 
       let canvas = document.createElement('canvas');
-      await tf.browser.toPixels(tf.squeeze(image), canvas);
+      await tf.browser.toPixels(image, canvas);
       
       for(let o = 0; o < objects.length; o += 5) {
-        const x = objects[o] * 8
-        const y = objects[o + 1] * 8
+        const x = objects[o] * 8 / resized.scale
+        const y = objects[o + 1] * 8 / resized.scale
         const angle = objects[o + 2]
         // console.log('x, y, angle', x, y, angle);
 
@@ -123,7 +163,7 @@ export class Engine {
     let imageTensor = null;
     try {
       let imageTensor = tf.tidy(() =>  
-        tf.div(tf.cast(tf.expandDims(tf.browser.fromPixels(image), 0), 'float32'), 255));
+        tf.div(tf.cast(tf.browser.fromPixels(image), 'float32'), 255));
       return await this.localizer.predict(imageTensor);
     }
     finally {
