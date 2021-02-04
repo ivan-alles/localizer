@@ -71,8 +71,8 @@ class Localizer {
     let output = null;
     try {
       // console.log('image', image)
-      const input = tf.tidy(() => makeInput(image, 512, 32));
-      const output = await this.model.executeAsync({'image': input.image});
+      input = tf.tidy(() => makeInput(image, 512, 32));
+      output = await this.model.executeAsync({'image': input.image});
       // console.log('prediction', prediction);
       const objects = await output.data()
 
@@ -109,7 +109,7 @@ class Localizer {
       this.logger.logException('Localizer.predict', error);
     }
     finally {
-      tf.dispose(input);
+      if(input!==null) tf.dispose(input.image);
       tf.dispose(output);
     }
     return null; 
@@ -161,7 +161,7 @@ export class Engine {
     // console.log('tf.memory', tf.memory());
     let imageTensor = null;
     try {
-      let imageTensor = tf.tidy(() =>  
+      imageTensor = tf.tidy(() =>  
         tf.div(tf.cast(tf.browser.fromPixels(image), 'float32'), 255));
       return await this.localizer.predict(imageTensor);
     }
