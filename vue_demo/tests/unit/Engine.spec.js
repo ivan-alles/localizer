@@ -3,7 +3,7 @@
 import * as tf from '@tensorflow/tfjs';
 tf.setBackend('cpu')
 
-import { testables } from '@/client-engine'
+import { testables } from '@/Engine'
 const PreferenceModel = testables.PreferenceModel;
 const scaledDirichlet = testables.scaledDirichlet;
 const cartesianToSpherical = testables.cartesianToSpherical;

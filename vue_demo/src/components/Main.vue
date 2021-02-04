@@ -37,8 +37,7 @@
 
 <script>
 
-// import { Engine } from '@/server-engine'
-import { Engine } from '@/client-engine'
+import { Engine } from '@/Engine'
 
 const stateKind = {
     INIT: 'INIT',       // Loading models, etc.
