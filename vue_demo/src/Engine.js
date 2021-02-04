@@ -70,7 +70,7 @@ class Localizer {
     let input = null;
     let output = null;
     try {
-      // console.log('image', image)
+      // console.log('image', image);
       input = tf.tidy(() => makeInput(image, 512, 32));
       output = await this.model.executeAsync({'image': input.image});
       // console.log('prediction', prediction);
@@ -87,34 +87,7 @@ class Localizer {
         });
       }
 
-      let canvas = document.createElement('canvas');
-      await tf.browser.toPixels(image, canvas);
-
-      for(const o of objects) {
-        // console.log('object', o);
-
-        const sa = Math.sin(o.angle);
-        const ca = Math.cos(o.angle);
-
-        var ctx = canvas.getContext("2d");
-        ctx.strokeStyle = "#00FF00";
-        ctx.lineWidth = 3;
-        ctx.setTransform(ca, sa, -sa, ca, o.x, o.y);
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(44, 0);
-        ctx.lineTo(34, -10);
-        ctx.moveTo(44, 0);
-        ctx.lineTo(34, 10);
-        ctx.stroke();
-
-      }
-      
-      // let output = tf.clipByValue(prediction[2], 0, 1);
-      // output = tf.squeeze(tf.unstack(output, 4)[0]);
-      // console.log('output', output)
-
-      return canvas.toDataURL('image/png');
+      return objects;
     }
     catch(error) {
       this.logger.logException('Localizer.predict', error);

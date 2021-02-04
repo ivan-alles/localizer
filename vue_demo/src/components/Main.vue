@@ -106,8 +106,41 @@ export default {
           if(!this.isActive) {
             continue;
           }
-          //this.tempResultPicture = await this.engine.predict(document.getElementById('videoElement'));
-          this.tempResultPicture = await this.engine.predict(this.camera);
+          
+          const canvas = document.createElement('canvas');
+          canvas.setAttribute('width', this.camera.videoWidth);
+          canvas.setAttribute('height', this.camera.videoHeight);
+
+          var ctx = canvas.getContext("2d");
+
+          ctx.drawImage(this.camera, 0, 0); //, 640, 480, 0, 0, 300, 100);
+
+          const objects = await this.engine.predict(this.camera);
+          
+          //await tf.browser.toPixels(image, canvas);
+          
+
+          for(const o of objects) {
+            // console.log('object', o);
+
+            const sa = Math.sin(o.angle);
+            const ca = Math.cos(o.angle);
+
+            ctx.strokeStyle = "#00FF00";
+            ctx.lineWidth = 3;
+            ctx.setTransform(ca, sa, -sa, ca, o.x, o.y);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(44, 0);
+            ctx.lineTo(34, -10);
+            ctx.moveTo(44, 0);
+            ctx.lineTo(34, 10);
+            ctx.stroke();
+
+          }
+          
+          this.tempResultPicture = canvas.toDataURL('image/png');
+
         }
       }
       catch(error) {
