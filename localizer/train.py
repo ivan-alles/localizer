@@ -360,7 +360,6 @@ class Trainer:
         self._cfg['runtime'] = {}
         self._output_dir = os.path.join(self._model_dir, '.temp', 'train')
         self._cfg['runtime']['output_dir'] = self._output_dir
-        self._rng = np.random.RandomState(self._cfg['rng_seed'])
 
     def run(self):
         """
@@ -398,10 +397,15 @@ class Trainer:
         categories = set()
 
         if training_fraction == int(training_fraction):
-            indexes = np.arange(len(self._dataset.data_elements))
-            self._rng.shuffle(indexes)
-            indexes = indexes[:training_fraction]
-            training_fraction = [self._dataset.data_elements[i].rel_path for i in indexes]
+            hashes = [
+                (random.str_to_random(os.path.basename(self._dataset.data_elements[i].rel_path)), i)
+                for i in range(len(self._dataset.data_elements))
+            ]
+            hashes.sort(key=lambda x: x[0])
+            training_fraction = [
+                self._dataset.data_elements[h[1]].rel_path
+                for h in hashes[:training_fraction]
+            ]
 
         for i, data_element in enumerate(self._dataset.data_elements):
             if type(training_fraction) == list:
