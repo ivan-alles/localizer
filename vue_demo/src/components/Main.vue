@@ -6,8 +6,7 @@
       <h1>Localizer</h1>
     </div>
     <template v-if="state === stateKind.WORKING">
-      <img :src="tempResultPicture" class="full-picture">
-      <img src="test_image.png" class="full-picture" id="cameraImage">
+      <canvas id="cameraCanvas" width="640" height="480"></canvas>
     </template>
     <template v-if="state === stateKind.INIT">
       <h4>
@@ -107,18 +106,15 @@ export default {
             continue;
           }
           
-          const canvas = document.createElement('canvas');
-          canvas.setAttribute('width', this.camera.videoWidth);
-          canvas.setAttribute('height', this.camera.videoHeight);
+          const canvas = document.getElementById('cameraCanvas');
+          // canvas.setAttribute('width', this.camera.videoWidth);
+          // canvas.setAttribute('height', this.camera.videoHeight);
 
-          var ctx = canvas.getContext("2d");
+          const ctx = canvas.getContext("2d");
 
-          ctx.drawImage(this.camera, 0, 0); //, 640, 480, 0, 0, 300, 100);
+          ctx.drawImage(this.camera, 0, 0);
 
           const objects = await this.engine.predict(this.camera);
-          
-          //await tf.browser.toPixels(image, canvas);
-          
 
           for(const o of objects) {
             // console.log('object', o);
@@ -136,10 +132,8 @@ export default {
             ctx.moveTo(44, 0);
             ctx.lineTo(34, 10);
             ctx.stroke();
-
+            ctx.resetTransform();
           }
-          
-          this.tempResultPicture = canvas.toDataURL('image/png');
 
         }
       }
