@@ -1,4 +1,4 @@
-// Copyright 2016-2020 Ivan Alles. See also the LICENSE file. 
+// Copyright 2021 Ivan Alles. See also the LICENSE file. 
 
 // eslint-disable no-unused-vars
 

@@ -1,19 +1,19 @@
-<!-- Copyright 2016-2020 Ivan Alles. See also the LICENSE file. -->
+<!-- Copyright 2021 Ivan Alles. See also the LICENSE file. -->
 
 <template>
   <div class="home">
-    <Images msg="Welcome to Your Vue.js App"/>
+    <Main msg="Object Localization With Orientation"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Images from '@/components/Images.vue'
+import Main from '@/components/Main.vue'
 
 export default {
   name: 'Home',
   components: {
-    Images
+    Main
   }
 }
 </script>

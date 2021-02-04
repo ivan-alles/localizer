@@ -1,4 +1,4 @@
-<!-- Copyright 2016-2020 Ivan Alles. See also the LICENSE file. -->
+<!-- Copyright 2021 Ivan Alles. See also the LICENSE file. -->
 
 <template>
   <b-container>
@@ -37,8 +37,7 @@
 
 <script>
 
-// import { Engine } from '@/server-engine'
-import { Engine } from '@/client-engine'
+import { Engine } from '@/Engine'
 
 const stateKind = {
     INIT: 'INIT',       // Loading models, etc.
@@ -81,6 +80,7 @@ export default {
       progressMessage: 'Loading ...',
       tempResultPicture: null,
       camera: null,
+      isVideoReady: false,
     };
   },
   computed: {
@@ -95,9 +95,12 @@ export default {
         await this.engine.init(message => {this.progressMessage = message;});
         this.progressMessage = 'Warming up ...';
 
+        while(!this.isVideoReady) {
+          await sleep(50);
+        }
+
         this.state = stateKind.WORKING;
 
-      await sleep(1000);
         while(this.state != stateKind.EXIT) {
           await sleep(50);
           if(!this.isActive) {
@@ -117,6 +120,12 @@ export default {
     reload() {
       location.reload();
     },
+
+    onVideoReady() {
+      console.log('Video ready.');
+      this.isVideoReady = true;
+    },
+
     async startVideo() {
       // this.camera = document.querySelector("#videoElement");
       this.camera = document.createElement("video");
@@ -124,6 +133,12 @@ export default {
       if (navigator.mediaDevices.getUserMedia) {
         this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
       }
+      // this.camera.onloadeddata = function() {
+      //   console.log('Video ready.');
+      //   this.isVideoReady = true;
+      // };
+      this.camera.onloadeddata = this.onVideoReady;
+
       this.camera.play();
     },    
   },
