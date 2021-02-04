@@ -129,7 +129,6 @@ export default {
     async startVideo() {
       // this.camera = document.querySelector("#videoElement");
       this.camera = document.createElement("video");
-      console.log(this.camera);
       if (navigator.mediaDevices.getUserMedia) {
         this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
       }

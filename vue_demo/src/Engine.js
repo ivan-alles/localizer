@@ -13,7 +13,7 @@ function padSize(size, padTo) {
   return padTo - size % padTo;
 }
 
-function resizeImage(image, maxSize=511, padTo=32) {
+function makeInput(image, maxSize=511, padTo=32) {
   let sizeX = image.shape[1];
   let sizeY = image.shape[0];
   const scaleX = maxSize / sizeX;
@@ -38,6 +38,8 @@ function resizeImage(image, maxSize=511, padTo=32) {
   if(padX != 0 || padY != 0) {
     image = tf.pad(image, [[0, padY], [0, padX], [0, 0]])
   }
+  // RGB -> BGR, add batch dimension.
+  image = tf.expandDims(tf.reverse(image, 2), 0);
   return {
     image,
     scale
@@ -65,24 +67,21 @@ class Localizer {
   }
 
   async predict(image) {
-    let result = null;
+    let input = null;
+    let output = null;
     try {
       // console.log('image', image)
-      let resized = resizeImage(image, 512, 32);
-      console.log('resized.image', resized.image);
-      let bgr = tf.unstack(resized.image, 2);
-      bgr = tf.stack([bgr[2], bgr[1], bgr[0]], 2);
-      bgr = tf.expandDims(bgr, 0); // Add batch dimension.
-      const prediction = await this.model.executeAsync({'image': bgr});
+      const input = tf.tidy(() => makeInput(image, 512, 32));
+      const output = await this.model.executeAsync({'image': input.image});
       // console.log('prediction', prediction);
-      const objects = await prediction.data()
+      const objects = await output.data()
 
       let canvas = document.createElement('canvas');
       await tf.browser.toPixels(image, canvas);
       
       for(let o = 0; o < objects.length; o += 5) {
-        const x = objects[o] * 8 / resized.scale
-        const y = objects[o + 1] * 8 / resized.scale
+        const x = objects[o] * 8 / input.scale
+        const y = objects[o + 1] * 8 / input.scale
         const angle = objects[o + 2]
         // console.log('x, y, angle', x, y, angle);
 
@@ -104,16 +103,16 @@ class Localizer {
       // output = tf.squeeze(tf.unstack(output, 4)[0]);
       // console.log('output', output)
 
-      result = canvas.toDataURL('image/png');
-      return result;
+      return canvas.toDataURL('image/png');
     }
     catch(error) {
-      this.logger.logException('Generator.generate', error);
+      this.logger.logException('Localizer.predict', error);
     }
     finally {
-      tf.dispose(result);
+      tf.dispose(input);
+      tf.dispose(output);
     }
-    return result; 
+    return null; 
   }
 }
 
@@ -173,6 +172,5 @@ export class Engine {
 
 }
 
-// TODO(ia): clean-up
 // Export for tests only.
-// export const testables = {PreferenceModel, sphericalToCartesian, cartesianToSpherical, scaledDirichlet};
+export const testables = {padSize, makeInput};
