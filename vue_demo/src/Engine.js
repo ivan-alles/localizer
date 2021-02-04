@@ -74,21 +74,32 @@ class Localizer {
       input = tf.tidy(() => makeInput(image, 512, 32));
       output = await this.model.executeAsync({'image': input.image});
       // console.log('prediction', prediction);
-      const objects = await output.data()
+      const outputArray = await output.data();
+
+      const objects = [];
+
+      // Each object is a 5-tuple of x, y, angle, category, confidence
+      for(let i = 0; i < outputArray.length; i += 5) {
+        objects.push({
+          x: outputArray[i] * 8 / input.scale,
+          y: outputArray[i + 1] * 8 / input.scale,
+          angle: outputArray[i + 2]
+        });
+      }
 
       let canvas = document.createElement('canvas');
       await tf.browser.toPixels(image, canvas);
-      
-      for(let o = 0; o < objects.length; o += 5) {
-        const x = objects[o] * 8 / input.scale
-        const y = objects[o + 1] * 8 / input.scale
-        const angle = objects[o + 2]
-        // console.log('x, y, angle', x, y, angle);
+
+      for(const o of objects) {
+        // console.log('object', o);
+
+        const sa = Math.sin(o.angle);
+        const ca = Math.cos(o.angle);
 
         var ctx = canvas.getContext("2d");
         ctx.strokeStyle = "#00FF00";
         ctx.lineWidth = 3;
-        ctx.setTransform(Math.cos(angle), Math.sin(angle), -Math.sin(angle), Math.cos(angle), x, y);
+        ctx.setTransform(ca, sa, -sa, ca, o.x, o.y);
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(44, 0);
