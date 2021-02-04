@@ -43,7 +43,7 @@
   "pos_ksize": 3,
   "confidence_thr": 0.5,
   "position_diff_thr": 15,
-  "angle_diff_thr": 15,
+  "angle_diff_thr": 999,
   "input_shape": [
     384,
     384,
