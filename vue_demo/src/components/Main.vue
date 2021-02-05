@@ -6,7 +6,7 @@
       <h1>Localizer</h1>
     </div>
     <template v-if="state === stateKind.WORKING">
-      <canvas id="cameraCanvas" width="640" height="480"></canvas>
+      <canvas id="viewCanvas" width="640" height="480"></canvas>
     </template>
     <template v-if="state === stateKind.INIT">
       <h4>
@@ -100,21 +100,25 @@ export default {
 
         this.state = stateKind.WORKING;
 
+        const bufferCanvas = document.createElement('canvas');
+        bufferCanvas.setAttribute('width', this.camera.videoWidth);
+        bufferCanvas.setAttribute('height', this.camera.videoHeight);
+
         while(this.state != stateKind.EXIT) {
           await sleep(50);
           if(!this.isActive) {
             continue;
           }
           
-          const canvas = document.getElementById('cameraCanvas');
-          // canvas.setAttribute('width', this.camera.videoWidth);
-          // canvas.setAttribute('height', this.camera.videoHeight);
+          const ctx = bufferCanvas.getContext("2d");
 
-          const ctx = canvas.getContext("2d");
-
+          // Flip camera image.
+          ctx.translate(bufferCanvas.width, 0);
+          ctx.scale(-1, 1);
           ctx.drawImage(this.camera, 0, 0);
+          ctx.resetTransform();
 
-          const objects = await this.engine.predict(this.camera);
+          const objects = await this.engine.predict(bufferCanvas);
 
           for(const o of objects) {
             // console.log('object', o);
@@ -124,7 +128,7 @@ export default {
 
             ctx.strokeStyle = "#00FF00";
             ctx.lineWidth = 3;
-            ctx.setTransform(ca, sa, -sa, ca, o.x, o.y);
+            ctx.transform(ca, sa, -sa, ca, o.x, o.y);
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.lineTo(44, 0);
@@ -135,6 +139,9 @@ export default {
             ctx.resetTransform();
           }
 
+          const viewCanvas = document.getElementById('viewCanvas');
+          const viewCtx = viewCanvas.getContext("2d");
+          viewCtx.drawImage(bufferCanvas, 0, 0);
         }
       }
       catch(error) {
