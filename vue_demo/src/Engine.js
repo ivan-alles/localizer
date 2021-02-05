@@ -6,6 +6,7 @@ import * as tf from '@tensorflow/tfjs';
 import {loadGraphModel} from '@tensorflow/tfjs-converter';
 
 let MODEL_URL = '/prediction_model.tfjs/model.json';
+const OBJECT_SIZE = 88;
 
 function padSize(size, padTo) {
   if (size % padTo == 0)
@@ -51,6 +52,7 @@ class Localizer {
     this.logger = logger;
     this.models = {};
   }
+
 
   async init(onProgress) {
     let url = MODEL_URL;
@@ -107,6 +109,7 @@ class Localizer {
 export class Engine {
   constructor(logger) {
     this.logger = logger;
+    this.objectSize = OBJECT_SIZE;
   }
 
   async init(onProgress) {

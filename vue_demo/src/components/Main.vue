@@ -125,28 +125,30 @@ export default {
           const viewCanvas = document.getElementById('viewCanvas');
           // Make View canvas fit the screen and preserve the aspect ratio.
           viewCanvas.setAttribute('width', window.innerWidth);
-          const scale = viewCanvas.width / bufferCanvas.width;
-          viewCanvas.setAttribute('height', bufferCanvas.height * scale);
-          console.log('viewCanvas.size', viewCanvas.width, viewCanvas.height);
+          const viewScale = viewCanvas.width / bufferCanvas.width;
+          viewCanvas.setAttribute('height', bufferCanvas.height * viewScale);
 
           const viewContext = viewCanvas.getContext("2d");
           viewContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height, 0, 0, viewCanvas.width, viewCanvas.height);
 
+          const objScale = viewScale * this.engine.objectSize / 2;
+
           for(const o of objects) {
             // console.log('object', o);
             viewContext.strokeStyle = "#00FF00";
-            viewContext.lineWidth = 3;
-            const sa = Math.sin(o.angle) * scale;
-            const ca = Math.cos(o.angle) * scale;
-            viewContext.transform(ca, sa, -sa, ca, o.x * scale, o.y * scale);
+            const sa = Math.sin(o.angle) * objScale;
+            const ca = Math.cos(o.angle) * objScale;
+            viewContext.transform(ca, sa, -sa, ca, o.x * viewScale, o.y * viewScale);
             viewContext.beginPath();
             viewContext.moveTo(0, 0);
-            viewContext.lineTo(44, 0);
-            viewContext.lineTo(34, -10);
-            viewContext.moveTo(44, 0);
-            viewContext.lineTo(34, 10);
-            viewContext.stroke();
+            viewContext.lineTo(1.05, 0);
+            viewContext.moveTo(1, 0);
+            viewContext.lineTo(0.8, -0.15);
+            viewContext.moveTo(1, 0);
+            viewContext.lineTo(0.8, 0.15);
             viewContext.resetTransform();
+            viewContext.lineWidth = 3;
+            viewContext.stroke();
           }
         }
       }
