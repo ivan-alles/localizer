@@ -6,7 +6,7 @@
       <h1>Localizer</h1>
     </div>
     <template v-if="state === stateKind.WORKING">
-      <canvas id="viewCanvas" width="640" height="480"></canvas>
+      <canvas id="viewCanvas" class="viewCanvas"></canvas>
     </template>
     <template v-if="state === stateKind.INIT">
       <h4>
@@ -97,6 +97,7 @@ export default {
         while(!this.isVideoReady) {
           await sleep(50);
         }
+        console.log('isVideoReady state: ', this.isVideoReady);
 
         this.state = stateKind.WORKING;
 
@@ -139,9 +140,13 @@ export default {
             ctx.resetTransform();
           }
 
+          console.log('getting viewCanvas');
           const viewCanvas = document.getElementById('viewCanvas');
+          // View canvas fits the screen with (see CSS), now preserve the aspect ratio.
+          viewCanvas.setAttribute('height', bufferCanvas.height / bufferCanvas.width * viewCanvas.width);
+
           const viewCtx = viewCanvas.getContext("2d");
-          viewCtx.drawImage(bufferCanvas, 0, 0);
+          viewCtx.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height, 0, 0, viewCanvas.width, viewCanvas.height);
         }
       }
       catch(error) {
@@ -166,10 +171,6 @@ export default {
       if (navigator.mediaDevices.getUserMedia) {
         this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
       }
-      // this.camera.onloadeddata = function() {
-      //   console.log('Video ready.');
-      //   this.isVideoReady = true;
-      // };
       this.camera.onloadeddata = this.onVideoReady;
 
       this.camera.play();
@@ -216,23 +217,12 @@ function sleep(ms) {
 
 <style scoped>
 
-
-.full-picture {
-  border-radius: 4px;
-  box-shadow: 2px 2px 4px #0004;
-  margin-top: 10px;  
-  width: 528px; 
-  height: 400px; 
-}
-
 .error {
   color: var(--danger);
 }
 
-#videoElement {
-	width: 528px;
-	height: 400px;
-	background-color: #666;
+.viewCanvas {
+	width: 100%;
 }
 
 </style>
