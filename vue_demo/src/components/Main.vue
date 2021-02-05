@@ -127,10 +127,22 @@ export default {
           const viewCanvas = document.getElementById('viewCanvas');
           // Make View canvas fit the container and preserve the aspect ratio.
           const viewContainer = document.getElementById('viewContainer');
-          console.log('viewContainer.offsetWidth', viewContainer.offsetWidth)
-          viewCanvas.setAttribute('width', viewContainer.offsetWidth);
-          const viewScale = viewCanvas.width / bufferCanvas.width;
-          viewCanvas.setAttribute('height', bufferCanvas.height * viewScale);
+          const viewRect = viewContainer.getBoundingClientRect();
+          const fullWidth = viewRect.width;
+          const fullHeight = window.innerHeight - viewRect.y - 10;
+          const viewScaleX = fullWidth / bufferCanvas.width;
+          const viewScaleY = fullHeight / bufferCanvas.height;
+          let viewScale = 1;
+          if(viewScaleX < viewScaleY) {
+            viewCanvas.setAttribute('width', fullWidth);
+            viewCanvas.setAttribute('height', bufferCanvas.height * viewScaleX);
+            viewScale = viewScaleX;
+          }
+          else {
+            viewCanvas.setAttribute('height', fullHeight);
+            viewCanvas.setAttribute('width', bufferCanvas.width * viewScaleY);
+            viewScale = viewScaleY;
+          }
 
           const viewContext = viewCanvas.getContext("2d");
           viewContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height, 0, 0, viewCanvas.width, viewCanvas.height);
@@ -225,7 +237,6 @@ function sleep(ms) {
 
 #viewContainer {
   width: 100%;
-
 }
 
 .error {
