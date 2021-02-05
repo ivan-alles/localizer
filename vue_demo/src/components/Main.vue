@@ -2,9 +2,14 @@
 
 <template>
   <b-container>
-    <div>
-      <h1>Localizer</h1>
-    </div>
+    <template v-if="state === stateKind.WELCOME">
+      <h1>Localizer Demo</h1>
+      <p>This is a localizer demo app. It finds your hands on the live camera video.</p>
+      <b-button @click="startDemo()" variant="primary">
+        <b-icon icon="camera-video" ></b-icon>
+        Start
+      </b-button>
+    </template>  
     <template v-if="state === stateKind.WORKING">
       <div id="viewContainer">
         <canvas id="viewCanvas"></canvas>
@@ -41,8 +46,9 @@
 import { Engine } from '@/Engine'
 
 const stateKind = {
+    WELCOME: 'WELCOME', // Welcome screen.
     INIT: 'INIT',       // Loading models, etc.
-    WORKING: 'WORKING', // Generating pictures
+    WORKING: 'WORKING', // Detecting.
     EXIT: 'EXIT',       // App finished.
     ERROR: 'ERROR',     // Fatal error, cannot work.
 }
@@ -76,7 +82,7 @@ class GoogleAnalyticsLogger {
 export default {
   data() {
     return {
-      state: stateKind.INIT,
+      state: stateKind.WELCOME,
       isMobile: false,
       progressMessage: 'Loading ...',
       tempResultPicture: null,
@@ -183,6 +189,12 @@ export default {
       location.reload();
     },
 
+    startDemo() {
+      this.state = stateKind.INIT;
+      this.startVideo();
+      this.getPicturesTask();
+    },
+
     onVideoReady() {
       console.log('Video ready.');
       this.isVideoReady = true;
@@ -211,8 +223,6 @@ export default {
   },
 
   mounted() {
-    this.startVideo();
-    this.getPicturesTask();
   },
 
   beforeDestroy () {
