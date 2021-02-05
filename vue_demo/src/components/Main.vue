@@ -10,11 +10,6 @@
         Start
       </b-button>
     </template>  
-    <template v-if="state === stateKind.WORKING">
-      <div id="viewContainer">
-        <canvas id="viewCanvas"></canvas>
-      </div>
-    </template>
     <template v-if="state === stateKind.INIT">
       <h4>
         <b-spinner variant="secondary" label="Loading"></b-spinner>
@@ -24,6 +19,15 @@
         <p>Running this app on a mobile device can be slow or irresponsive. It works best on a desktop with an NVIDIA graphic card.</p>
       </template>
     </template>
+    <template v-if="state === stateKind.WORKING">
+      <div id="viewContainer">
+        <canvas id="viewCanvas"></canvas>
+      </div>
+      <b-button @click="stopDemo()" variant="primary">
+        <b-icon icon="stop" ></b-icon>
+        Quit
+      </b-button>
+    </template>    
     <template v-if="state === stateKind.ERROR">
       <!-- The practice have shown that in case of an error we cannot recover. Only reloading the page helps. -->
       <h4 class="error">
@@ -88,6 +92,7 @@ export default {
       tempResultPicture: null,
       camera: null,
       isVideoReady: false,
+      isDetecting: false,
     };
   },
   computed: {
@@ -99,7 +104,7 @@ export default {
     */
     async getPicturesTask() {
       try {
-        console.log('this.isMobile', this.isMobile);
+        this.isDetecting = false;
         const maxInputSize = this.isMobile ? 256 : 512;
         await this.engine.init(maxInputSize, message => {this.progressMessage = message;});
         this.progressMessage = 'Warming up ...';
@@ -111,11 +116,15 @@ export default {
 
         this.state = stateKind.WORKING;
 
-        while(this.state != stateKind.EXIT) {
+        for(;;) {
+          this.isDetecting = false;
           await sleep(50);
           if(!this.isActive) {
             continue;
           }
+          if (this.state != stateKind.WORKING) break;
+
+          this.isDetecting = true;
 
           // Make this in the loop, as if phone screen orientation changes, video will resize.
           const bufferCanvas = document.createElement('canvas');
@@ -179,9 +188,9 @@ export default {
         }
       }
       catch(error) {
-        this.state = stateKind.ERROR;
+        this.isDetecting = false;
         this.logger.logException('Images.getPicturesTask.createPictures', error);
-        return;
+        if (this.state != stateKind.WELCOME) this.state = stateKind.ERROR;
       }
     },
 
@@ -195,18 +204,29 @@ export default {
       this.getPicturesTask();
     },
 
+    async stopDemo() {
+      while(this.isDetecting) {
+        await sleep(50);
+      }
+      this.state = stateKind.WELCOME;
+    },
+
     onVideoReady() {
       console.log('Video ready.');
       this.isVideoReady = true;
     },
 
     async startVideo() {
+      if (this.camera !== null) {
+        // Camera is already opened by a previous call.
+        return;
+      }
+
       this.camera = document.createElement("video");
       if (navigator.mediaDevices.getUserMedia) {
         this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
       }
       this.camera.onloadeddata = this.onVideoReady;
-
       this.camera.play();
     },    
   },

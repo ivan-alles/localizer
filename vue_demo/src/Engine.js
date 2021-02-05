@@ -113,9 +113,15 @@ class Localizer {
 export class Engine {
   constructor(logger) {
     this.logger = logger;
+    this.initDone = false;
   }
 
   async init(maxInputSize, onProgress) {
+    if (this.initDone) {
+      console.log('Init already done')
+      return;
+    }
+
     // Do tf initialization here, before any usage of it.
     await tf.ready();
 
@@ -145,6 +151,8 @@ export class Engine {
     this.localizer = new Localizer(this.logger);
 
     await this.localizer.init(maxInputSize, onProgress);
+
+    this.initDone = true;
   }
 
   async predict(image) {
