@@ -6,7 +6,9 @@
       <h1>Localizer</h1>
     </div>
     <template v-if="state === stateKind.WORKING">
-      <canvas id="viewCanvas"></canvas>
+      <div id="viewContainer">
+        <canvas id="viewCanvas"></canvas>
+      </div>
     </template>
     <template v-if="state === stateKind.INIT">
       <h4>
@@ -123,8 +125,10 @@ export default {
 
           // console.log('getting viewCanvas');
           const viewCanvas = document.getElementById('viewCanvas');
-          // Make View canvas fit the screen and preserve the aspect ratio.
-          viewCanvas.setAttribute('width', window.innerWidth);
+          // Make View canvas fit the container and preserve the aspect ratio.
+          const viewContainer = document.getElementById('viewContainer');
+          console.log('viewContainer.offsetWidth', viewContainer.offsetWidth)
+          viewCanvas.setAttribute('width', viewContainer.offsetWidth);
           const viewScale = viewCanvas.width / bufferCanvas.width;
           viewCanvas.setAttribute('height', bufferCanvas.height * viewScale);
 
@@ -218,6 +222,11 @@ function sleep(ms) {
 </script>
 
 <style scoped>
+
+#viewContainer {
+  width: 100%;
+
+}
 
 .error {
   color: var(--danger);
