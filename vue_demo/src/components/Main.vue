@@ -6,7 +6,7 @@
       <h1>Localizer</h1>
     </div>
     <template v-if="state === stateKind.WORKING">
-      <canvas id="viewCanvas" class="viewCanvas"></canvas>
+      <canvas id="viewCanvas"></canvas>
     </template>
     <template v-if="state === stateKind.INIT">
       <h4>
@@ -111,42 +111,43 @@ export default {
             continue;
           }
           
-          const ctx = bufferCanvas.getContext("2d");
+          const bufferContext = bufferCanvas.getContext("2d");
 
           // Flip camera image.
-          ctx.translate(bufferCanvas.width, 0);
-          ctx.scale(-1, 1);
-          ctx.drawImage(this.camera, 0, 0);
-          ctx.resetTransform();
+          bufferContext.translate(bufferCanvas.width, 0);
+          bufferContext.scale(-1, 1);
+          bufferContext.drawImage(this.camera, 0, 0);
+          bufferContext.resetTransform();
 
           const objects = await this.engine.predict(bufferCanvas);
 
+          // console.log('getting viewCanvas');
+          const viewCanvas = document.getElementById('viewCanvas');
+          // Make View canvas fit the screen and preserve the aspect ratio.
+          viewCanvas.setAttribute('width', window.innerWidth);
+          const scale = viewCanvas.width / bufferCanvas.width;
+          viewCanvas.setAttribute('height', bufferCanvas.height * scale);
+          console.log('viewCanvas.size', viewCanvas.width, viewCanvas.height);
+
+          const viewContext = viewCanvas.getContext("2d");
+          viewContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height, 0, 0, viewCanvas.width, viewCanvas.height);
+
           for(const o of objects) {
             // console.log('object', o);
-
-            const sa = Math.sin(o.angle);
-            const ca = Math.cos(o.angle);
-
-            ctx.strokeStyle = "#00FF00";
-            ctx.lineWidth = 3;
-            ctx.transform(ca, sa, -sa, ca, o.x, o.y);
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(44, 0);
-            ctx.lineTo(34, -10);
-            ctx.moveTo(44, 0);
-            ctx.lineTo(34, 10);
-            ctx.stroke();
-            ctx.resetTransform();
+            viewContext.strokeStyle = "#00FF00";
+            viewContext.lineWidth = 3;
+            const sa = Math.sin(o.angle) * scale;
+            const ca = Math.cos(o.angle) * scale;
+            viewContext.transform(ca, sa, -sa, ca, o.x * scale, o.y * scale);
+            viewContext.beginPath();
+            viewContext.moveTo(0, 0);
+            viewContext.lineTo(44, 0);
+            viewContext.lineTo(34, -10);
+            viewContext.moveTo(44, 0);
+            viewContext.lineTo(34, 10);
+            viewContext.stroke();
+            viewContext.resetTransform();
           }
-
-          console.log('getting viewCanvas');
-          const viewCanvas = document.getElementById('viewCanvas');
-          // View canvas fits the screen with (see CSS), now preserve the aspect ratio.
-          viewCanvas.setAttribute('height', bufferCanvas.height / bufferCanvas.width * viewCanvas.width);
-
-          const viewCtx = viewCanvas.getContext("2d");
-          viewCtx.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height, 0, 0, viewCanvas.width, viewCanvas.height);
         }
       }
       catch(error) {
@@ -221,8 +222,5 @@ function sleep(ms) {
   color: var(--danger);
 }
 
-.viewCanvas {
-	width: 100%;
-}
 
 </style>
