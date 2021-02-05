@@ -103,16 +103,17 @@ export default {
 
         this.state = stateKind.WORKING;
 
-        const bufferCanvas = document.createElement('canvas');
-        bufferCanvas.setAttribute('width', this.camera.videoWidth);
-        bufferCanvas.setAttribute('height', this.camera.videoHeight);
-
         while(this.state != stateKind.EXIT) {
           await sleep(50);
           if(!this.isActive) {
             continue;
           }
-          
+
+          // Make this in the loop, as if phone screen orientation changes, video will resize.
+          const bufferCanvas = document.createElement('canvas');
+          bufferCanvas.setAttribute('width', this.camera.videoWidth);
+          bufferCanvas.setAttribute('height', this.camera.videoHeight);
+
           const bufferContext = bufferCanvas.getContext("2d");
 
           // Flip camera image.
