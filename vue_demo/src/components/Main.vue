@@ -22,11 +22,11 @@
     <template v-if="state === stateKind.WORKING">
       <div id="viewContainer">
         <canvas id="viewCanvas"></canvas>
+        <b-button v-if="isVideoShown" @click="stopDemo()" variant="secondary" id="stopDemoButton">
+          <b-icon icon="stop-fill" ></b-icon>
+          Quit
+        </b-button>
       </div>
-      <b-button @click="stopDemo()" variant="primary">
-        <b-icon icon="stop" ></b-icon>
-        Quit
-      </b-button>
     </template>    
     <template v-if="state === stateKind.ERROR">
       <!-- The practice have shown that in case of an error we cannot recover. Only reloading the page helps. -->
@@ -93,6 +93,7 @@ export default {
       camera: null,
       isVideoReady: false,
       isDetecting: false,
+      isVideoShown: false,
     };
   },
   computed: {
@@ -105,6 +106,8 @@ export default {
     async getPicturesTask() {
       try {
         this.isDetecting = false;
+        this.isVideoShown = false;
+
         const maxInputSize = this.isMobile ? 256 : 512;
         await this.engine.init(maxInputSize, message => {this.progressMessage = message;});
         this.progressMessage = 'Warming up ...';
@@ -185,6 +188,7 @@ export default {
             viewContext.lineWidth = 3;
             viewContext.stroke();
           }
+          this.isVideoShown = true;
         }
       }
       catch(error) {
@@ -271,6 +275,18 @@ function sleep(ms) {
 
 #viewContainer {
   width: 100%;
+}
+
+#viewCanvas {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+}
+
+#stopDemoButton {
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
 
 .error {
