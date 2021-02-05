@@ -93,7 +93,9 @@ export default {
     */
     async getPicturesTask() {
       try {
-        await this.engine.init(message => {this.progressMessage = message;});
+        console.log('this.isMobile', this.isMobile);
+        const maxInputSize = this.isMobile ? 256 : 512;
+        await this.engine.init(maxInputSize, message => {this.progressMessage = message;});
         this.progressMessage = 'Warming up ...';
 
         while(!this.isVideoReady) {
@@ -122,7 +124,7 @@ export default {
           bufferContext.drawImage(this.camera, 0, 0);
           bufferContext.resetTransform();
 
-          const objects = await this.engine.predict(bufferCanvas);
+          const {objects, objectSize} = await this.engine.predict(bufferCanvas);
 
           // console.log('getting viewCanvas');
           const viewCanvas = document.getElementById('viewCanvas');
@@ -148,7 +150,7 @@ export default {
           const viewContext = viewCanvas.getContext("2d");
           viewContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height, 0, 0, viewCanvas.width, viewCanvas.height);
 
-          const objScale = viewScale * this.engine.objectSize / 2;
+          const objScale = viewScale * objectSize / 2;
 
           for(const o of objects) {
             // console.log('object', o);

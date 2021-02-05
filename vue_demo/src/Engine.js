@@ -50,11 +50,11 @@ function makeInput(image, maxSize=511, padTo=32) {
 class Localizer {
   constructor(logger) {
     this.logger = logger;
-    this.models = {};
   }
 
 
-  async init(onProgress) {
+  async init(maxInputSize, onProgress) {
+    this.maxInputSize = maxInputSize;
     let url = MODEL_URL;
     if (process.env.NODE_ENV === 'production' ) {
       url = '/preference-model' + url;      
@@ -73,7 +73,8 @@ class Localizer {
     let output = null;
     try {
       // console.log('image', image);
-      input = tf.tidy(() => makeInput(image, 512, 32));
+      input = tf.tidy(() => makeInput(image, this.maxInputSize, 32));
+      // console.log('input', input);
       output = await this.model.executeAsync({'image': input.image});
       // console.log('prediction', prediction);
       const outputArray = await output.data();
@@ -89,7 +90,10 @@ class Localizer {
         });
       }
 
-      return objects;
+      return {
+        objects,
+        objectSize: OBJECT_SIZE / input.scale
+      }
     }
     catch(error) {
       this.logger.logException('Localizer.predict', error);
@@ -109,10 +113,9 @@ class Localizer {
 export class Engine {
   constructor(logger) {
     this.logger = logger;
-    this.objectSize = OBJECT_SIZE;
   }
 
-  async init(onProgress) {
+  async init(maxInputSize, onProgress) {
     // Do tf initialization here, before any usage of it.
     await tf.ready();
 
@@ -141,7 +144,7 @@ export class Engine {
 
     this.localizer = new Localizer(this.logger);
 
-    await this.localizer.init(onProgress);
+    await this.localizer.init(maxInputSize, onProgress);
   }
 
   async predict(image) {
