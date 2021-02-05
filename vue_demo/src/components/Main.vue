@@ -154,7 +154,7 @@ export default {
             viewContext.strokeStyle = "#00FF00";
             const sa = Math.sin(o.angle) * objScale;
             const ca = Math.cos(o.angle) * objScale;
-            viewContext.transform(ca, sa, -sa, ca, o.x * viewScale, o.y * viewScale);
+            viewContext.setTransform(ca, sa, -sa, ca, o.x * viewScale, o.y * viewScale);
             viewContext.beginPath();
             viewContext.moveTo(0, 0);
             viewContext.lineTo(1.05, 0);
