@@ -2,5 +2,5 @@
 max-line-length = 120
 max-complexity=14
 statistics=1
-exclude = .venv,.pytest_cache,.idea
+exclude = .venv,.pytest_cache,.idea,vue_demo,convert_to_js
 ignore=E128
