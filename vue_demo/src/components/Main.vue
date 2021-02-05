@@ -160,11 +160,12 @@ export default {
             viewContext.setTransform(ca, sa, -sa, ca, o.x * viewScale, o.y * viewScale);
             viewContext.beginPath();
             viewContext.moveTo(0, 0);
-            viewContext.lineTo(1.05, 0);
+            viewContext.lineTo(1, 0);
             viewContext.moveTo(1, 0);
             viewContext.lineTo(0.8, -0.15);
             viewContext.moveTo(1, 0);
             viewContext.lineTo(0.8, 0.15);
+            viewContext.arc(0, 0, 1, 0, 2 * Math.PI);
             viewContext.resetTransform();
             viewContext.lineWidth = 3;
             viewContext.stroke();
