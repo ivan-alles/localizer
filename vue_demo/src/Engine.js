@@ -6,14 +6,55 @@ import * as tf from '@tensorflow/tfjs';
 import {loadGraphModel} from '@tensorflow/tfjs-converter';
 
 let MODEL_URL = '/prediction_model.tfjs/model.json';
+const OBJECT_SIZE = 88;
+
+function padSize(size, padTo) {
+  if (size % padTo == 0)
+    return 0;
+  return padTo - size % padTo;
+}
+
+function makeInput(image, maxSize=511, padTo=32) {
+  let sizeX = image.shape[1];
+  let sizeY = image.shape[0];
+  const scaleX = maxSize / sizeX;
+  const scaleY = maxSize / sizeY;
+  let scale = 0;
+  if (scaleX < 1 || scaleY < 1) {
+    if (scaleX < scaleY) {
+      scale = scaleX;
+      sizeX = maxSize;
+      sizeY = Math.floor(sizeY * scale);
+    }
+    else {
+      scale = scaleY;
+      sizeX = Math.floor(sizeX * scale);
+      sizeY = maxSize;
+    }
+    // console.log('sizeX, sizeY', sizeX, sizeY);
+    image = tf.image.resizeBilinear(image, [sizeY, sizeX]);
+  }
+  const padX = padSize(sizeX, padTo);
+  const padY = padSize(sizeY, padTo);
+  if(padX != 0 || padY != 0) {
+    image = tf.pad(image, [[0, padY], [0, padX], [0, 0]])
+  }
+  // RGB -> BGR, add batch dimension.
+  image = tf.expandDims(tf.reverse(image, 2), 0);
+  return {
+    image,
+    scale
+  };  
+}
 
 class Localizer {
   constructor(logger) {
     this.logger = logger;
-    this.models = {};
   }
 
-  async init(onProgress) {
+
+  async init(maxInputSize, onProgress) {
+    this.maxInputSize = maxInputSize;
     let url = MODEL_URL;
     if (process.env.NODE_ENV === 'production' ) {
       url = '/preference-model' + url;      
@@ -28,52 +69,40 @@ class Localizer {
   }
 
   async predict(image) {
-    let result = null;
+    let input = null;
+    let output = null;
     try {
-      // console.log('image', image)
-      let bgr = tf.unstack(image, 3);
-      bgr = tf.stack([bgr[2], bgr[1], bgr[0]], 3);
-      const prediction = await this.model.executeAsync({'image': bgr});
+      // console.log('image', image);
+      input = tf.tidy(() => makeInput(image, this.maxInputSize, 32));
+      // console.log('input', input);
+      output = await this.model.executeAsync({'image': input.image});
       // console.log('prediction', prediction);
-      const objects = await prediction.data()
+      const outputArray = await output.data();
 
-      let canvas = document.createElement('canvas');
-      await tf.browser.toPixels(tf.squeeze(image), canvas);
-      
-      for(let o = 0; o < objects.length; o += 5) {
-        const x = objects[o] * 8
-        const y = objects[o + 1] * 8
-        const angle = objects[o + 2]
-        // console.log('x, y, angle', x, y, angle);
+      const objects = [];
 
-        var ctx = canvas.getContext("2d");
-        ctx.strokeStyle = "#00FF00";
-        ctx.lineWidth = 3;
-        ctx.setTransform(Math.cos(angle), Math.sin(angle), -Math.sin(angle), Math.cos(angle), x, y);
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(44, 0);
-        ctx.lineTo(34, -10);
-        ctx.moveTo(44, 0);
-        ctx.lineTo(34, 10);
-        ctx.stroke();
-
+      // Each object is a 5-tuple of x, y, angle, category, confidence
+      for(let i = 0; i < outputArray.length; i += 5) {
+        objects.push({
+          x: outputArray[i] * 8 / input.scale,
+          y: outputArray[i + 1] * 8 / input.scale,
+          angle: outputArray[i + 2]
+        });
       }
-      
-      // let output = tf.clipByValue(prediction[2], 0, 1);
-      // output = tf.squeeze(tf.unstack(output, 4)[0]);
-      // console.log('output', output)
 
-      result = canvas.toDataURL('image/png');
-      return result;
+      return {
+        objects,
+        objectSize: OBJECT_SIZE / input.scale
+      }
     }
     catch(error) {
-      this.logger.logException('Generator.generate', error);
+      this.logger.logException('Localizer.predict', error);
     }
     finally {
-      tf.dispose(result);
+      if(input!==null) tf.dispose(input.image);
+      tf.dispose(output);
     }
-    return result; 
+    return null; 
   }
 }
 
@@ -84,9 +113,15 @@ class Localizer {
 export class Engine {
   constructor(logger) {
     this.logger = logger;
+    this.initDone = false;
   }
 
-  async init(onProgress) {
+  async init(maxInputSize, onProgress) {
+    if (this.initDone) {
+      console.log('Init already done')
+      return;
+    }
+
     // Do tf initialization here, before any usage of it.
     await tf.ready();
 
@@ -115,15 +150,17 @@ export class Engine {
 
     this.localizer = new Localizer(this.logger);
 
-    await this.localizer.init(onProgress);
+    await this.localizer.init(maxInputSize, onProgress);
+
+    this.initDone = true;
   }
 
   async predict(image) {
     // console.log('tf.memory', tf.memory());
     let imageTensor = null;
     try {
-      let imageTensor = tf.tidy(() =>  
-        tf.div(tf.cast(tf.expandDims(tf.browser.fromPixels(image), 0), 'float32'), 255));
+      imageTensor = tf.tidy(() =>  
+        tf.div(tf.cast(tf.browser.fromPixels(image), 'float32'), 255));
       return await this.localizer.predict(imageTensor);
     }
     finally {
@@ -133,6 +170,5 @@ export class Engine {
 
 }
 
-// TODO(ia): clean-up
 // Export for tests only.
-// export const testables = {PreferenceModel, sphericalToCartesian, cartesianToSpherical, scaledDirichlet};
+export const testables = {padSize, makeInput};

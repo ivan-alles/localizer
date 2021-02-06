@@ -2,13 +2,14 @@
 
 <template>
   <b-container>
-    <div>
-      <h1>Localizer</h1>
-    </div>
-    <template v-if="state === stateKind.WORKING">
-      <img :src="tempResultPicture" class="full-picture">
-      <img src="test_image.png" class="full-picture" id="cameraImage">
-    </template>
+    <template v-if="state === stateKind.WELCOME">
+      <h1>Localizer Demo</h1>
+      <p>This is a localizer demo app. It finds your hands on the live camera video.</p>
+      <b-button @click="startDemo()" variant="primary">
+        <b-icon icon="camera-video" ></b-icon>
+        Start
+      </b-button>
+    </template>  
     <template v-if="state === stateKind.INIT">
       <h4>
         <b-spinner variant="secondary" label="Loading"></b-spinner>
@@ -18,6 +19,15 @@
         <p>Running this app on a mobile device can be slow or irresponsive. It works best on a desktop with an NVIDIA graphic card.</p>
       </template>
     </template>
+    <template v-if="state === stateKind.WORKING">
+      <div id="viewContainer">
+        <canvas id="viewCanvas"></canvas>
+        <b-button v-if="isVideoShown" @click="stopDemo()" variant="secondary" id="stopDemoButton">
+          <b-icon icon="stop-fill" ></b-icon>
+          Quit
+        </b-button>
+      </div>
+    </template>    
     <template v-if="state === stateKind.ERROR">
       <!-- The practice have shown that in case of an error we cannot recover. Only reloading the page helps. -->
       <h4 class="error">
@@ -40,8 +50,9 @@
 import { Engine } from '@/Engine'
 
 const stateKind = {
+    WELCOME: 'WELCOME', // Welcome screen.
     INIT: 'INIT',       // Loading models, etc.
-    WORKING: 'WORKING', // Generating pictures
+    WORKING: 'WORKING', // Detecting.
     EXIT: 'EXIT',       // App finished.
     ERROR: 'ERROR',     // Fatal error, cannot work.
 }
@@ -75,12 +86,14 @@ class GoogleAnalyticsLogger {
 export default {
   data() {
     return {
-      state: stateKind.INIT,
+      state: stateKind.WELCOME,
       isMobile: false,
       progressMessage: 'Loading ...',
       tempResultPicture: null,
       camera: null,
       isVideoReady: false,
+      isDetecting: false,
+      isVideoShown: false,
     };
   },
   computed: {
@@ -92,33 +105,114 @@ export default {
     */
     async getPicturesTask() {
       try {
-        await this.engine.init(message => {this.progressMessage = message;});
+        this.isDetecting = false;
+        this.isVideoShown = false;
+
+        const maxInputSize = this.isMobile ? 256 : 512;
+        await this.engine.init(maxInputSize, message => {this.progressMessage = message;});
         this.progressMessage = 'Warming up ...';
 
         while(!this.isVideoReady) {
           await sleep(50);
         }
+        console.log('isVideoReady state: ', this.isVideoReady);
 
         this.state = stateKind.WORKING;
 
-        while(this.state != stateKind.EXIT) {
+        for(;;) {
+          this.isDetecting = false;
           await sleep(50);
           if(!this.isActive) {
             continue;
           }
-          //this.tempResultPicture = await this.engine.predict(document.getElementById('videoElement'));
-          this.tempResultPicture = await this.engine.predict(this.camera);
+          if (this.state != stateKind.WORKING) break;
+
+          this.isDetecting = true;
+
+          // Make this in the loop, as if phone screen orientation changes, video will resize.
+          const bufferCanvas = document.createElement('canvas');
+          bufferCanvas.setAttribute('width', this.camera.videoWidth);
+          bufferCanvas.setAttribute('height', this.camera.videoHeight);
+
+          const bufferContext = bufferCanvas.getContext("2d");
+
+          // Flip camera image.
+          bufferContext.translate(bufferCanvas.width, 0);
+          bufferContext.scale(-1, 1);
+          bufferContext.drawImage(this.camera, 0, 0);
+          bufferContext.resetTransform();
+
+          const {objects, objectSize} = await this.engine.predict(bufferCanvas);
+
+          // console.log('getting viewCanvas');
+          const viewCanvas = document.getElementById('viewCanvas');
+          // Make View canvas fit the container and preserve the aspect ratio.
+          const viewContainer = document.getElementById('viewContainer');
+          const viewRect = viewContainer.getBoundingClientRect();
+          const fullWidth = viewRect.width;
+          const fullHeight = window.innerHeight - viewRect.y - 10;
+          const viewScaleX = fullWidth / bufferCanvas.width;
+          const viewScaleY = fullHeight / bufferCanvas.height;
+          let viewScale = 1;
+          if(viewScaleX < viewScaleY) {
+            viewCanvas.setAttribute('width', fullWidth);
+            viewCanvas.setAttribute('height', bufferCanvas.height * viewScaleX);
+            viewScale = viewScaleX;
+          }
+          else {
+            viewCanvas.setAttribute('height', fullHeight);
+            viewCanvas.setAttribute('width', bufferCanvas.width * viewScaleY);
+            viewScale = viewScaleY;
+          }
+
+          const viewContext = viewCanvas.getContext("2d");
+          viewContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height, 0, 0, viewCanvas.width, viewCanvas.height);
+
+          const objScale = viewScale * objectSize / 2;
+
+          for(const o of objects) {
+            // console.log('object', o);
+            viewContext.strokeStyle = "#00FF00";
+            const sa = Math.sin(o.angle) * objScale;
+            const ca = Math.cos(o.angle) * objScale;
+            viewContext.setTransform(ca, sa, -sa, ca, o.x * viewScale, o.y * viewScale);
+            viewContext.beginPath();
+            viewContext.moveTo(0, 0);
+            viewContext.lineTo(1, 0);
+            viewContext.moveTo(1, 0);
+            viewContext.lineTo(0.8, -0.15);
+            viewContext.moveTo(1, 0);
+            viewContext.lineTo(0.8, 0.15);
+            viewContext.arc(0, 0, 1, 0, 2 * Math.PI);
+            viewContext.resetTransform();
+            viewContext.lineWidth = 3;
+            viewContext.stroke();
+          }
+          this.isVideoShown = true;
         }
       }
       catch(error) {
-        this.state = stateKind.ERROR;
+        this.isDetecting = false;
         this.logger.logException('Images.getPicturesTask.createPictures', error);
-        return;
+        if (this.state != stateKind.WELCOME) this.state = stateKind.ERROR;
       }
     },
 
     reload() {
       location.reload();
+    },
+
+    startDemo() {
+      this.state = stateKind.INIT;
+      this.startVideo();
+      this.getPicturesTask();
+    },
+
+    async stopDemo() {
+      while(this.isDetecting) {
+        await sleep(50);
+      }
+      this.state = stateKind.WELCOME;
     },
 
     onVideoReady() {
@@ -127,18 +221,16 @@ export default {
     },
 
     async startVideo() {
-      // this.camera = document.querySelector("#videoElement");
+      if (this.camera !== null) {
+        // Camera is already opened by a previous call.
+        return;
+      }
+
       this.camera = document.createElement("video");
-      console.log(this.camera);
       if (navigator.mediaDevices.getUserMedia) {
         this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
       }
-      // this.camera.onloadeddata = function() {
-      //   console.log('Video ready.');
-      //   this.isVideoReady = true;
-      // };
       this.camera.onloadeddata = this.onVideoReady;
-
       this.camera.play();
     },    
   },
@@ -155,8 +247,6 @@ export default {
   },
 
   mounted() {
-    this.startVideo();
-    this.getPicturesTask();
   },
 
   beforeDestroy () {
@@ -183,23 +273,25 @@ function sleep(ms) {
 
 <style scoped>
 
+#viewContainer {
+  width: 100%;
+}
 
-.full-picture {
-  border-radius: 4px;
-  box-shadow: 2px 2px 4px #0004;
-  margin-top: 10px;  
-  width: 528px; 
-  height: 400px; 
+#viewCanvas {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+}
+
+#stopDemoButton {
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
 
 .error {
   color: var(--danger);
 }
 
-#videoElement {
-	width: 528px;
-	height: 400px;
-	background-color: #666;
-}
 
 </style>
