@@ -26,9 +26,7 @@ class Object:
 
 
 class TrainingModelChannels(enum.IntEnum):
-    """
-    Indices of output channels.
-    """
+    """ Indices of output channels. """
     Y = 0  # y-coordinate.
     X = 1  # x-coordinate.
     SA = 2  # sin(angle).
@@ -37,9 +35,7 @@ class TrainingModelChannels(enum.IntEnum):
 
 
 class PredictionModelOutputs(enum.IntEnum):
-    """
-    Indices of prediction model outputs.
-    """
+    """ Indices of prediction model outputs. """
     OBJECTS = 0  # Objects, a 2d array num_objects x (x, y, angle, category, confidence)
     # The rest is used for diagnostics
     MODEL = 1  # Training model output.
@@ -123,7 +119,7 @@ class Localizer:
         Compute kernels for positions.
 
         pos = (y, x)
-        gaussian = exp(-0.5 * (r/sigma)**2), where r = sqrt(x**2 + y**2)
+        gaussian = exp(-0.5 * (pos/sigma)**2).
         :param size - size of the kernel. Must be an odd integer.
         :return:  pos tensor (size, size, 2), gaussian tensor (size, size).
         """
@@ -137,8 +133,8 @@ class Localizer:
         pos[:, :, 1] = np.broadcast_to(row, (size, size))
         pos[:, :, 0] = pos[:, :, 1].T
 
-        nr2 = ((pos / sigma) ** 2).sum(axis=2)
-        gaussian = np.exp(-0.5 * nr2)
+        n2 = ((pos / sigma) ** 2).sum(axis=2)
+        gaussian = np.exp(-0.5 * n2)
         return pos, gaussian
 
     def _create_model(self):
