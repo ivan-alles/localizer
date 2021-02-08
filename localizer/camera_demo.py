@@ -40,6 +40,7 @@ class CameraDemo:
         self._image_idx = 0
         self._key = -1
         os.makedirs(self._model_dir, exist_ok=True)
+        shutil.copyfile(self._template_cfg_path, self._cfg_path)
 
         self._camera = cv2.VideoCapture(camera_id)
         self._load_model()
@@ -79,7 +80,7 @@ class CameraDemo:
             self._view_image[:self._camera_image.shape[0], :self._camera_image.shape[1], :] = self._camera_image
 
             if self._mode == self.__class__.Mode.DETECT:
-                self._put_text('Press n - new model, q - exit', 50)
+                self._put_text('Press n to train new model, q to quit', 50)
                 self._detect()
             else:
                 self._new_model()
@@ -166,7 +167,6 @@ class CameraDemo:
             if self._image_idx == len(positions):
                 with open(self._dataset_path, 'w') as f:
                     json.dump(self._dataset, f, indent=' ')
-                shutil.copyfile(self._template_cfg_path, self._cfg_path)
                 self._train()
         else:
             self._put_text(f'Image #{self._image_idx + 1} of {len(positions)}', 20)

@@ -13,6 +13,7 @@ opencv-python = "*"
 tensorflow = "*"
 robogym = {git = "https://github.com/ivan-alles/robogym.git",ref = "v1.0.2"}
 pydot = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.6"
