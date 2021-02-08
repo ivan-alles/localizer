@@ -50,7 +50,7 @@ You need to convert your dataset to this format to use it with the localizer.
 
 You can use [Anno](https://github.com/urobots-io/anno/) to manually label images. To do this:
 
-1. Download and istall the [Anno](https://github.com/urobots-io/anno/).
+1. Download and istall [Anno](https://github.com/urobots-io/anno/).
 2. Copy `localizer\dataset_template.anno` into the directory with your images and rename it (e.g. `mydataset.anno`).
 3. Open `mydataset.anno` with Anno.
 4. Label objects with the **object** marker. 
@@ -71,7 +71,8 @@ For example: `python localizer\train.py models\tools\config.json`.
 This will train and save a Tensorflow model under `models\tools\model.tf`.
 
 ## Running a model
-Run `python localizer\predict_for_images.py PATH_TO_MODEL_CONFIG IMAGES_DIR`. 
+Run `python localizer\predict_for_images.py PATH_TO_MODEL_CONFIG IMAGES_DIR`.
+ 
 For example: `python localizer\predict_for_images.py models\tools\config.json datasets\tools`.
 
 ## Use a transfer learning model
