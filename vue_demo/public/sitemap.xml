@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
   <url>
-    <loc>https://ivan-alles.github.io/preference-model/</loc>
-    <lastmod>2020-10-20</lastmod>
-  </url>
-  <url>
-    <loc>https://ivan-alles.github.io/preference-model/about</loc>
-    <lastmod>2020-10-20</lastmod>
+    <loc>https://ivan-alles.github.io/localizer/</loc>
+    <lastmod>2021-02-08</lastmod>
   </url>
 </urlset>

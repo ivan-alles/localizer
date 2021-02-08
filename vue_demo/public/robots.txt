@@ -5,4 +5,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ivan-alles.github.io/preference-model/sitemap.xml
+Sitemap: https://ivan-alles.github.io/localizer/sitemap.xml
