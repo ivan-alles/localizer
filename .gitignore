@@ -1,4 +1,4 @@
 .temp
 .venv
-*.anno
+datasets/*/*.anno
 __pycache__

@@ -1,0 +1,52 @@
+{
+ "definitions": {
+  "files_root_dir": "",
+  "marker_types": {
+   "origin": {
+    "categories": [
+     {
+      "color": "#86f574",
+      "id": 0,
+      "name": "object 0"
+     }
+    ],
+    "description": " ",
+    "line_width": -5,
+    "rendering_script": [
+     "p.SetBaseTransform(true, true)",
+     "p.SetDefaultPen()",
+     "let object_size = 88",
+     "p.DrawEllipse(-object_size / 2, -object_size / 2, object_size, object_size)",
+     "let arrow_size = object_size / 4",
+     "p.DrawLine(0, 0, arrow_size, 0)",
+     "p.DrawLine(arrow_size * 0.95, arrow_size * 0.05, arrow_size, 0)",
+     "p.DrawLine(arrow_size * 0.95, -arrow_size * 0.05, arrow_size, 0)",
+     "p.DrawLine(0, 0, 0, arrow_size)",
+     "p.DrawLine(arrow_size * 0.05, arrow_size * 0.95, 0, arrow_size)",
+     "p.DrawLine(-arrow_size * 0.05, arrow_size * 0.95, 0, arrow_size)"
+    ],
+    "value_type": "oriented_point"
+   },
+   "empty": {
+    "categories": [
+     {
+      "color": "#ff0000",
+      "id": 0,
+      "name": "empty"
+     }
+    ],
+    "description": "Image without objects.",
+    "rendering_script": [
+     "p.SetBaseTransform(false, false)",
+     "p.SetDefaultPen()",
+     "p.DrawEllipse(-50, -50, 100, 100)"
+    ],
+    "stamp": true,
+    "value_type": "point"
+   }
+  },
+  "user_data": {}
+ },
+ "files": [
+ ]
+}
