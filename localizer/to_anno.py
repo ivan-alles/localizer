@@ -20,12 +20,15 @@ ANNO_TEMPLATE = {
                 "rendering_script": [
                     "p.SetBaseTransform(true, true)",
                     "p.SetDefaultPen()",
-                    "p.DrawLine(0, 0, 50, 0)",
-                    "p.DrawLine(45, 5, 50, 0)",
-                    "p.DrawLine(45, -5, 50, 0)",
-                    "p.DrawLine(0, 0, 0, 50)",
-                    "p.DrawLine(5, 45, 0, 50)",
-                    "p.DrawLine(-5, 45, 0, 50)"
+                    "let object_size = 88",
+                    "p.DrawEllipse(-object_size / 2, -object_size / 2, object_size, object_size)",
+                    "let arrow_size = object_size / 4",
+                    "p.DrawLine(0, 0, arrow_size, 0)",
+                    "p.DrawLine(arrow_size * 0.95, arrow_size * 0.05, arrow_size, 0)",
+                    "p.DrawLine(arrow_size * 0.95, -arrow_size * 0.05, arrow_size, 0)",
+                    "p.DrawLine(0, 0, 0, arrow_size)",
+                    "p.DrawLine(arrow_size * 0.05, arrow_size * 0.95, 0, arrow_size)",
+                    "p.DrawLine(-arrow_size * 0.05, arrow_size * 0.95, 0, arrow_size)"
                 ],
                 "value_type": "oriented_point"
             }
