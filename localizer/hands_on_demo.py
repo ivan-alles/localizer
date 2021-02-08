@@ -111,7 +111,7 @@ class HandsOnDemo:
                 objects = self._localizer.predict(input)
                 for obj in objects:
                     self._draw_pose(obj.origin[0], obj.origin[1], obj.angle)
-                self._put_text('Detecting...', 20)
+                self._put_text('Detecting. Show object to the camera.', 20)
         except Exception:
             traceback.print_exc()
             self._localizer = None

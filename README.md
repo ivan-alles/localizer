@@ -81,11 +81,22 @@ Transfer learning can reduce the number of images required for training by more 
 
 <img src="./assets/Training performance.svg">
 
-To use transfer learning in training, specify the path to the transfer learning model
-in the configuration:
+To use transfer learning in training, add the following to the configuration:
 
 ```json
 {
-  "transfer_learning_base": "models/transfer_learning_base/features.tf"
+  "transfer_learning_base": "models/transfer_learning_base/features.tf",
+  "pad_to": 32
+} 
+```
+Input shape must be divisible by 32, for example:
+
+```json
+{
+  "input_shape": [
+    384,
+    384,
+    3
+  ]
 } 
 ```

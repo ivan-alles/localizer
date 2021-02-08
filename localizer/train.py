@@ -487,7 +487,7 @@ class Trainer:
 
         if 'transfer_learning_base' in self._cfg:
             self._features_model = keras.models.load_model(self._cfg['transfer_learning_base'])
-            retrain_tl = self._cfg['retrain_transfer_learning']
+            retrain_tl = self._cfg.get('retrain_transfer_learning', True)
             self._features_model.trainable = retrain_tl
             f = self._features_model(self._image_input, training=retrain_tl)
         else:
@@ -515,7 +515,6 @@ class Trainer:
         category_models = []
 
         for cat in range(self._category_count):
-            # category_model = keras.layers.SpatialDropout2D(0.3)(f)
             category_model = f
             conv_params['activation'] = None
             category_model = keras.layers.Conv2D(32, (1, 1), **conv_params)(category_model)

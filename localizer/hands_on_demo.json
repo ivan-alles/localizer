@@ -6,7 +6,7 @@
   "object_size": 88,
   "input_scale": 1,
   "model_scale": 0.125,
-  "pad_to": 64,
+  "pad_to": 32,
   "background_weight": 0.1,
   "object_weight_sigma_factor": 3,
   "weight_border": 7,
