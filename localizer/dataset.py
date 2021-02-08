@@ -78,7 +78,7 @@ class Dataset:
             }
             dataset.append(data_element)
             for marker in file['markers']:
-                if marker['type'] == 'origin':
+                if marker['type'] == 'object':
                     value = [float(v) for v in marker['value'].split()]
                     data_element['objects'].append({
                         'category': marker['category'],

@@ -13,7 +13,7 @@ ANNO_TEMPLATE = {
     "definitions": {
         "files_root_dir": "",
         "marker_types": {
-            "origin": {
+            "object": {
                 "categories": [],
                 "description": " ",
                 "line_width": -5,
@@ -74,7 +74,7 @@ def convert(input_file):
             for obj in image['objects']:
                 categories.add(obj['category'])
                 file['markers'].append({
-                    'type': 'origin',
+                    'type': 'object',
                     'category': obj['category'],
                     'value': f"{obj['origin']['x']} {obj['origin']['y']} {obj['origin']['angle']}",
                 })
@@ -93,7 +93,7 @@ def convert(input_file):
                          'id': i,
                          'name': f'object {i}'
                          }
-        anno['definitions']['marker_types']['origin']['categories'].append(category_data)
+        anno['definitions']['marker_types']['object']['categories'].append(category_data)
 
     anno_path = os.path.splitext(input_file)[0] + '.anno'
     with open(anno_path, 'w') as f:

@@ -32,7 +32,7 @@
   ],
   "rng_seed": 1,
   "sigma": 1.5,
-  "objectness_ksize": 7,
+  "confidence_ksize": 7,
   "angle_ksize": 3,
   "pos_ksize": 3,
   "confidence_thr": 0.5,

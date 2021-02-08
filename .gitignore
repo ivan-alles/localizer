@@ -2,3 +2,6 @@
 .venv
 datasets/*/*.anno
 __pycache__
+models/*/*.svg
+models/*/*.png
+

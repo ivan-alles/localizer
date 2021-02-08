@@ -2,12 +2,22 @@
  "definitions": {
   "files_root_dir": "",
   "marker_types": {
-   "origin": {
+   "object": {
     "categories": [
      {
-      "color": "#86f574",
+      "color": "#ff0000",
       "id": 0,
-      "name": "object 0"
+      "name": "category 0"
+     },
+     {
+      "color": "#00ff00",
+      "id": 0,
+      "name": "category 1"
+     },
+     {
+      "color": "#0000ff",
+      "id": 0,
+      "name": "category 2"
      }
     ],
     "description": " ",
