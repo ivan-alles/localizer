@@ -89,7 +89,7 @@ To use transfer learning in training, add the following to the configuration:
   "pad_to": 32
 } 
 ```
-Input shape must be divisible by 32, for example:
+The input shape must be divisible by 32, for example:
 
 ```json
 {
