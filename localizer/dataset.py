@@ -24,9 +24,14 @@ class Dataset:
         with open(file_name) as f:
             data = json.load(f)
 
+        root_dir = os.path.dirname(self._file_name)
+
+        if os.path.splitext(file_name)[1] == '.anno':
+            root_dir = os.path.join(root_dir, data['definitions']['files_root_dir'])
+            data = self._convert_from_anno(data)
+
         self.image_mean = None
         self.data_elements = []
-        root_dir = os.path.dirname(self._file_name)
         for i, data_element_data in enumerate(data):
             self.data_elements.append(DataElement(i, cfg, root_dir, data_element_data))
 
@@ -62,6 +67,29 @@ class Dataset:
 
         self.image_mean = (mean_sum / mean_count).astype(np.float32)
         logger.info(f'Image mean {self.image_mean}')
+
+    def _convert_from_anno(self, anno):
+        dataset = []
+
+        for file in anno['files']:
+            data_element = {
+                'image': file['name'],
+                'objects': []
+            }
+            dataset.append(data_element)
+            for marker in file['markers']:
+                if marker['type'] == 'origin':
+                    value = [float(v) for v in marker['value'].split()]
+                    data_element['objects'].append({
+                        'category': marker['category'],
+                        'origin': {
+                            'x': value[0],
+                            'y': value[1],
+                            'angle': value[2]
+                        }
+                    })
+
+        return dataset
 
 
 class DataElement:
