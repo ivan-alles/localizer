@@ -66,6 +66,7 @@ This anno file can be specified in the model configuration:
 
 ## Training a model
 Run `python localizer\train.py PATH_TO_MODEL_CONFIG`. 
+
 For example: `python localizer\train.py models\tools\config.json`.
 
 This will train and save a Tensorflow model under `models\tools\model.tf`.
