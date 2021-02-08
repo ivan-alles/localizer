@@ -4,7 +4,7 @@
 
 Localizer is a neural network predicting object positions and orientation on 2d images.
 
-Check out a [browser app](https://ivan-alles.github.io/localizer/) finding your hand on a live camera video.
+Check out a [browser app](https://ivan-alles.github.io/localizer/) finding your hands on a live camera video.
 
 ## Setup
 I tested these instruction under Windows. 
@@ -44,17 +44,25 @@ with position, orientation and category:
 ]
 ```
 
-You need to convert your dataset to this format.
+You need to convert your dataset to this format to use it with the localizer.
 
 ## Creating a new dataset 
 
-You can use the [anno tool](https://github.com/urobots-io/anno/) to manually label images. To do this:
+You can use [Anno](https://github.com/urobots-io/anno/) to manually label images. To do this:
 
-1. Download and istall the [anno tool](https://github.com/urobots-io/anno/).
-2. Put `localizer\dataset_template.anno` into the directory with your images.
-3. Label objects with the **object** marker. 
-4. Label images without any objects with the **empty** marker.
+1. Download and istall the [Anno](https://github.com/urobots-io/anno/).
+2. Copy `localizer\dataset_template.anno` into the directory with your images and rename it (e.g. `mydataset.anno`).
+3. Open `mydataset.anno` with Anno.
+4. Label objects with the **object** marker. 
+5. Label images without any objects with the **empty** marker.
 
+This anno file can be specified in the model configuration:
+
+```json
+{
+  "dataset": "path/mydataset.anno",
+} 
+```
 
 ## Training a model
 Run `python localizer\train.py PATH_TO_MODEL_CONFIG`. 
