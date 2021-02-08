@@ -57,7 +57,7 @@ class Localizer {
     this.maxInputSize = maxInputSize;
     let url = MODEL_URL;
     if (process.env.NODE_ENV === 'production' ) {
-      url = '/preference-model' + url;      
+      url = '/localizer' + url;      
     }
 
     console.log(`Loading model ${url} ...`)
