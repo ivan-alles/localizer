@@ -11,7 +11,7 @@ I tested these instruction under Windows.
 
 1. To run neural networks on a GPU (highly recommended) 
    install (if not done yet) the required drivers, etc. for **[TensorFlow 2](https://www.tensorflow.org/install/gpu)**.
-2. Clone the repository.
+2. Get the source code into your working folder.
 3. Install the dependencies with `pipenv sync`.
 4. Activate the pipenv environment with `pipenv shell`.
 5. Run `set PYTHONPATH=.`.  
