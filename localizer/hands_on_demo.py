@@ -15,18 +15,18 @@ from localizer import predict
 from localizer import utils
 
 
-class CameraDemo:
+class HandsOnDemo:
     class Mode(enum.Enum):
         DETECT = 0  # Detect using current model
         NEW_MODEL = 1  # Create a new dataset and train a new model
 
     def __init__(self, camera_id):
-        self._template_cfg_path = os.path.join(os.path.dirname(__file__), 'camera_demo.json')
+        self._template_cfg_path = os.path.join(os.path.dirname(__file__), 'hands_on_demo.json')
 
         with open(self._template_cfg_path) as f:
             cfg = json.load(f)
 
-        self._model_dir = os.path.join('.temp', 'camera_demo_model')
+        self._model_dir = os.path.join('.temp', 'hands_on_demo_model')
         self._dataset_path = os.path.join(self._model_dir, 'dataset.json')
         self._cfg_path = os.path.join(self._model_dir, 'config.json')
 
@@ -187,5 +187,5 @@ class CameraDemo:
 
 if __name__ == '__main__':
     camera_id = int(sys.argv[1]) if len(sys.argv) > 1 else 0
-    app = CameraDemo(camera_id)
+    app = HandsOnDemo(camera_id)
     app.run()
