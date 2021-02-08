@@ -60,7 +60,7 @@ This anno file can be specified in the model configuration:
 
 ```json
 {
-  "dataset": "path/mydataset.anno",
+  "dataset": "path/mydataset.anno"
 } 
 ```
 
