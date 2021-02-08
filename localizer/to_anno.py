@@ -31,6 +31,23 @@ ANNO_TEMPLATE = {
                     "p.DrawLine(-arrow_size * 0.05, arrow_size * 0.95, 0, arrow_size)"
                 ],
                 "value_type": "oriented_point"
+            },
+            "empty": {
+                "categories": [
+                    {
+                        "color": "#ff0000",
+                        "id": 0,
+                        "name": "empty"
+                    }
+                ],
+                "description": "Image without objects.",
+                "rendering_script": [
+                    "p.SetBaseTransform(false, false)",
+                    "p.SetDefaultPen()",
+                    "p.DrawEllipse(-50, -50, 100, 100)"
+                ],
+                "stamp": True,
+                "value_type": "point"
             }
         },
         "user_data": {
@@ -53,12 +70,19 @@ def convert(input_file):
             'name': image['image'],
             'markers': []
         }
-        for obj in image['objects']:
-            categories.add(obj['category'])
+        if image['objects']:
+            for obj in image['objects']:
+                categories.add(obj['category'])
+                file['markers'].append({
+                    'type': 'origin',
+                    'category': obj['category'],
+                    'value': f"{obj['origin']['x']} {obj['origin']['y']} {obj['origin']['angle']}",
+                })
+        else:
             file['markers'].append({
-                'type': 'origin',
-                'category': obj['category'],
-                'value': f"{obj['origin']['x']} {obj['origin']['y']} {obj['origin']['angle']}",
+                'type': 'empty',
+                'category': 0,
+                'value': "50 50",
             })
         anno['files'].append(file)
 
