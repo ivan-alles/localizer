@@ -16,7 +16,7 @@ I tested these instruction under Windows.
 4. Activate the pipenv environment with `pipenv shell`.
 5. Run `set PYTHONPATH=.`.  
 
-## Run a hands-on python app
+## Run the hands-on python app
 
 You can interactively train and run a model on images from your web camera in the hands-on demo app. Run 
 `python localizer\hands_on_demo.py` and follow the on-screen instructions.
@@ -50,7 +50,7 @@ You need to convert your dataset to this format to use it with the localizer.
 
 You can use [Anno](https://github.com/urobots-io/anno/) to manually label images. To do this:
 
-1. Download and istall [Anno](https://github.com/urobots-io/anno/).
+1. Download and install [Anno](https://github.com/urobots-io/anno/).
 2. Copy `localizer\dataset_template.anno` into the directory with your images and rename it (e.g. `mydataset.anno`).
 3. Open `mydataset.anno` with Anno.
 4. Label objects with the **object** marker. 
