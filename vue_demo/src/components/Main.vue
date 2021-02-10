@@ -4,6 +4,45 @@
   <b-container>
     <template v-if="state === stateKind.WELCOME">
       <h1>Localizer Demo</h1>
+      <ShareNetwork
+          network="Facebook"
+          :url="shareUrl()"
+          :title="shareTitle()"
+        >
+        <b-button variant="secondary">
+          <font-awesome-icon :icon="['fab', 'facebook']" size="lg" ></font-awesome-icon>
+        </b-button>
+      </ShareNetwork>
+      <!-- Twitter does not work with a local URL. -->
+      <ShareNetwork
+          network="Twitter"
+          :url="shareUrl()"
+          :title="shareTitle()"
+        >
+        <b-button variant="secondary">
+          <font-awesome-icon :icon="['fab', 'twitter']" size="lg" ></font-awesome-icon>
+        </b-button>
+      </ShareNetwork>         
+      <ShareNetwork
+          network="VK"
+          :url="shareUrl()"
+          :title="shareTitle()"
+        >
+        <b-button variant="secondary">
+          <font-awesome-icon :icon="['fab', 'vk']" size="lg" ></font-awesome-icon>
+        </b-button>
+      </ShareNetwork>   
+      <!-- The URL will be inserted as plain text, so add a line break and a short description. -->
+      <ShareNetwork
+          network="Email"
+          :url="shareUrl()"
+          :title="shareTitle()"
+          description="Check out the localizer demo app."
+        >
+        <b-button variant="secondary">
+          <b-icon icon="envelope" ></b-icon>
+        </b-button>
+      </ShareNetwork>          
       <p>This is a localizer demo app. It finds your hands on the live camera video.</p>
       <b-button @click="startDemo()" variant="primary">
         <b-icon icon="camera-video" ></b-icon>
@@ -234,6 +273,14 @@ export default {
       this.camera.onloadeddata = this.onVideoReady;
       this.camera.play();
     },    
+
+    shareUrl() {
+      return window.location.href;
+    },
+
+    shareTitle() {
+      return 'Localizer Demo App';
+    },      
   },
 
   created() {
@@ -294,5 +341,8 @@ function sleep(ms) {
   color: var(--danger);
 }
 
+button {
+  margin: 0 0.5rem 0 0;
+}
 
 </style>
