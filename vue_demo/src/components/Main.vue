@@ -58,28 +58,30 @@ const stateKind = {
 }
 
 class GoogleAnalyticsLogger {
-  constructor(ga) {
-    this.ga = ga;
+  constructor(gtag) {
+    this.gtag = gtag;
   }
 
   log(category, action, label, value=1) {
     console.log(category, action, label, value);
-    this.ga.event({
-      eventCategory: category,
-      eventAction: action,
-      eventLabel: label,
-      eventValue: value
-    });
+    // TODO(ia): restore this
+    // this.ga.event({
+    //   eventCategory: category,
+    //   eventAction: action,
+    //   eventLabel: label,
+    //   eventValue: value
+    // });
   }
 
   logException(action, exception, value=1) {
-    console.error(exception);
-    this.ga.event({
-      eventCategory: 'LogError',
-      eventAction: action,
-      eventLabel: exception.stack,
-      eventValue: value
-    });
+    console.error(action, exception, value);
+    // TODO(ia): restore this
+    // this.ga.event({
+    //   eventCategory: 'LogError',
+    //   eventAction: action,
+    //   eventLabel: exception.stack,
+    //   eventValue: value
+    // });
   }
 }
 
@@ -239,7 +241,8 @@ export default {
     // Make globals accessible in Vue rendering code
     this.stateKind = stateKind;
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    this.logger = new GoogleAnalyticsLogger(this.$ga);
+    this.$gtag.event('created', { method: 'Google' }); // TODO(ia): this is a test from a documentation, do we need it?
+    this.logger = new GoogleAnalyticsLogger(this.$gtag);
     this.isActive = true;
     this.engine = new Engine(this.logger);
   },
