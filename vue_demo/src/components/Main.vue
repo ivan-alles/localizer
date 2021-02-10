@@ -57,20 +57,19 @@ const stateKind = {
     ERROR: 'ERROR',     // Fatal error, cannot work.
 }
 
-class GoogleAnalyticsLogger {
+class Logger {
   constructor(gtag) {
     this.gtag = gtag;
   }
 
   log(category, action, label, value=1) {
     console.log(category, action, label, value);
-    // TODO(ia): restore this
-    // this.ga.event({
-    //   eventCategory: category,
-    //   eventAction: action,
-    //   eventLabel: label,
-    //   eventValue: value
-    // });
+    this.gtag.event({
+      eventCategory: category,
+      eventAction: action,
+      eventLabel: label,
+      eventValue: value
+    });
   }
 
   logException(action, exception, value=1) {
@@ -242,7 +241,8 @@ export default {
     this.stateKind = stateKind;
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     this.$gtag.event('created', { method: 'Google' }); // TODO(ia): this is a test from a documentation, do we need it?
-    this.logger = new GoogleAnalyticsLogger(this.$gtag);
+    this.logger = new Logger(this.$gtag);
+    this.logger.log('test category', 'test action', 'test label', 123);
     this.isActive = true;
     this.engine = new Engine(this.logger);
   },
