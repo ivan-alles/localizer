@@ -152,6 +152,9 @@ export default {
         await this.engine.init(maxInputSize, message => {this.progressMessage = message;});
         this.progressMessage = 'Warming up ...';
 
+        const handIcon = new Image();
+        handIcon.src = 'hand.svg';
+
         while(!this.isVideoReady) {
           await sleep(50);
         }
@@ -206,13 +209,16 @@ export default {
           }
 
           const viewContext = viewCanvas.getContext("2d");
-          viewContext.drawImage(bufferCanvas, 0, 0, bufferCanvas.width, bufferCanvas.height, 0, 0, viewCanvas.width, viewCanvas.height);
+          viewContext.drawImage(bufferCanvas, 0, 0, viewCanvas.width, viewCanvas.height);
 
           const objScale = viewScale * objectSize / 2;
 
+          viewContext.drawImage(handIcon, 
+            viewCanvas.width / 2 - objScale, viewCanvas.height / 2 - objScale, 
+            2 * objScale, 2 * objScale);
+
           for(const o of objects) {
             // console.log('object', o);
-            viewContext.strokeStyle = "#00FF00";
             const sa = Math.sin(o.angle) * objScale;
             const ca = Math.cos(o.angle) * objScale;
             viewContext.setTransform(ca, sa, -sa, ca, o.x * viewScale, o.y * viewScale);
@@ -226,8 +232,10 @@ export default {
             viewContext.arc(0, 0, 1, 0, 2 * Math.PI);
             viewContext.resetTransform();
             viewContext.lineWidth = 3;
+            viewContext.strokeStyle = "#0AAF0A";
             viewContext.stroke();
           }
+
           this.isVideoShown = true;
         }
       }
