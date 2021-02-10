@@ -88,6 +88,10 @@
 
 import { Engine } from '@/Engine'
 
+// Intervals in ms.
+const HAND_ICON_OFF_INTERVAL = 5000;
+const HAND_ICON_ON_INTERVAL = 2000;
+
 const stateKind = {
     WELCOME: 'WELCOME', // Welcome screen.
     INIT: 'INIT',       // Loading models, etc.
@@ -134,6 +138,8 @@ export default {
       isVideoReady: false,
       isVideoShown: false,
       isDetecting: false, // Processing a video frame by a DNN, ignore attempts to quit.
+      isHandIconOn: false,
+      handIconTime: new Date() - HAND_ICON_OFF_INTERVAL,
     };
   },
   computed: {
@@ -193,7 +199,7 @@ export default {
           const viewContainer = document.getElementById('viewContainer');
           const viewRect = viewContainer.getBoundingClientRect();
           const fullWidth = viewRect.width;
-          const fullHeight = window.innerHeight - viewRect.y - 10;
+          const fullHeight = window.innerHeight - viewRect.y - 2;
           const viewScaleX = fullWidth / bufferCanvas.width;
           const viewScaleY = fullHeight / bufferCanvas.height;
           let viewScale = 1;
@@ -213,9 +219,30 @@ export default {
 
           const objScale = viewScale * objectSize / 2;
 
-          viewContext.drawImage(handIcon, 
-            viewCanvas.width / 2 - objScale, viewCanvas.height / 2 - objScale, 
-            2 * objScale, 2 * objScale);
+          const currentTime = new Date();
+          if(this.isHandIconOn) {
+            if(currentTime - this.handIconTime > HAND_ICON_ON_INTERVAL || objects.length > 0) {
+              this.handIconTime = currentTime;
+              this.isHandIconOn = false;
+            }
+            else {
+              viewContext.drawImage(handIcon, 
+                viewCanvas.width / 2 - objScale, viewCanvas.height / 2 - objScale, 
+                2 * objScale, 2 * objScale);
+
+              viewContext.font = '24px arial';
+              viewContext.fillStyle = "#0AAF0A";
+              viewContext.textAlign = 'center';
+              viewContext.textBaseline = 'top';
+              viewContext.fillText('show me your hand', 
+                viewCanvas.width / 2, 
+                viewCanvas.height / 2 + objScale);
+            }
+          }
+          else if(currentTime - this.handIconTime > HAND_ICON_OFF_INTERVAL) {
+              this.handIconTime = currentTime;
+              this.isHandIconOn = true;
+          }
 
           for(const o of objects) {
             // console.log('object', o);
