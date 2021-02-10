@@ -357,19 +357,20 @@ function sleep(ms) {
 <style scoped>
 
 #viewContainer {
+  position: absolute;
+  left: 0px;
+  top: 0px;
   width: 100%;
 }
 
 #viewCanvas {
-  position: absolute;
-  top: 1px;
-  left: 1px;
+  z-index: -1;
 }
 
 #stopDemoButton {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: 1px;
+  left: 1px;
 }
 
 .error {
