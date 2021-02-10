@@ -92,8 +92,8 @@ export default {
       tempResultPicture: null,
       camera: null,
       isVideoReady: false,
-      isDetecting: false,
       isVideoShown: false,
+      isDetecting: false, // Processing a video frame by a DNN, ignore attempts to quit.
     };
   },
   computed: {
@@ -192,10 +192,10 @@ export default {
         }
       }
       catch(error) {
-        this.isDetecting = false;
         this.logger.logException('Images.getPicturesTask.createPictures', error);
         if (this.state != stateKind.WELCOME) this.state = stateKind.ERROR;
       }
+      this.isDetecting = false;
     },
 
     reload() {
@@ -209,7 +209,7 @@ export default {
     },
 
     async stopDemo() {
-      while(this.isDetecting) {
+      while(this.state == stateKind.WORKING && this.isDetecting) {
         await sleep(50);
       }
       this.state = stateKind.WELCOME;
@@ -238,9 +238,7 @@ export default {
   created() {
     // Make globals accessible in Vue rendering code
     this.stateKind = stateKind;
-
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
     this.logger = new GoogleAnalyticsLogger(this.$ga);
     this.isActive = true;
     this.engine = new Engine(this.logger);
