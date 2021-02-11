@@ -2,19 +2,40 @@
 
 # Localizer
 
-Localizer is a neural network predicting object positions and orientation on 2d images.
+Localizer is a neural network for 2D object detection. 
+Unlike popular algorithms predicting bounding boxes, Localizer predicts accurate object coordinates
+and orientation. This data is essential in robotic applications to plan precise motions and avoid collisions.
 
-Check out a [browser app](https://ivan-alles.github.io/localizer/) finding your hands on a live camera video.
+Check out the online [hand detector app](https://ivan-alles.github.io/localizer/) to see Localizer in action.
+
+Provided enough training data, Localizer:
+* Reaches accuracy less than 2 pixels for the position and  2 degrees for orientation.
+* Works with rigid and flexible objects.
+* Detects an unlimited number of object categories.
+* Adapts to variations in scale, point of view, and lighting.
+
+Transfer learning reduces the amount of training data and time by 10-20 times.
+
+Localizer powered various industrial and hobby projects in:
+* Robot control
+* Manufacturing quality assurance
+* Object counting
+
+This repository contains:
+* The source code
+* Examples of datasets and models
+* A pretrained transfer learning model
+* A hands-on demo app for training and running models
 
 ## Setup
-I tested these instruction under Windows. 
+These instructions use Windows syntax. 
 
-1. To run neural networks on a GPU (highly recommended) 
-   install (if not done yet) the required drivers, etc. for **[TensorFlow 2](https://www.tensorflow.org/install/gpu)**.
+1. To run neural networks on a GPU (highly recommended), 
+   install the required prerequisites for **[TensorFlow 2](https://www.tensorflow.org/install/gpu)**.
 2. Get the source code into your working folder.
-3. Install the dependencies with `pipenv sync`.
-4. Activate the pipenv environment with `pipenv shell`.
-5. Run `set PYTHONPATH=.`.  
+3. Install the dependencies: `pipenv sync`.
+4. Activate the pipenv environment: `pipenv shell`.
+5. Add localizer to python: `set PYTHONPATH=.`.  
 
 ## Run the hands-on python app
 
@@ -24,8 +45,8 @@ You can select a camera with the optional `CAMERA_ID`parameter. It is an integer
 
 ## Converting an existing dataset
 
-A dataset required by the localizer is a number of images annotated in a simple JSON file. This is a list of images, each containing a list of objects 
-with position, orientation and category:
+A dataset for the Localizer is a JSON list of images, each containing a list of objects 
+with the position, orientation, and category:
 
 ```json
 [
@@ -45,11 +66,11 @@ with position, orientation and category:
 ]
 ```
 
-You need to convert your dataset to this format to use it with the localizer.
+If you have your dataset, you need to convert it to this format.
 
 ## Creating a new dataset 
 
-You can use [Anno](https://github.com/urobots-io/anno/) to manually label images. To do this:
+You can use [Anno](https://github.com/urobots-io/anno/) to label images manually. To do this:
 
 1. Download and install [Anno](https://github.com/urobots-io/anno/).
 2. Copy `localizer\dataset_template.anno` into the directory with your images and rename it (e.g. `mydataset.anno`).
@@ -70,7 +91,7 @@ Run `python localizer\train.py PATH_TO_MODEL_CONFIG`.
 
 For example: `python localizer\train.py models\tools\config.json`.
 
-This will train and save a Tensorflow model under `models\tools\model.tf`.
+This command will train and save a Tensorflow model under `models\tools\model.tf`.
 
 ## Running a model
 Run `python localizer\predict_for_images.py PATH_TO_MODEL_CONFIG IMAGES_DIR`.
