@@ -159,7 +159,12 @@ export default {
         this.progressMessage = 'Warming up ...';
 
         const handIcon = new Image();
+        let imageLoaded = false;
+        handIcon.onload = function() { imageLoaded = true; }
         handIcon.src = 'hand.svg';
+        while(!imageLoaded) {
+          await sleep(50);
+        }        
 
         while(!this.isVideoReady) {
           await sleep(50);
