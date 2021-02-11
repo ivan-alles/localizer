@@ -3,7 +3,7 @@
 # Localizer
 
 Localizer is a neural network for 2D object detection. 
-Unlike popular algorithms predicting bounding boxes, Localizer predicts accurate object coordinates
+Unlike popular algorithms finding bounding boxes, Localizer predicts accurate object coordinates
 and orientation. This data is essential in robotic applications to plan precise motions and avoid collisions.
 
 Check out the online [hand detector app](https://ivan-alles.github.io/localizer/) to see Localizer in action.
