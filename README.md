@@ -37,7 +37,7 @@ These instructions use Windows syntax.
 4. Activate the pipenv environment: `pipenv shell`.
 5. Add localizer to python: `set PYTHONPATH=.`.  
 
-## Run the hands-on python app
+## Hands-on python demo
 
 <img src="./assets/hands_on.gif">
 
