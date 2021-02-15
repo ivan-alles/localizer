@@ -31,7 +31,7 @@ This repository contains:
 These instructions use Windows syntax. 
 
 1. To run neural networks on a GPU (highly recommended), 
-   install the required prerequisites for **[TensorFlow 2](https://www.tensorflow.org/install/gpu)**.
+   install the required **[prerequisites](https://www.tensorflow.org/install/gpu)** for TensorFlow 2.
 2. Get the source code into your working folder.
 3. Install the dependencies: `pipenv sync`.
 4. Activate the pipenv environment: `pipenv shell`.
