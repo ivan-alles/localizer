@@ -3,7 +3,8 @@
 <template>
   <b-container>
     <template v-if="state === stateKind.WELCOME">
-      <h1>Localizer Demo</h1>
+      <h1>Hand Detector</h1>
+      <h4>Localizer demo app</h4>
       <ShareNetwork
           network="Facebook"
           :url="shareUrl()"
@@ -43,7 +44,7 @@
           <b-icon icon="envelope" ></b-icon>
         </b-button>
       </ShareNetwork>          
-      <p>This is a localizer demo app. It finds your hands on the live camera video.</p>
+      <p>This app detects your hands on camera image. It is powered by the <a href="https://ivan-alles.github.io/localizer/">Localizer</a>: a neural network for object detection.</p>
       <b-button @click="startDemo()" variant="primary">
         <b-icon icon="camera-video" ></b-icon>
         Start
@@ -319,8 +320,8 @@ export default {
     },
 
     shareTitle() {
-      return 'Localizer Demo App';
-    },      
+      return 'Hand Detector Demo';
+    },
   },
 
   created() {
