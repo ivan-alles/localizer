@@ -1,0 +1,1177 @@
+{
+ "definitions": {
+  "files_root_dir": "",
+  "marker_types": {
+   "object": {
+    "categories": [
+     {
+      "color": "#86f574",
+      "id": 0,
+      "name": "object 0"
+     },
+     {
+      "color": "#a582e2",
+      "id": 1,
+      "name": "object 1"
+     }
+    ],
+    "description": " ",
+    "line_width": -5,
+    "rendering_script": [
+     "p.SetBaseTransform(true, true)",
+     "p.SetDefaultPen()",
+     "let object_size = 88",
+     "p.DrawEllipse(-object_size / 2, -object_size / 2, object_size, object_size)",
+     "let arrow_size = object_size / 4",
+     "p.DrawLine(0, 0, arrow_size, 0)",
+     "p.DrawLine(arrow_size * 0.95, arrow_size * 0.05, arrow_size, 0)",
+     "p.DrawLine(arrow_size * 0.95, -arrow_size * 0.05, arrow_size, 0)",
+     "p.DrawLine(0, 0, 0, arrow_size)",
+     "p.DrawLine(arrow_size * 0.05, arrow_size * 0.95, 0, arrow_size)",
+     "p.DrawLine(-arrow_size * 0.05, arrow_size * 0.95, 0, arrow_size)"
+    ],
+    "value_type": "oriented_point"
+   },
+   "empty": {
+    "categories": [
+     {
+      "color": "#ff0000",
+      "id": 0,
+      "name": "empty"
+     }
+    ],
+    "description": "Image without objects.",
+    "rendering_script": [
+     "p.SetBaseTransform(false, false)",
+     "p.SetDefaultPen()",
+     "p.DrawEllipse(-50, -50, 100, 100)"
+    ],
+    "stamp": true,
+    "value_type": "point"
+   }
+  },
+  "user_data": {}
+ },
+ "files": [
+  {
+   "name": "20180514-130933-252-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "249.938 85.9627 1.309"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "566.956 141.615 2.77507"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "145.59 273.292 0.994838"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "506.335 337.888 0.680678"
+    }
+   ]
+  },
+  {
+   "name": "20180514-130943-426-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "100.373 221.615 0.645772"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "403.975 82.4845 0.523599"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "327.95 320.497 1.39626"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "484.472 355.776 1.09956"
+    }
+   ]
+  },
+  {
+   "name": "20180514-130950-195-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "126.211 401.988 -1.3439"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "390.062 291.18 0.0"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "280.745 220.124 -1.8675"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "397.043 118.335 -2.84489"
+    }
+   ]
+  },
+  {
+   "name": "20180514-130957-292-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "181.366 82.4845 0.645772"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "558.012 290.683 2.60054"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "231.056 339.379 -0.715585"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "403.478 118.758 -2.72271"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131001-006-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "310.062 227.081 -2.82743"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "559.006 288.696 2.60054"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "231.553 338.385 -0.715585"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "402.981 119.752 -2.72271"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131007-348-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "348.852 59.8033 2.05949"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "507.279 366.689 -2.63545"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "472.176 160.054 2.63545"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "214.379 355.624 -2.68781"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131019-789-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "122.754 214.033 0.659701"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "262.295 172.066 1.01229"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "402.901 215.601 1.84106"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "461.189 314.691 2.35619"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131027-654-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "158.951 303.738 0.192224"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "492.066 271.213 -1.67552"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "450.623 155.279 -0.942478"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "253.377 194.098 -2.11486"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131033-348-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "438.033 243.41 1.85122"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "442.754 134.295 -2.72271"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "234.545 154.634 0.607456"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "145.695 271.317 -2.54818"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131038-908-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "437.508 243.41 1.8101"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "402.885 118.033 -3.02341"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "271.213 274.361 -1.95477"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "144.262 270.164 -2.56563"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "476.328 336.262 1.72733"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131048-116-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "336.262 64.5246 1.15593"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "484.721 162.098 0.907571"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "488.393 281.18 -2.51327"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "242.885 282.229 -1.66716"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "155.803 307.41 -1.16937"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131055-061-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "335.738 65.5738 1.16086"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "454.295 147.41 2.02294"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "487.869 280.131 -2.51016"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "285.377 316.852 0.663225"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "162.623 187.279 1.68876"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131101-148-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "335.738 66.0984 1.14683"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "454.295 147.41 2.04009"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "487.869 279.082 -2.56255"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "406.033 339.41 0.628229"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "195.672 367.213 1.01417"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "161.574 186.754 1.65192"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131109-420-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "265.967 247.082 -1.65806"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "497.836 339.41 -2.11795"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "162.981 187.283 1.68518"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "195.727 367.899 1.0206"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "406.531 339.246 0.62307"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131124-655-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "265.967 247.082 -1.65806"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "498.361 340.984 -2.09621"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "406.557 339.41 0.649727"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "194.098 367.213 0.997822"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131134-481-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "162.098 281.705 -1.72788"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "434.361 334.689 -1.23918"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "262.295 191.475 1.62455"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "374.557 168.918 -1.33551"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131140-162-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "278.033 198.82 -2.41833"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "383.475 279.082 0.168611"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "455.344 148.459 0.0450762"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "250.754 325.246 -2.28785"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131149-893-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "133.77 228.721 -1.05783"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "376.131 50.3607 0.706899"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "500.459 386.098 -2.60054"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "232.918 376.656 2.15433"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131153-262-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "112.262 190.951 -0.789086"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "376.131 50.3607 0.6962"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "500.984 385.574 -2.57233"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "219.726 352.07 1.92982"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131200-800-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "412.328 433.311 -1.85021"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "564.984 85.5082 2.58309"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "112.262 192.0 -0.815641"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "494.562 246.594 -2.79253"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "219.14 353.361 1.92615"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131210-954-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "477.377 354.098 3.03729"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "540.328 36.7213 2.30244"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "492.3 245.674 -2.79253"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "138.176 267.3 -2.9147"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "280.366 151.061 1.08229"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131225-481-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "362.492 364.066 -0.703536"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "271.213 233.967 2.15627"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "502.557 159.475 0.638838"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "303.738 158.951 -2.65471"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131231-158-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "391.869 290.623 0.376062"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "277.508 303.738 2.89879"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "328.918 151.607 1.15192"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "450.623 146.885 1.76278"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131236-956-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "560.787 280.131 2.09455"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "170.492 229.246 0.463239"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "400.262 187.803 -3.06418"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "286.951 102.295 2.86941"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131243-868-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "558.688 280.656 2.07596"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "163.148 236.59 0.422251"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "327.577 112.321 1.93732"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "394.608 235.891 2.84233"
+    }
+   ]
+  },
+  {
+   "name": "20180514-131250-595-0.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "134.295 197.77 -0.506145"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "454.82 438.557 -2.29334"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "453.665 163.478 2.79253"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "218.137 338.385 2.32129"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094146-862.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "326.82 332.066 2.7068"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "490.492 78.6885 1.61808"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "304.262 197.77 1.18107"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "483.148 331.016 2.73284"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094213-306.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "144.787 348.328 -1.50718"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "540.328 181.508 1.55599"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "333.639 144.262 2.02112"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "396.066 302.164 -1.81913"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094236-235.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "279.607 274.885 2.25702"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "269.317 220.621 -1.44033"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "495.738 236.59 -0.855211"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "353.574 317.902 1.27332"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094335-091.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "182.557 362.492 -1.9317"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "494.689 368.787 -2.23371"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "350.426 138.492 2.42077"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "321.049 332.59 -1.00839"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094344-740.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "183.607 359.869 -1.9609"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "494.164 367.738 -2.26525"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "321.574 333.639 -1.03158"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "349.902 135.869 2.41165"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094352-986.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "110.689 320.0 -1.39395"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "563.41 292.197 2.69741"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "404.984 135.869 -0.488151"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "318.426 312.131 2.00552"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094418-586.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 1,
+     "value": "183.607 325.77 -2.55251"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "403.41 344.131 -2.63545"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "203.541 219.803 0.593412"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "285.902 159.475 1.11928"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "396.59 163.672 -1.69766"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "487.869 198.82 2.04129"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "536.131 248.131 2.15483"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094427-184.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 1,
+     "value": "182.557 325.77 -2.56795"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "203.016 219.279 0.593412"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "286.426 160.0 1.13665"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "396.066 164.721 -1.72788"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "486.295 199.344 1.99902"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "535.082 246.033 2.15177"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "403.934 344.656 -2.70526"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094436-470.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 1,
+     "value": "403.934 345.18 -2.66614"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "182.557 324.721 -2.57473"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "488.393 197.77 2.00628"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "534.557 247.607 2.16313"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "395.541 165.77 -1.69755"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "287.475 161.049 1.14326"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "203.339 220.112 0.575959"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094537-773.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "538.229 80.7869 1.44601"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "246.557 54.5574 0.652955"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "236.59 347.279 -2.54244"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "332.59 257.049 0.283304"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094551-686.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "538.754 82.8852 1.4826"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "249.18 70.8197 0.689014"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "237.639 348.328 -2.52119"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "332.59 255.475 0.3488"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094608-966.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "265.443 359.344 -2.31555"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "326.295 276.459 0.140855"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "250.754 118.557 0.366838"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "473.705 93.377 0.922769"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094623-381.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "475.279 92.8525 0.932942"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "250.754 117.508 0.389053"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "326.295 276.459 0.18238"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "265.443 359.344 -2.34262"
+    }
+   ]
+  },
+  {
+   "name": "20180515-094638-348.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "145.836 340.459 -1.23848"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "438.557 413.377 -2.29599"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "326.82 121.705 0.699558"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "449.574 29.377 1.09239"
+    }
+   ]
+  },
+  {
+   "name": "20180517-144448-381.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "228.075 199.752 1.3439"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "394.037 185.342 1.29154"
+    },
+    {
+     "type": "object",
+     "category": 0,
+     "value": "572.919 197.764 1.67552"
+    }
+   ]
+  },
+  {
+   "name": "20180518-115608-395.png",
+   "markers": [
+    {
+     "type": "object",
+     "category": 0,
+     "value": "307.578 208.199 1.82273"
+    },
+    {
+     "type": "object",
+     "category": 1,
+     "value": "369.689 291.677 -1.48176"
+    }
+   ]
+  }
+ ]
+}
