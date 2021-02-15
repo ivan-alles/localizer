@@ -39,6 +39,8 @@ These instructions use Windows syntax.
 
 ## Run the hands-on python app
 
+<img src="./assets/hands_on.gif">
+
 You can interactively train and run a model on images from your web camera in the hands-on demo app. Run 
 `python localizer\hands_on_demo.py [CAMERA_ID]` and follow the on-screen instructions. 
 You can select a camera with the optional `CAMERA_ID`parameter. It is an integer with the default value of 0. 
