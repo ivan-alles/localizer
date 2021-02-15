@@ -44,7 +44,7 @@
           <b-icon icon="envelope" ></b-icon>
         </b-button>
       </ShareNetwork>          
-      <p>This app detects your hands on camera image. It is powered by the <a href="https://ivan-alles.github.io/localizer/">Localizer</a>: a neural network for object detection.</p>
+      <p>This app detects your hands on a live camera video. It is powered by the <a href="https://ivan-alles.github.io/localizer/">Localizer</a>: a neural network for object detection.</p>
       <b-button @click="startDemo()" variant="primary">
         <b-icon icon="camera-video" ></b-icon>
         Start
