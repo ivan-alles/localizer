@@ -398,10 +398,12 @@ function sleep(ms) {
   margin: 0 0 10px 0;
 }
 
+/* Limit youtube iframe width on large screen. */
 .youtube-super-container {
     max-width: 560px;
 }
 
+/* Responsive youtube iframe, see https://www.h3xed.com/web-development/how-to-make-a-responsive-100-width-youtube-iframe-embed */
 .youtube-container {
     position: relative;
     width: 100%;
