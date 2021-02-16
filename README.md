@@ -102,7 +102,7 @@ Run `python localizer\predict_for_images.py PATH_TO_MODEL_CONFIG IMAGES_DIR`.
  
 For example: `python localizer\predict_for_images.py models\tools\config.json datasets\tools`.
 
-## Use transfer learning
+## Transfer learning
 Transfer learning reduces the number of labeled images required for training by more than 10 times:
 
 <img src="./assets/Training performance.svg">
