@@ -2,6 +2,8 @@
 
 # Localizer
 
+[![Video Intro](http://img.youtube.com/vi/Pcbk_Hx1WpU/0.jpg)](http://www.youtube.com/watch?v=Pcbk_Hx1WpU "Video Intro")
+
 Localizer is a neural network for 2D object detection. 
 Unlike popular algorithms finding bounding boxes, Localizer predicts accurate object coordinates
 and orientation. This data is essential in robotic applications to plan precise motions and avoid collisions.
