@@ -46,8 +46,12 @@
           </b-button>
         </ShareNetwork>
       </div>
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/Pcbk_Hx1WpU" frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
+      <div class="youtube-super-container">
+        <div class="youtube-container">
+          <iframe class="youtube-video" src="https://www.youtube.com/embed/Pcbk_Hx1WpU" frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
+        </div>
+      </div>
       <div class="main-text">
         <p>This app detects your hands on a live camera video. It is powered by the <b>Localizer</b>: a neural network for object detection.</p>
         <p><a href="https://ivan-alles.github.io/localizer/">Get more</a> on GitHub: source code, examples, hands-on python app.</p>
@@ -392,6 +396,25 @@ function sleep(ms) {
 
 .social-share {
   margin: 0 0 10px 0;
+}
+
+.youtube-super-container {
+    max-width: 560px;
+}
+
+.youtube-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+}
+
+.youtube-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .main-text {
