@@ -5,46 +5,53 @@
     <template v-if="state === stateKind.WELCOME">
       <h1>Hand Detector</h1>
       <h4>Localizer demo app</h4>
-      <ShareNetwork
-          network="Facebook"
-          :url="shareUrl()"
-          :title="shareTitle()"
-        >
-        <b-button variant="secondary">
-          <font-awesome-icon :icon="['fab', 'facebook']" size="lg" ></font-awesome-icon>
-        </b-button>
-      </ShareNetwork>
-      <!-- Twitter does not work with a local URL. -->
-      <ShareNetwork
-          network="Twitter"
-          :url="shareUrl()"
-          :title="shareTitle()"
-        >
-        <b-button variant="secondary">
-          <font-awesome-icon :icon="['fab', 'twitter']" size="lg" ></font-awesome-icon>
-        </b-button>
-      </ShareNetwork>         
-      <ShareNetwork
-          network="VK"
-          :url="shareUrl()"
-          :title="shareTitle()"
-        >
-        <b-button variant="secondary">
-          <font-awesome-icon :icon="['fab', 'vk']" size="lg" ></font-awesome-icon>
-        </b-button>
-      </ShareNetwork>   
-      <!-- The URL will be inserted as plain text, so add a line break and a short description. -->
-      <ShareNetwork
-          network="Email"
-          :url="shareUrl()"
-          :title="shareTitle()"
-          description="Check out the localizer demo app."
-        >
-        <b-button variant="secondary">
-          <b-icon icon="envelope" ></b-icon>
-        </b-button>
-      </ShareNetwork>          
-      <p>This app detects your hands on a live camera video. It is powered by the <a href="https://ivan-alles.github.io/localizer/">Localizer</a>: a neural network for object detection.</p>
+      <div class='social-share'>
+        <ShareNetwork
+            network="Facebook"
+            :url="shareUrl()"
+            :title="shareTitle()"
+          >
+          <b-button variant="secondary">
+            <font-awesome-icon :icon="['fab', 'facebook']" size="lg" ></font-awesome-icon>
+          </b-button>
+        </ShareNetwork>
+        <!-- Twitter does not work with a local URL. -->
+        <ShareNetwork
+            network="Twitter"
+            :url="shareUrl()"
+            :title="shareTitle()"
+          >
+          <b-button variant="secondary">
+            <font-awesome-icon :icon="['fab', 'twitter']" size="lg" ></font-awesome-icon>
+          </b-button>
+        </ShareNetwork>         
+        <ShareNetwork
+            network="VK"
+            :url="shareUrl()"
+            :title="shareTitle()"
+          >
+          <b-button variant="secondary">
+            <font-awesome-icon :icon="['fab', 'vk']" size="lg" ></font-awesome-icon>
+          </b-button>
+        </ShareNetwork>   
+        <!-- The URL will be inserted as plain text, so add a line break and a short description. -->
+        <ShareNetwork
+            network="Email"
+            :url="shareUrl()"
+            :title="shareTitle()"
+            description="Check out the localizer demo app."
+          >
+          <b-button variant="secondary">
+            <b-icon icon="envelope" ></b-icon>
+          </b-button>
+        </ShareNetwork>
+      </div>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/Pcbk_Hx1WpU" frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
+      <div class="main-text">
+        <p>This app detects your hands on a live camera video. It is powered by the <b>Localizer</b>: a neural network for object detection.</p>
+        <p><a href="https://ivan-alles.github.io/localizer/">Get more</a> on GitHub: source code, examples, hands-on python app.</p>
+      </div>
       <b-button @click="startDemo()" variant="primary">
         <b-icon icon="camera-video" ></b-icon>
         Start
@@ -381,6 +388,14 @@ function sleep(ms) {
 
 .error {
   color: var(--danger);
+}
+
+.social-share {
+  margin: 0 0 10px 0;
+}
+
+.main-text {
+  margin: 10px 0 0 0;
 }
 
 button {
