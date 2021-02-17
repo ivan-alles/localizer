@@ -96,7 +96,7 @@
         Details
       </b-button>      
       <template v-if="showFatalError">
-        <p>{{this.fatalError}}</p>
+        <p class='fatal-error-text'>{{this.fatalError}}</p>
       </template>
     </template>
   </b-container>
@@ -296,7 +296,7 @@ export default {
       }
       catch(error) {
         this.logger.logException('Main.detectionTask.createPictures', error);
-        this.fatalError = error;
+        this.fatalError = error.stack;
         if (this.state != stateKind.WELCOME) this.state = stateKind.ERROR;
       }
       this.isDetecting = false;
@@ -347,7 +347,7 @@ export default {
       }
       catch(error) {
         this.logger.logException('Images.startVideo', error);
-        this.fatalError = error;
+        this.fatalError = error.stack;
         this.state = stateKind.ERROR;
       }
     },    
@@ -443,6 +443,10 @@ function sleep(ms) {
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+.fatal-error-text {
+  margin: 10px 0 0 0;
 }
 
 .main-text {
