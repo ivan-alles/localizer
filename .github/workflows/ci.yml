@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6]
+        node-version: [12.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -27,3 +28,11 @@ jobs:
     - name: Test with pytest
       run: |
         pipenv run pytest
+    - name: Test with Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: yarn --cwd vue_demo install 
+    - run: yarn --cwd vue_demo jest 
+      env:
+        CI: true        
