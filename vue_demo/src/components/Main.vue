@@ -90,8 +90,14 @@
       </p>
       <b-button @click="reload()" variant="primary">
         <b-icon icon="bootstrap-reboot"></b-icon>
-          Reload
-        </b-button>
+        Reload
+      </b-button>
+      <b-button @click="showFatalError = true" variant="secondary">
+        Details
+      </b-button>      
+      <template v-if="showFatalError">
+        <p>{{this.fatalError}}</p>
+      </template>
     </template>
   </b-container>
 </template>
@@ -152,6 +158,8 @@ export default {
       isDetecting: false, // Processing a video frame by a DNN, ignore attempts to quit.
       isHandIconOn: false,
       handIconTime: new Date() - HAND_ICON_OFF_INTERVAL,
+      fatalError: '', // Information about the error triggered ERROR state.
+      showFatalError: false, 
     };
   },
   computed: {
@@ -288,6 +296,7 @@ export default {
       }
       catch(error) {
         this.logger.logException('Main.detectionTask.createPictures', error);
+        this.fatalError = error;
         if (this.state != stateKind.WELCOME) this.state = stateKind.ERROR;
       }
       this.isDetecting = false;
@@ -316,8 +325,9 @@ export default {
     },
 
     onVideoError() {
-      this.logger.logException('Images.onVideoError', this.camera.error.code);
+      this.logger.logException('Images.onVideoError', this.camera.error.message);
       this.isVideoReady = false;
+      this.fatalError = this.camera.error.message;
       this.state = stateKind.ERROR;
     },
 
@@ -337,6 +347,7 @@ export default {
       }
       catch(error) {
         this.logger.logException('Images.startVideo', error);
+        this.fatalError = error;
         this.state = stateKind.ERROR;
       }
     },    
