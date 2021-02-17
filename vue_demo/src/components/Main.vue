@@ -161,7 +161,7 @@ export default {
     /**
     * Generates pictures in the background.
     */
-    async getPicturesTask() {
+    async detectionTask() {
       try {
         this.isDetecting = false;
         this.isVideoShown = false;
@@ -178,10 +178,13 @@ export default {
           await sleep(50);
         }        
 
-        while(!this.isVideoReady) {
+        while(!this.isVideoReady && this.state != stateKind.ERROR) {
           await sleep(50);
         }
         console.log('isVideoReady state: ', this.isVideoReady);
+
+        if(this.state == stateKind.ERROR)
+          return; // Something went wrong elsewhere (e.g. camera video).
 
         this.state = stateKind.WORKING;
 
@@ -284,7 +287,7 @@ export default {
         }
       }
       catch(error) {
-        this.logger.logException('Images.getPicturesTask.createPictures', error);
+        this.logger.logException('Main.detectionTask.createPictures', error);
         if (this.state != stateKind.WELCOME) this.state = stateKind.ERROR;
       }
       this.isDetecting = false;
@@ -297,7 +300,7 @@ export default {
     startDemo() {
       this.state = stateKind.INIT;
       this.startVideo();
-      this.getPicturesTask();
+      this.detectionTask();
     },
 
     async stopDemo() {
@@ -312,18 +315,30 @@ export default {
       this.isVideoReady = true;
     },
 
-    async startVideo() {
-      if (this.camera !== null) {
-        // Camera is already opened by a previous call.
-        return;
-      }
+    onVideoError() {
+      this.logger.logException('Images.onVideoError', this.camera.error.code);
+      this.isVideoReady = false;
+      this.state = stateKind.ERROR;
+    },
 
-      this.camera = document.createElement("video");
-      if (navigator.mediaDevices.getUserMedia) {
-        this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
+    async startVideo() {
+      try {
+        if (this.camera !== null) {
+          // Camera is already opened by a previous call.
+          return;
+        }
+
+        this.camera = document.createElement("video");
+        if (navigator.mediaDevices.getUserMedia) {
+          this.camera.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
+        }
+        this.camera.onloadeddata = this.onVideoReady;
+        this.camera.play();
       }
-      this.camera.onloadeddata = this.onVideoReady;
-      this.camera.play();
+      catch(error) {
+        this.logger.logException('Images.startVideo', error);
+        this.state = stateKind.ERROR;
+      }
     },    
 
     shareUrl() {
