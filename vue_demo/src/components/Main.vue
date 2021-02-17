@@ -135,13 +135,12 @@ class Logger {
 
   logException(action, exception, value=1) {
     console.error(action, exception, value);
-    // TODO(ia): restore this
-    // this.ga.event({
-    //   eventCategory: 'LogError',
-    //   eventAction: action,
-    //   eventLabel: exception.stack,
-    //   eventValue: value
-    // });
+    this.gtag.event({
+      eventCategory: 'LogError',
+      eventAction: action,
+      eventLabel: exception.stack,
+      eventValue: value
+    });    
   }
 }
 
@@ -167,7 +166,7 @@ export default {
 
   methods: {
     /**
-    * Generates pictures in the background.
+    * Detects objects in the background.
     */
     async detectionTask() {
       try {
