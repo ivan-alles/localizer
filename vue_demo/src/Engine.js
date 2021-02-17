@@ -8,12 +8,27 @@ import {loadGraphModel} from '@tensorflow/tfjs-converter';
 let MODEL_URL = '/prediction_model.tfjs/model.json';
 const OBJECT_SIZE = 88;
 
+/**
+ * Compute padding size to use in tf.pad().
+ *
+ * @param {number} size tensor axis size.
+ * @param {number} padTo the resulting axis size must be divisible by this value.
+ * @returns required padding size.
+ */
 function padSize(size, padTo) {
   if (size % padTo == 0)
     return 0;
   return padTo - size % padTo;
 }
 
+/**
+ * Adapts input image for DNN computations.
+ * 
+ * @param {tf.Tensor} image input image.
+ * @param {number} maxSize maximal width or height.
+ * @param {number} padTo the resulting width and height must be divisible by this value.
+ * @returns {image, scale}. image is adapted for DNN, scale is its scale factor.
+ */
 function makeInput(image, maxSize=511, padTo=32) {
   let sizeX = image.shape[1];
   let sizeY = image.shape[0];
@@ -47,6 +62,10 @@ function makeInput(image, maxSize=511, padTo=32) {
   };  
 }
 
+/**
+ * @class Localizer
+ * Implementation of the Localizer prediction algorithm.
+ */
 class Localizer {
   constructor(logger) {
     this.logger = logger;
@@ -68,6 +87,13 @@ class Localizer {
     console.log(`Model loaded`);
   }
 
+  /**
+   * Finds objects on the input image.
+   * @param {tf.Tensor} image input image.
+   * @returns {objects, objectSize}. objects is an array of object positions, objectSize is the size of the 
+   * perceptive field of the neural network scaled to the input image size.
+   * @memberof Localizer
+   */
   async predict(image) {
     let input = null;
     let output = null;
@@ -155,6 +181,13 @@ export class Engine {
     this.initDone = true;
   }
 
+  /**
+   * Finds objects on the browser image.
+   *
+   * @param {*} image browser image.
+   * @returns see Localizer.predict().
+   * @memberof Engine
+   */
   async predict(image) {
     // console.log('tf.memory', tf.memory());
     let imageTensor = null;
