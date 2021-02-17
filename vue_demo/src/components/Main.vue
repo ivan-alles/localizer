@@ -364,8 +364,10 @@ export default {
     // Make globals accessible in Vue rendering code
     this.stateKind = stateKind;
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    this.$gtag.event('created', { method: 'Google' }); // TODO(ia): this is a test from a documentation, do we need it?
+    // TODO(ia): this is just a test of gtag, remove in future.
+    this.$gtag.event('test_event', { method: 'Google' }); 
     this.logger = new Logger(this.$gtag);
+    // TODO(ia): this is just a test of gtag logger, remove in future.
     this.logger.log('test category', 'test action', 'test label', 123);
     this.isActive = true;
     this.engine = new Engine(this.logger);
