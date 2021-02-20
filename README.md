@@ -2,7 +2,7 @@
 
 # Localizer
 
-[![Video Intro](/assets/youtube_thumbnail.jpg)](http://www.youtube.com/watch?v=Pcbk_Hx1WpU "Video Intro")
+[![Video Intro](/assets/youtube_thumbnail.jpg)](https://youtu.be/M1_5VaDYxK4 "Video Intro")
 
 Localizer is a neural network for 2D object detection. 
 Unlike popular algorithms finding bounding boxes, Localizer predicts accurate object coordinates
