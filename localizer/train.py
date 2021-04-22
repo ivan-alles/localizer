@@ -558,6 +558,18 @@ class Trainer:
         weight = self._weight_input
 
         loss = loss * weight
+
+        # Set the weights of position and orientation errors in the loss function.
+        loss_weight_pos = self._cfg.get('loss_weight_pos', 1)
+        loss_weight_angle = self._cfg.get('loss_weight_angle', 1)
+        loss_weight = tf.constant([
+            loss_weight_pos,
+            loss_weight_pos,
+            loss_weight_angle,
+            loss_weight_angle
+        ], dtype='float32')
+        loss = loss * loss_weight
+
         # Normalize to make loss comparable for different output sizes and number of categories.
         loss = tf.reduce_sum(loss) / (tf.reduce_sum(weight) + 1e-5)
 
@@ -611,12 +623,22 @@ class Trainer:
             self._cfg['process_count'])
 
         self._optimizer = keras.optimizers.Adam(learning_rate=self._cfg.get('learning_rate', 0.0005))
+        self._epoch_loss = tf.keras.metrics.Mean()
 
         for p in train_phase_params:
             total_training_examples_count += self._cfg[p['name'] + '_training_examples_count']
             self._train_phase(p)
 
         self._batchgen.close()
+
+    @tf.function
+    def _train_step(self, inputs, target_windows, weights):
+        with tf.GradientTape() as tape:
+            loss_value, outputs = self._loss((inputs, target_windows, weights), training=True)
+        grads = tape.gradient(loss_value, self._loss.trainable_variables)
+        self._optimizer.apply_gradients(zip(grads, self._loss.trainable_variables))
+        self._epoch_loss.update_state(loss_value)
+        return outputs
 
     def _train_phase(self, train_phase_params):
         training_examples_to_make = self._cfg[train_phase_params['name'] + '_training_examples_count']
@@ -642,26 +664,22 @@ class Trainer:
 
         # Loop over epochs
         while not is_phase_finished():
+            self._epoch_loss.reset_states()
             epoch_start_time = datetime.datetime.now()
             self._batchgen.start_generation(self._cfg['training_examples_per_batch'], train_filter_name)
             training_examples_in_epoch_done = 0
-            self._epoch_loss = tf.keras.metrics.Mean()
             # Loop over batches in epoch
             while not is_phase_finished() and \
                     training_examples_in_epoch_done < self._cfg['training_examples_per_epoch']:
                 batch = self._batchgen.generate_batch()
 
-                arguments = (batch.input, batch.target_window, batch.weight)
-                with tf.GradientTape() as tape:
-                    loss_value, model_output = self._loss(arguments, training=True)
-                grads = tape.gradient(loss_value, self._loss.trainable_variables)
-                self._optimizer.apply_gradients(zip(grads, self._loss.trainable_variables))
-                self._epoch_loss(loss_value)
-
+                batch.output = self._train_step(
+                    tf.convert_to_tensor(batch.input),
+                    tf.convert_to_tensor(batch.target_window),
+                    tf.convert_to_tensor(batch.weight)
+                )
                 self._training_examples_done += len(batch.input)
                 training_examples_in_epoch_done += len(batch.input)
-
-                batch.output = model_output
 
                 # Update diagnostics on the 1st batch in epoch.
                 if training_examples_in_epoch_done == len(batch.input):

@@ -32,6 +32,8 @@
     0.9,
     1.1
   ],
+  "loss_weight_pos": 1,
+  "loss_weight_angle": 1,
   "rng_seed": 1,
   "sigma": 1.5,
   "confidence_ksize": 7,
