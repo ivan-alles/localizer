@@ -43,7 +43,8 @@ These instructions use Windows syntax.
 
 <img src="./assets/hands_on.gif">
 
-You can interactively train and run a model on images from your web camera in the hands-on demo app. Run 
+To see, how to detect position and orientation of objects without writing any code, use the hands-on demo app. 
+You can interactively train and run a model on images from your web camera. Run 
 `python localizer\hands_on_demo.py [CAMERA_ID]` and follow the on-screen instructions. 
 You can select a camera with the optional `CAMERA_ID`parameter. It is an integer with the default value of 0. 
 
@@ -74,7 +75,7 @@ If you have your dataset, you need to convert it to this format.
 
 ## Creating a new dataset 
 
-You can use [Anno](https://github.com/urobots-io/anno/) to label images manually. To do this:
+You can use [Anno](https://github.com/urobots-io/anno/) to label object detection data manually. To do this:
 
 1. Download and install [Anno](https://github.com/urobots-io/anno/).
 2. Copy `localizer\dataset_template.anno` into the directory with your images and rename it (e.g. `mydataset.anno`).
@@ -97,10 +98,17 @@ For example: `python localizer\train.py models\tools\config.json`.
 
 This command will train and save a Tensorflow model under `models\tools\model.tf`.
 
-## Running a model
-Run `python localizer\predict_for_images.py PATH_TO_MODEL_CONFIG IMAGES_DIR`.
+## Making predictions
+You can start off with the included program for prediction on images in a folder:
+ 
+`python localizer\predict_for_images.py PATH_TO_MODEL_CONFIG IMAGES_DIR`.
  
 For example: `python localizer\predict_for_images.py models\tools\config.json datasets\tools`.
+
+Refer to the source code for details on how to find position and orientation of an object in the prediction.
+
+Localizer does not predict bounding boxes. If you need them and your objects have fixed size, you can generate 
+bounding boxes using the predicted object position and orientation angle.
 
 ## Transfer learning
 Transfer learning reduces the number of labeled images required for training by more than 10 times:
@@ -126,3 +134,19 @@ The input shape must be divisible by 32, for example:
   ]
 } 
 ```
+
+Then train on your dataset to make the fine tuning of the base model.
+
+## Rotation-invariant object detection
+
+If you all you need is to adapt the detection model to object rotation instead of finding the orientation, you can do 
+the following:
+
+1. Label object positions only, with arbitrary rotation angles.
+2. In the configuration file specify:
+```json
+{
+  "loss_weight_angle": 0,
+  "angle_diff_thr": 999
+} 
+``` 
