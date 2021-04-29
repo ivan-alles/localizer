@@ -4,17 +4,21 @@
 
 [![Video Intro](/assets/youtube_thumbnail.jpg)](https://youtu.be/M1_5VaDYxK4 "Video Intro")
 
-Localizer is a neural network for 2D object detection. 
-Unlike popular algorithms finding bounding boxes, Localizer predicts accurate object coordinates
-and orientation. This data is essential in robotic applications to plan precise motions and avoid collisions.
+Localizer is a python library for 2D object detection. Popular algorithms like YOLO find axis-aligned
+or rotated bounding boxes, which is only a rough description of the object location. 
+In contrast, Localizer predicts accurate object coordinates and orientation. This data is essential, 
+for example, in robotic applications, to plan precise motions and avoid collisions.
 
-Check out the online [hand detector app](https://ivan-alles.github.io/localizer/) to see Localizer in action.
+Check out the online [hand detector app](https://ivan-alles.github.io/localizer/) to see how to find the position and 
+orientation of hands on a live camera video.
 
-Provided enough training data, Localizer:
-* Reaches accuracy less than 2 pixels for the position and  2 degrees for orientation.
-* Works with rigid and flexible objects.
+Localizer is a deep neural network. Provided enough training data, it:
+* Reaches accuracy less than 2 pixels for position and 2 degrees for orientation.
+* Works with rigid and flexible object shapes and structures.
 * Detects an unlimited number of object categories.
-* Adapts to variations in scale, point of view, and lighting.
+* Adapts to variations in size, point of view, and lighting.
+
+The object detection runs in real-time on various platforms (GPU, FPGA).
 
 Transfer learning reduces the amount of training data and time by 10-20 times.
 
@@ -22,8 +26,20 @@ Localizer powered various industrial and hobby projects in:
 * Robot control
 * Manufacturing quality assurance
 * Object counting
+* Board games
 
-This repository contains:
+## How it works
+
+First, you create a dataset with labeled object positions and rotation angles. You also make a configuration file with
+training parameters. 
+
+Then you run the training process, which will create and train an object detection Tensorflow model. The training data 
+will be generated from the dataset using data augmentation like image and color transformations. The training will
+periodically compute object detection metrics to evaluate the correctness of the model. 
+
+Then you use this model for inference to calculate 3DOF object pose estimation, category, and confidence.
+
+For an easy start, this repository contains:
 * The source code
 * Examples of datasets and models
 * A pretrained transfer learning model
