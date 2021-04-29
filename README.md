@@ -59,7 +59,7 @@ These instructions use Windows syntax.
 
 <img src="./assets/hands_on.gif">
 
-To see, how to detect position and orientation of objects without writing any code, use the hands-on demo app. 
+To see how to detect the position and orientation of objects without writing any code, use the hands-on demo app. 
 You can interactively train and run a model on images from your web camera. Run 
 `python localizer\hands_on_demo.py [CAMERA_ID]` and follow the on-screen instructions. 
 You can select a camera with the optional `CAMERA_ID`parameter. It is an integer with the default value of 0. 
@@ -99,7 +99,7 @@ You can use [Anno](https://github.com/urobots-io/anno/) to label object detectio
 4. Label objects with the **object** marker. 
 5. Label images without any objects with the **empty** marker.
 
-This anno file can be specified in the model configuration:
+You can specify this anno file in the model configuration:
 
 ```json
 {
@@ -121,9 +121,9 @@ You can start off with the included program for prediction on images in a folder
  
 For example: `python localizer\predict_for_images.py models\tools\config.json datasets\tools`.
 
-Refer to the source code for details on how to find position and orientation of an object in the prediction.
+Refer to the source code for details on how to find the position and orientation of an object in the prediction.
 
-Localizer does not predict bounding boxes. If you need them and your objects have fixed size, you can generate 
+Localizer does not predict bounding boxes. If you need them and your objects have fixed sizes, you can generate 
 bounding boxes using the predicted object position and orientation angle.
 
 ## Transfer learning
@@ -151,15 +151,15 @@ The input shape must be divisible by 32, for example:
 } 
 ```
 
-Then train on your dataset to make the fine tuning of the base model.
+Then train on your dataset to make the fine-tuning of the base model.
 
 ## Rotation-invariant object detection
 
-If you all you need is to adapt the detection model to object rotation instead of finding the orientation, you can do 
+If all you need is to adapt the detection model to object rotation instead of finding the orientation, you can do 
 the following:
 
 1. Label object positions only, with arbitrary rotation angles.
-2. In the configuration file specify:
+2. In the configuration file, specify:
 ```json
 {
   "loss_weight_angle": 0,
