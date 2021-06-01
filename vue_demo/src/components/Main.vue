@@ -54,7 +54,7 @@
       </div>
       <div class="main-text">
         <p>This app detects your hands on a live camera video. It is powered by the <b>Localizer</b>: a neural network for object detection.</p>
-        <p><a href="https://ivan-alles.github.io/localizer/">Get more</a> on GitHub: source code, examples, hands-on python app.</p>
+        <p><a href="https://github.com/ivan-alles/localizer">Get more</a> on GitHub: source code, examples, hands-on python app.</p>
       </div>
       <b-button @click="startDemo()" variant="primary">
         <b-icon icon="camera-video" ></b-icon>
