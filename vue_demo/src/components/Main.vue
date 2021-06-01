@@ -53,7 +53,12 @@
         </div>
       </div>
       <div class="main-text">
-        <p>This app detects your hands on a live camera video. It is powered by the <b>Localizer</b>: a neural network for object detection.</p>
+        <p>This app detects your hands on a live camera video. It is powered by the <b>Localizer</b>: a deep neural network for object detection.</p>
+
+        <p>Popular algorithms like YOLO find axis-aligned or rotated bounding boxes, which is only a rough description of the object's location. 
+        In contrast, Localizer predicts accurate object coordinates and orientation. This data is essential, for example, in robotic applications, 
+        to plan precise motions and avoid collisions.</p>
+
         <p><a href="https://github.com/ivan-alles/localizer">Get more</a> on GitHub: source code, examples, hands-on python app.</p>
       </div>
       <b-button @click="startDemo()" variant="primary">
