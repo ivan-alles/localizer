@@ -361,7 +361,7 @@ export default {
     },
 
     shareTitle() {
-      return 'Hand Detector Demo';
+      return 'Hand Detector';
     },
   },
 
