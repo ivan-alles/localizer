@@ -13,10 +13,11 @@ Check out the online [hand detector app](https://ivan-alles.github.io/localizer/
 orientation of hands on a live camera video.
 
 Localizer is a deep neural network. Provided enough training data, it:
-* Works with rigid and flexible object shapes and structures.
-* Detects an unlimited number of object categories.
-* Adapts to variations in size, point of view, and lighting.
 * Reaches accuracy better than 2 pixels for position, 2 degrees for orientation, and 99.9% for classification.
+* Detects an unlimited number of object categories.
+* Works with rigid and flexible object shapes and structures.
+* Adapts to variations in size, point of view, and lighting.
+
 
 The object detection runs in real-time on various platforms (GPU, FPGA).
 
