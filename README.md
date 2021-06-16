@@ -14,7 +14,7 @@ orientation of hands on a live camera video.
 
 Localizer is a deep neural network. Provided enough training data, it:
 * Reaches accuracy better than 2 pixels for position, 2 degrees for orientation, and 99.9% for classification.
-* Detects an unlimited number of object categories.
+* Detects 100+ object categories.
 * Works with rigid and flexible object shapes and structures.
 * Adapts to variations in size, point of view, and lighting.
 
