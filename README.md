@@ -10,7 +10,7 @@ In contrast, Localizer predicts accurate object coordinates and orientation. Thi
 for example, in robotic applications, to plan precise motions and avoid collisions.
 
 Check out the online [hand detector app](https://ivan-alles.github.io/localizer/) to see how to find the position and 
-orientation of hands on a live camera video.
+orientation of hands on a live camera video in a pure JavaScript code.
 
 Localizer is a deep neural network. Provided enough training data, it:
 * Reaches accuracy better than 2 pixels for position, 2 degrees for orientation, and 99.9% for classification.
@@ -19,7 +19,7 @@ Localizer is a deep neural network. Provided enough training data, it:
 * Adapts to variations in size, point of view, and lighting.
 
 
-The object detection runs in real-time on various platforms (GPU, FPGA).
+The object detection runs in real-time on various platforms (CPU, GPU, FPGA, smartphones).
 
 Transfer learning reduces the amount of training data and time by 10-20 times.
 
