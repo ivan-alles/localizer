@@ -183,7 +183,7 @@ class Localizer:
                                  strides=1,
                                  padding='SAME', name='confidence_map')
 
-        confidence_loc_max = (tf.nn.max_pool(confidence_map, 3, 1, 'SAME', 'NCDHW') - confidence_map) == 0
+        confidence_loc_max = (tf.nn.max_pool(confidence_map, 3, 1, 'SAME', 'NDHWC') - confidence_map) == 0
         confidence_thr = tf.math.logical_and(confidence_loc_max, confidence_map >= self._cfg['confidence_thr'])
         confidence = confidence_map * tf.cast(confidence_thr, tf.float32)
 
