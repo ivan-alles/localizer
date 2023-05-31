@@ -209,7 +209,7 @@ class Localizer:
         confidence = tf.squeeze(confidence, -1)
         local_max_idx = tf.where(confidence)
         category = tf.cast(local_max_idx[:, 1], tf.float32)
-        yx = tf.gather_nd(average_pos, local_max_idx) + tf.cast(local_max_idx[:, 2:], np.float32)
+        yx = tf.gather_nd(average_pos, local_max_idx) + tf.cast(local_max_idx[:, 2:], tf.float32)
         sc = tf.gather_nd(average_angle, local_max_idx)
         angle = tf.math.atan2(sc[:, 0], sc[:, 1])
         conf = tf.gather_nd(confidence, local_max_idx)
